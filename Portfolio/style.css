@@ -1,7 +1,7 @@
 :root{
-      --bg:#0f1724; /* deep navy */
+      --bg:#0f1724;
       --card:#0b1220;
-      --accent:#5eead4; /* mint */
+      --accent:#5eead4;
       --muted:#94a3b8;
       --glass: rgba(255,255,255,0.03);
       --radius:14px;
@@ -14,7 +14,7 @@
     body{
       margin:0;
       font-family:var(--ff-sans);
-      background: linear-gradient(180deg,var(--bg) 0%, #071021 100%);
+      background: var(--bg);
       color:#e6eef6;
       -webkit-font-smoothing:antialiased;
       line-height:1.45;
@@ -55,6 +55,7 @@
       padding:22px;
       box-shadow: 0 6px 24px rgba(2,6,23,0.6);
       border:1px solid rgba(255,255,255,0.03);
+      margin-bottom: 16px;
     }
 
     .intro h1{margin:0 0 6px 0;font-size:28px}
