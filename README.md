@@ -1,10 +1,14 @@
 # Veille-Technologique
 This repository is used for my work on my "Veille Technologique" for BTS SIO SISR. My subject is the differences between "Quantum computer" and "Classic computer".
 
-Nom : Leseigneur,
-Prénom : Léo,
+Nom : Leseigneur
+
+Prénom : Léo
+
 Classe : BTS SIO SISR 1
+
 Date de naissance : 15/11/2007
+
 Etablissement d'origine : Lycée Saint-Esprit, Beauvais (60000)
 Bac obtenu et spécialité : Bac général, spécialités AMC/NSI (HGGSP abandonnée)
 Année d'optention : 2025
