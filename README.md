@@ -1,5 +1,5 @@
 # Veille-Technologique
-This repository is used for my work on my "Veille Technologique" for BTS SIO SISR. My subject is the differences between "Quantum computer" and "Classic computer".,
+This repository is used for my work on my "Veille Technologique" for BTS SIO SISR. My subject is the differences between "Quantum computer" and "Classic computer". n/
 Nom : Leseigneur,
 Prénom : Léo,
 Classe : BTS SIO SISR 1
