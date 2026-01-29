@@ -1,6 +1,8 @@
 # Veille-Technologique
 This repository is used for my work on my "Veille Technologique" for BTS SIO SISR. My subject is the differences between "Quantum computer" and "Classic computer".
 
+<img width="900" height="600" alt="image" src="https://github.com/user-attachments/assets/98185eed-07b5-47af-b495-723139f3a651" />
+
 Nom : Leseigneur
 
 Prénom : Léo
