@@ -771,39 +771,275 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2rem;
+  /* Navigation mobile */
+  nav .container {
+    padding: 0 1rem;
   }
 
-  .stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .profile-content,
-  .contact-content {
-    grid-template-columns: 1fr;
-  }
-
-  .timeline::before {
-    left: 0;
-  }
-
-  .timeline-item {
-    grid-template-columns: 1fr;
-  }
-
-  .timeline-item:nth-child(even) .timeline-content {
-    grid-column: 1;
+  .nav-brand {
+    font-size: 1.2rem;
   }
 
   .nav-links {
     display: none;
   }
 
-  .comparison-grid,
+  /* Section générale */
+  .container {
+    padding: 0 1rem;
+  }
+
+  section {
+    padding: 4rem 0;
+    min-height: auto;
+  }
+
+  /* Hero Section */
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-box {
+    padding: 1.5rem 1rem;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+  }
+
+  /* Section titles */
+  .section-title h2 {
+    font-size: 2rem;
+  }
+
+  .section-title p {
+    font-size: 1rem;
+  }
+
+  /* Profil Section */
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .avatar-large {
+    width: 250px;
+    height: 250px;
+    font-size: 6rem;
+  }
+
+  .cv-button {
+    display: block;
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+  /* Timeline */
+  .timeline::before {
+    left: 0;
+  }
+
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-item:nth-child(even) .timeline-content {
+    grid-column: 1;
+  }
+
+  .timeline-date {
+    justify-content: flex-start;
+    text-align: left !important;
+  }
+
+  .timeline-content {
+    padding: 1.5rem;
+  }
+
+  /* Skills */
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Projects */
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .project-image {
+    height: 150px;
+    font-size: 2.5rem;
+  }
+
+  /* Veille Technologique */
+  .veille-intro {
+    font-size: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .comparison-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .comparison-card {
+    border-radius: 12px;
+  }
+
+  .card-icon {
+    font-size: 3.5rem;
+  }
+
+  .card-header h4 {
+    font-size: 1.4rem;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+    gap: 0.75rem;
+  }
+
+  .feature-box {
+    padding: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .feature-label {
+    font-size: 0.85rem;
+  }
+
+  .feature-value {
+    font-size: 0.95rem;
+    text-align: right;
+  }
+
+  /* Applications, Sources, Méthodes */
+  .veille-applications h3,
+  .veille-sources-section h3,
+  .veille-methods h3 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .applications-grid,
+  .sources-grid,
+  .methods-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .application-card,
+  .source-category,
+  .method-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .app-icon,
+  .source-icon,
+  .method-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .application-card h4,
+  .source-category h4,
+  .method-card h4 {
+    font-size: 0.95rem;
+  }
+
+  /* Conclusion */
+  .veille-conclusion {
+    padding: 2rem 1.5rem;
+  }
+
+  .veille-conclusion h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .veille-conclusion p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Contact */
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-item {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  input, textarea {
+    font-size: 16px; /* Évite le zoom automatique sur iOS */
+  }
+
+  /* Footer */
+  footer {
+    padding: 1.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Très petits écrans (< 400px) */
+@media (max-width: 400px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
   .applications-grid,
   .sources-grid,
   .methods-grid {
     grid-template-columns: 1fr;
+  }
+
+  .avatar-large {
+    width: 200px;
+    height: 200px;
+    font-size: 5rem;
+  }
+
+  .card-icon {
+    font-size: 3rem;
+  }
+
+  .card-header h4 {
+    font-size: 1.2rem;
+  }
+
+  .feature-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .feature-value {
+    text-align: left;
   }
 }
