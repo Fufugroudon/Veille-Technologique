@@ -42,3 +42,5 @@ Vos points forts / faibles :
 • Forts : Quand je me fixe un objectif (sportif ou scolaire), je fais tout pour le réaliser et le mettre en oeuvre.
 
 • Faibles : Compétitif et assez tétu (négatif dans certaines situations).
+
+All the articles are in the "Article" folder; the number of each markdown file represents the corresponding articles.
