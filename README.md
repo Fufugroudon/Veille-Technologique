@@ -43,4 +43,4 @@ Vos points forts / faibles :
 
 • Faibles : Compétitif et assez tétu (négatif dans certaines situations).
 
-All the articles are in the "Article" folder; the number of each markdown file represents the corresponding articles.
+All the articles are in the "Articles" folder; the number of each markdown file represents the corresponding articles.
