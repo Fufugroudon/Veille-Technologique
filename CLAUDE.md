@@ -135,9 +135,19 @@ Just edit files directly. The portfolio can be opened with any browser (`file://
 
 ### Git Conventions
 - Commits are in **English** (e.g. `Add articles`, `Fix README title`)
-- Branch: `claude/add-claude-documentation-nnkIw` is the active development branch
 - GPG/SSH commit signing is enabled — do not bypass it
 - Remote: `Fufugroudon/Veille-Technologique` on GitHub
+
+### Branch Strategy
+| Branch | Purpose |
+|---|---|
+| `main` | Production branch — stable, merged content only |
+| `dev` | Personal development branch for Léo's own changes |
+| `claude-workflow` | Branch used by Claude AI for automated contributions |
+
+- **Léo** works on `dev` and opens a PR to merge into `main` when ready
+- **Claude** works on `claude-workflow` and merges into `main` via PR
+- Never push directly to `main`
 
 ### Adding New Articles
 1. Create or update a file in `Articles/` (follow the `N&M.md` naming convention)
