@@ -4,7 +4,7 @@ This file provides guidance for AI assistants working in this repository.
 
 ## Project Overview
 
-This is **Leseigneur Léo**'s personal academic project for the **BTS SIO SISR** (Services Informatiques aux Organisations — Solutions d'Infrastructure, Systèmes et Réseaux) program at Lycée Saint-Esprit, Beauvais.
+This is **Leseigneur Léo**'s personal academic project for the **BTS SIO SISR** (Services Informatiques aux Organisations — Solutions d'Infrastructure, Systèmes et Réseaux) program at **Ensitech, Cergy** (previously at Lycée Saint-Esprit, Beauvais).
 
 The repository serves two purposes:
 1. **Veille Technologique** (Technology Watch): Structured research on quantum computers vs. classical computers, focusing on cybersecurity and practical applications.
