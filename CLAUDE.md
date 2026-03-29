@@ -175,5 +175,5 @@ Just edit files directly. The portfolio can be opened with any browser (`file://
 - **Naming**: Article files follow the `N&M.md` pattern (e.g. `5&6.md` for the next pair).
 - **Formatting**: Articles use Markdown tables; maintain consistent column order.
 - **Scoring**: Source evaluation scores are integers 1–4; always justify scores in the table cells.
-- **Branch**: Always work on and push to `claude/add-claude-documentation-nnkIw` unless instructed otherwise.
+- **Branch**: Always work on and push to `claude-workflow` unless instructed otherwise.
 - **Domain**: The production domain is `lesnorrys.com`, hosted on o2switch.
