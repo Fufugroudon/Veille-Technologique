@@ -8,7 +8,13 @@ This is **Leseigneur Léo**'s personal academic project for the **BTS SIO SISR**
 
 The repository serves two purposes:
 1. **Veille Technologique** (Technology Watch): Structured research on quantum computers vs. classical computers, focusing on cybersecurity and practical applications.
-2. **Portfolio Web**: A static HTML/CSS personal portfolio website.
+2. **Portfolio Web**: A personal portfolio website, currently static (HTML/CSS), intended to evolve into a full-stack interactive web application.
+
+### Hosting & Domain
+
+- **Hosting**: [o2switch](https://www.o2switch.fr/) — highest-tier shared hosting plan (France-based, Apache server, cPanel)
+- **Domain**: `lesnorrys.com` (owned by Leseigneur Léo)
+- The domain is already active and points to the o2switch infrastructure.
 
 ## Repository Structure
 
@@ -26,13 +32,31 @@ The repository serves two purposes:
 
 ## Technology Stack
 
-This is a **pure static web project** — no build system, no package manager, no frameworks:
+### Current State (v1 — Static)
+
+The portfolio is currently a **pure static web project** with no build system or backend:
 
 - **HTML5** — semantic structure, single-page layout with anchor navigation
 - **CSS3** — custom properties, Flexbox, CSS Grid, responsive design
 - **Markdown** — article/research documentation
 
-There is no JavaScript logic (navigation uses CSS/anchor links), no Node.js, no Python, no backend, and no test suite.
+### Planned Evolution (v2+ — Full-Stack)
+
+The site is intended to become a **complete, interactive, and visually rich web application** hosted on `lesnorrys.com`. Planned technologies include:
+
+| Layer | Technologies |
+|---|---|
+| **Frontend** | TypeScript, JavaScript, HTML5, CSS3 (animations, visual effects) |
+| **Backend** | PHP |
+| **Database** | SQL (MySQL/MariaDB — available on o2switch) |
+| **Other** | Additional languages/tools as the project evolves |
+
+The goal is a unique, feature-rich site with:
+- Dynamic database-driven content
+- Rich visual effects and smooth interactivity
+- A polished, professional UI well beyond the current static version
+
+When working on future iterations, prefer patterns compatible with the **o2switch Apache/PHP/MySQL stack**. Do not introduce Node.js servers or containerized runtimes unless the hosting environment supports them.
 
 ## Content: Veille Technologique
 
@@ -121,18 +145,25 @@ Just edit files directly. The portfolio can be opened with any browser (`file://
 3. Follow each table with `## Analyse comparative` and `## Synthèse` sections
 4. Keep all content in **French**
 
-### Updating the Portfolio
+### Updating the Portfolio (Current Static Version)
 - All changes go in `Portfolio/index.html` and `Portfolio/styles.css`
-- Do not introduce JavaScript dependencies or build tools
+- Do not introduce JavaScript dependencies or build tools in the current static version
 - Maintain the French-language content
 - Keep the dark navy/blue color scheme consistent with existing CSS variables
 
+### Future Full-Stack Development
+- Backend files (PHP) and database schemas (SQL) will be added as the project evolves
+- Follow the o2switch/Apache/PHP/MySQL stack — avoid Node.js server-side runtimes
+- TypeScript should be compiled to JavaScript before deployment (no runtime TS execution on o2switch)
+- Keep all user-facing content in **French**
+
 ## Key Conventions for AI Assistants
 
-- **Language**: All user-facing content (HTML, articles) is in French. Keep it French.
-- **No dependencies**: Do not introduce npm, bundlers, frameworks, or any build tooling.
-- **Static only**: This is a portfolio/documentation site — no backend, no API calls, no dynamic data.
+- **Language**: All user-facing content (HTML, articles, PHP templates) is in French. Keep it French.
+- **Current static version**: Do not introduce npm, bundlers, frameworks, or any build tooling into the existing static files.
+- **Future full-stack version**: PHP + MySQL + vanilla JS/TS is the target stack — match the o2switch hosting environment.
 - **Naming**: Article files follow the `N&M.md` pattern (e.g. `5&6.md` for the next pair).
 - **Formatting**: Articles use Markdown tables; maintain consistent column order.
 - **Scoring**: Source evaluation scores are integers 1–4; always justify scores in the table cells.
 - **Branch**: Always work on and push to `claude/add-claude-documentation-nnkIw` unless instructed otherwise.
+- **Domain**: The production domain is `lesnorrys.com`, hosted on o2switch.
