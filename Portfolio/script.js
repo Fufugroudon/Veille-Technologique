@@ -924,3 +924,69 @@ function initCardTilt() {
 }
 
 document.addEventListener('DOMContentLoaded', initCardTilt);
+
+// =========================================================================
+// FEATURE: SCRAMBLE TEXT ON SECTION TITLES
+// =========================================================================
+
+/**
+ * When a .section-header h2 enters the viewport, scramble its letters
+ * for 800 ms using random chars, then resolve left-to-right to the real text.
+ * Triggered once per element.
+ *
+ * @returns {void}
+ */
+function initScrambleText() {
+    var CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
+    var DURATION = 800;  // ms total scramble phase
+    var STEP_MS  = 40;   // repaint interval
+
+    function randChar() {
+        return CHARSET[Math.floor(Math.random() * CHARSET.length)];
+    }
+
+    function scramble(el) {
+        var original = el.textContent;
+        var length   = original.length;
+        var resolved = 0;
+        var elapsed  = 0;
+        var resolveInterval = DURATION / length; // ms per resolved char
+
+        var timer = setInterval(function () {
+            elapsed += STEP_MS;
+            resolved = Math.floor(elapsed / resolveInterval);
+            if (resolved >= length) { resolved = length; }
+
+            var out = '';
+            for (var i = 0; i < length; i++) {
+                if (i < resolved) {
+                    out += original[i];              // resolved character
+                } else if (original[i] === ' ') {
+                    out += ' ';                      // preserve spaces
+                } else {
+                    out += randChar();               // scrambled character
+                }
+            }
+            el.textContent = out;
+
+            if (resolved >= length) {
+                clearInterval(timer);
+                el.textContent = original;           // guarantee exact restore
+            }
+        }, STEP_MS);
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) { return; }
+            scramble(entry.target);
+            observer.unobserve(entry.target);
+        });
+    }, { threshold: 0.6 });
+
+    document.querySelectorAll('.section-header h2').forEach(function (h2) {
+        observer.observe(h2);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initScrambleText);
