@@ -612,3 +612,98 @@ function initTagTooltips() {
 }
 
 document.addEventListener('DOMContentLoaded', initTagTooltips);
+
+// =========================================================================
+// FEATURE: PARTICLE BACKGROUND ON #accueil
+// =========================================================================
+
+/**
+ * Inject a <canvas> as the first child of #accueil and animate ~80 particles
+ * that drift slowly and connect with faint lines when closer than 120 px.
+ * The canvas resizes on window resize and never blocks the main thread
+ * (pure requestAnimationFrame loop).
+ *
+ * @returns {void}
+ */
+function initParticles() {
+    var section = document.getElementById('accueil');
+    if (!section || !window.requestAnimationFrame) { return; }
+
+    var canvas = document.createElement('canvas');
+    canvas.id = 'particles-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    section.insertBefore(canvas, section.firstChild);
+
+    var ctx      = canvas.getContext('2d');
+    var pts      = [];
+    var COUNT    = 80;
+    var MAX_DIST = 120;
+    var raf      = null;
+
+    function rand(a, b) { return a + Math.random() * (b - a); }
+
+    function makePt() {
+        return {
+            x:  rand(0, canvas.width),
+            y:  rand(0, canvas.height),
+            vx: rand(-0.35, 0.35),
+            vy: rand(-0.35, 0.35),
+            r:  rand(1.5, 2.5)
+        };
+    }
+
+    function init() {
+        canvas.width  = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+        pts = [];
+        for (var i = 0; i < COUNT; i++) { pts.push(makePt()); }
+    }
+
+    function frame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = 0; i < pts.length; i++) {
+            var p = pts[i];
+
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0 || p.x > canvas.width)  { p.vx *= -1; }
+            if (p.y < 0 || p.y > canvas.height) { p.vy *= -1; }
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(96, 165, 250, 0.55)';
+            ctx.fill();
+
+            for (var j = i + 1; j < pts.length; j++) {
+                var q    = pts[j];
+                var dx   = p.x - q.x;
+                var dy   = p.y - q.y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < MAX_DIST) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(q.x, q.y);
+                    ctx.strokeStyle = 'rgba(96, 165, 250, ' +
+                        ((1 - dist / MAX_DIST) * 0.2).toFixed(3) + ')';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        raf = requestAnimationFrame(frame);
+    }
+
+    init();
+    frame();
+
+    window.addEventListener('resize', function () {
+        cancelAnimationFrame(raf);
+        init();
+        frame();
+    }, { passive: true });
+}
+
+document.addEventListener('DOMContentLoaded', initParticles);

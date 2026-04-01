@@ -1697,3 +1697,15 @@ body.light-mode .tag-tooltip {
   color: #0f172a;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PARTICLE CANVAS
+═══════════════════════════════════════════════════════════════ */
+#particles-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
