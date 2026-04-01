@@ -1187,3 +1187,375 @@ function initMatrixEasterEgg() {
 }
 
 document.addEventListener('DOMContentLoaded', initMatrixEasterEgg);
+
+// =========================================================================
+// FEATURE: INTERACTIVE TERMINAL
+// =========================================================================
+
+/**
+ * Inject a >_ button in the nav that opens a modal terminal.
+ * Supports: help, whoami, skills, contact, secret, hack, weather, clear, exit.
+ * Desktop: sidebar cheatsheet + ↑/↓ history.
+ * Mobile: pill-button row + scrolls input into view on focus.
+ *
+ * @returns {void}
+ */
+function initTerminal() {
+    // ── Command registry ─────────────────────────────────────────────────
+    var COMMANDS = {
+        help:    'Liste toutes les commandes disponibles',
+        whoami:  'Affiche le profil de L\u00e9o',
+        skills:  'Graphique ASCII des comp\u00e9tences',
+        contact: 'Email et liens de contact',
+        secret:  'D\u00e9clenche le Matrix rain',
+        hack:    'Simulation de hacking (pour rire)',
+        weather: 'M\u00e9t\u00e9o en direct (Open-Meteo)',
+        clear:   'Vide le terminal',
+        exit:    'Ferme le terminal'
+    };
+
+    // ── Build DOM ─────────────────────────────────────────────────────────
+    var navContainer = document.querySelector('.nav-container');
+    if (!navContainer) { return; }
+
+    var navBtn = document.createElement('button');
+    navBtn.className = 'terminal-nav-btn';
+    navBtn.setAttribute('aria-label', 'Ouvrir le terminal');
+    navBtn.setAttribute('type', 'button');
+    navBtn.textContent = '>_';
+    navContainer.appendChild(navBtn);
+
+    // Modal
+    var modal = document.createElement('div');
+    modal.id = 'terminal-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Terminal interactif');
+
+    var win = document.createElement('div');
+    win.className = 'term-window';
+
+    // Title bar
+    var titlebar = document.createElement('div');
+    titlebar.className = 'term-titlebar';
+    ['term-dot-red','term-dot-yellow','term-dot-green'].forEach(function (c) {
+        var d = document.createElement('span');
+        d.className = 'term-dot ' + c;
+        titlebar.appendChild(d);
+    });
+    var titleSpan = document.createElement('span');
+    titleSpan.className = 'term-title';
+    titleSpan.textContent = 'terminal — leo@portfolio';
+    titlebar.appendChild(titleSpan);
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'term-close-btn';
+    closeBtn.setAttribute('aria-label', 'Fermer le terminal');
+    closeBtn.setAttribute('type', 'button');
+    closeBtn.textContent = '\u2715'; // ×
+    titlebar.appendChild(closeBtn);
+    win.appendChild(titlebar);
+
+    // Body
+    var body = document.createElement('div');
+    body.className = 'term-body';
+
+    // Cheatsheet (desktop sidebar)
+    var cheat = document.createElement('div');
+    cheat.className = 'term-cheatsheet';
+    var cheatTitle = document.createElement('div');
+    cheatTitle.className = 'term-cheatsheet-title';
+    cheatTitle.textContent = 'Commandes';
+    cheat.appendChild(cheatTitle);
+    Object.keys(COMMANDS).forEach(function (cmd) {
+        var row = document.createElement('div');
+        row.className = 'term-cmd-hint';
+        row.innerHTML = '<strong>' + cmd + '</strong><span>' + COMMANDS[cmd] + '</span>';
+        cheat.appendChild(row);
+    });
+
+    // Main
+    var main = document.createElement('div');
+    main.className = 'term-main';
+
+    var output = document.createElement('div');
+    output.className = 'term-output';
+    output.setAttribute('aria-live', 'polite');
+    main.appendChild(output);
+
+    // Mobile pill row
+    var pillRow = document.createElement('div');
+    pillRow.className = 'term-pills';
+    Object.keys(COMMANDS).forEach(function (cmd) {
+        var pill = document.createElement('button');
+        pill.className = 'term-pill';
+        pill.setAttribute('type', 'button');
+        pill.textContent = cmd;
+        pill.addEventListener('click', function () {
+            input.value = cmd;
+            input.focus();
+        });
+        pillRow.appendChild(pill);
+    });
+    main.appendChild(pillRow);
+
+    // Input row
+    var inputRow = document.createElement('div');
+    inputRow.className = 'term-input-row';
+    var promptLabel = document.createElement('span');
+    promptLabel.className = 'term-prompt-label';
+    promptLabel.textContent = 'leo@portfolio:~$';
+    var input = document.createElement('input');
+    input.className = 'term-input';
+    input.setAttribute('type', 'text');
+    input.setAttribute('autocomplete', 'off');
+    input.setAttribute('autocorrect', 'off');
+    input.setAttribute('autocapitalize', 'none');
+    input.setAttribute('spellcheck', 'false');
+    input.setAttribute('aria-label', 'Commande terminal');
+    inputRow.appendChild(promptLabel);
+    inputRow.appendChild(input);
+    main.appendChild(inputRow);
+
+    body.appendChild(main);
+    body.appendChild(cheat);
+    win.appendChild(body);
+    modal.appendChild(win);
+    document.body.appendChild(modal);
+
+    // ── History ──────────────────────────────────────────────────────────
+    var history = [];
+    var histIdx = -1;
+
+    // ── Helpers ──────────────────────────────────────────────────────────
+    function print(text, cls) {
+        var line = document.createElement('div');
+        line.className = 'term-line' + (cls ? ' ' + cls : '');
+        line.textContent = text;
+        output.appendChild(line);
+        output.scrollTop = output.scrollHeight;
+    }
+
+    function printHTML(html, cls) {
+        var line = document.createElement('div');
+        line.className = 'term-line' + (cls ? ' ' + cls : '');
+        line.innerHTML = html;
+        output.appendChild(line);
+        output.scrollTop = output.scrollHeight;
+    }
+
+    function printBlank() { print(''); }
+
+    function openTerm() {
+        modal.classList.add('term-open');
+        input.focus();
+        if (output.childNodes.length === 0) { printWelcome(); }
+    }
+
+    function closeTerm() {
+        modal.classList.remove('term-open');
+    }
+
+    function printWelcome() {
+        print('  _____                   _             _ ', 'term-line-accent');
+        print(' |_   _|__ _ __ _ __ ___ (_)_ __   __ _| |', 'term-line-accent');
+        print('   | |/ _ \\ \'__| \'_ ` _ \\| | \'_ \\ / _` | |', 'term-line-accent');
+        print('   | |  __/ |  | | | | | | | | | | (_| | |', 'term-line-accent');
+        print('   |_|\\___|_|  |_| |_| |_|_|_| |_|\\__,_|_|', 'term-line-accent');
+        printBlank();
+        print('  Bienvenue ! Tapez "help" pour voir les commandes.', 'term-line-muted');
+        printBlank();
+    }
+
+    // ── Command handlers ─────────────────────────────────────────────────
+    function cmdHelp() {
+        printBlank();
+        print('Commandes disponibles :', 'term-line-accent');
+        Object.keys(COMMANDS).forEach(function (cmd) {
+            print('  ' + cmd.padEnd(10) + COMMANDS[cmd]);
+        });
+        printBlank();
+    }
+
+    function cmdWhoami() {
+        printBlank();
+        print('  \u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557');
+        print('  \u2551  Leseigneur L\u00e9o                       \u2551');
+        print('  \u2551  \u00c9tudiant BTS SIO option SISR          \u2551');
+        print('  \u2551  Ensitech, Cergy                        \u2551');
+        print('  \u2551  Futur ing\u00e9nieur en cybers\u00e9curit\u00e9      \u2551');
+        print('  \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d');
+        printBlank();
+        print('  Passions  : Infrastructure, r\u00e9seaux, cybers\u00e9curit\u00e9');
+        print('  Fun fact  : Aspirant arm\u00e9e de l\'air fran\u00e7aise \u2708\uFE0F');
+        print('  Stack     : Linux, Apache, pfSense, Python, C#');
+        printBlank();
+    }
+
+    function cmdSkills() {
+        var skills = [
+            { name: 'Linux / Bash',   pct: 80 },
+            { name: 'R\u00e9seaux / VLAN', pct: 75 },
+            { name: 'S\u00e9curit\u00e9 / CTF',  pct: 70 },
+            { name: 'Python',          pct: 65 },
+            { name: 'C# / .NET',       pct: 60 },
+            { name: 'HTML/CSS',        pct: 72 }
+        ];
+        printBlank();
+        print('  Comp\u00e9tences :', 'term-line-accent');
+        skills.forEach(function (s) {
+            var bars   = Math.round(s.pct / 5);
+            var filled = '\u2588'.repeat(bars);
+            var empty  = '\u2591'.repeat(20 - bars);
+            print('  ' + s.name.padEnd(18) + ' [' + filled + empty + '] ' + s.pct + '%');
+        });
+        printBlank();
+    }
+
+    function cmdContact() {
+        printBlank();
+        print('  \u2709  Email  : leo.leseigneur@orange.fr', 'term-line-accent');
+        printHTML(
+            '  \uD83D\uDD17 GitHub : <span class="term-line-link" onclick="window.open(\'https://github.com/Fufugroudon\',\'_blank\')">github.com/Fufugroudon</span>'
+        );
+        printHTML(
+            '  \uD83C\uDF10 Site   : <span class="term-line-link" onclick="window.open(\'https://lesnorrys.com\',\'_blank\')">lesnorrys.com</span>'
+        );
+        printBlank();
+    }
+
+    function cmdSecret() {
+        print('  \uD83D\uDCBB Activation de la s\u00e9quence...');
+        // Trigger the Matrix egg if available
+        var ev = new KeyboardEvent('keydown', { keyCode: 65, bubbles: true });
+        var KONAMI_SEQ = [38,38,40,40,37,39,37,39,66,65];
+        var i = 0;
+        var t = setInterval(function () {
+            if (i >= KONAMI_SEQ.length) { clearInterval(t); return; }
+            document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: KONAMI_SEQ[i], bubbles: true }));
+            i++;
+        }, 30);
+    }
+
+    function cmdHack() {
+        print('  Initialisation de la connexion...', 'term-line-muted');
+        var ips   = ['192.168.1.1','10.0.0.1','172.16.4.2','203.0.113.42','198.51.100.7'];
+        var msgs  = [
+            'PORT SCAN en cours...',
+            'Tentative d\'intrusion sur /etc/passwd...',
+            'Escalade de privil\u00e8ges...',
+            'Ex\u00e9cution du payload...',
+            'T\u00e9l\u00e9chargement des donn\u00e9es sensibles...',
+            'D\u00e9tect\u00e9 par le syst\u00e8me de d\u00e9fense !'
+        ];
+        var step  = 0;
+        var timer = setInterval(function () {
+            if (step < 5) {
+                print('  > ' + ips[step] + ' ... ' + msgs[step]);
+            } else if (step === 5) {
+                print('  > ' + msgs[5], 'term-line-error');
+            } else {
+                clearInterval(timer);
+                printBlank();
+                print('  \u26D4 ACC\u00c8S REFUS\u00c9. Cible trop forte.', 'term-line-error');
+                printBlank();
+            }
+            step++;
+        }, 380);
+    }
+
+    function cmdWeather() {
+        print('  R\u00e9cup\u00e9ration de la m\u00e9t\u00e9o pour M\u00e9ru...', 'term-line-muted');
+        // Open-Meteo: Méru (49.2300N, 2.1300E), WMO weather codes
+        var url = 'https://api.open-meteo.com/v1/forecast' +
+                  '?latitude=49.23&longitude=2.13' +
+                  '&current=temperature_2m,wind_speed_10m,weather_code' +
+                  '&wind_speed_unit=kmh&timezone=Europe%2FParis';
+
+        var WMO = {
+            0:'Ciel d\u00e9gag\u00e9 \u2600\uFE0F', 1:'Principalement d\u00e9gag\u00e9', 2:'Partiellement nuageux \u26C5',
+            3:'Couvert \u2601\uFE0F', 45:'Brouillard \uD83C\uDF2B\uFE0F', 48:'Brouillard givrant',
+            51:'Bruine l\u00e9g\u00e8re', 61:'Pluie l\u00e9g\u00e8re \uD83C\uDF27\uFE0F', 71:'Neige l\u00e9g\u00e8re \u2744\uFE0F',
+            95:'Orage \u26C8\uFE0F', 99:'Orage + gr\u00eale'
+        };
+
+        fetch(url)
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                var c    = d.current;
+                var cond = WMO[c.weather_code] || 'Code ' + c.weather_code;
+                printBlank();
+                print('  \u250C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510');
+                print('  \u2502  M\u00e9t\u00e9o — M\u00e9ru, FR  \u2502');
+                print('  \u251C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524');
+                print('  \u2502  Temp.  : ' + c.temperature_2m + '\u00b0C          \u2502');
+                print('  \u2502  Vent   : ' + c.wind_speed_10m + ' km/h      \u2502');
+                print('  \u2502  ' + cond.padEnd(20) + '\u2502');
+                print('  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518');
+                printBlank();
+            })
+            .catch(function () {
+                print('  \u26A0\uFE0F Impossible de r\u00e9cup\u00e9rer la m\u00e9t\u00e9o.', 'term-line-error');
+            });
+    }
+
+    // ── Command dispatcher ───────────────────────────────────────────────
+    function dispatch(raw) {
+        var cmd = raw.trim().toLowerCase();
+        print('leo@portfolio:~$ ' + raw, 'term-line-prompt');
+
+        switch (cmd) {
+            case 'help':    cmdHelp();    break;
+            case 'whoami':  cmdWhoami();  break;
+            case 'skills':  cmdSkills();  break;
+            case 'contact': cmdContact(); break;
+            case 'secret':  cmdSecret();  break;
+            case 'hack':    cmdHack();    break;
+            case 'weather': cmdWeather(); break;
+            case 'clear':
+                while (output.firstChild) { output.removeChild(output.firstChild); }
+                break;
+            case 'exit':
+                closeTerm();
+                break;
+            default:
+                if (cmd !== '') {
+                    print('  Commande introuvable: "' + cmd + '". Tapez "help".', 'term-line-error');
+                }
+        }
+    }
+
+    // ── Input handling ───────────────────────────────────────────────────
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            var val = input.value;
+            input.value = '';
+            histIdx = -1;
+            if (val.trim()) { history.unshift(val); }
+            dispatch(val);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (histIdx < history.length - 1) { histIdx++; input.value = history[histIdx]; }
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (histIdx > 0) { histIdx--; input.value = history[histIdx]; }
+            else { histIdx = -1; input.value = ''; }
+        } else if (e.key === 'Escape') {
+            closeTerm();
+        }
+    });
+
+    // Mobile: scroll input into view on focus
+    input.addEventListener('focus', function () {
+        setTimeout(function () { input.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 300);
+    });
+
+    // ── Open / close ─────────────────────────────────────────────────────
+    navBtn.addEventListener('click', openTerm);
+    closeBtn.addEventListener('click', closeTerm);
+
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) { closeTerm(); }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initTerminal);
