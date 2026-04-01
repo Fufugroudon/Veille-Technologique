@@ -826,3 +826,40 @@ function initReadingProgressBar() {
 }
 
 document.addEventListener('DOMContentLoaded', initReadingProgressBar);
+
+// =========================================================================
+// FEATURE: GLITCH EFFECT ON HERO H1
+// =========================================================================
+
+/**
+ * Trigger a 600 ms cyberpunk glitch animation on the hero <h1> via
+ * CSS ::before/::after layers keyed off a data-text attribute.
+ * Fires on mouseover (desktop) and touchstart (mobile).
+ *
+ * @returns {void}
+ */
+function initGlitchEffect() {
+    var h1 = document.querySelector('#accueil .hero-title');
+    if (!h1) { return; }
+
+    var glitching = false;
+
+    function triggerGlitch() {
+        if (glitching) { return; }
+        glitching = true;
+
+        // Keep data-text in sync with current visible text
+        h1.setAttribute('data-text', h1.textContent);
+        h1.classList.add('glitching');
+
+        setTimeout(function () {
+            h1.classList.remove('glitching');
+            glitching = false;
+        }, 620);
+    }
+
+    h1.addEventListener('mouseover',   triggerGlitch);
+    h1.addEventListener('touchstart',  triggerGlitch, { passive: true });
+}
+
+document.addEventListener('DOMContentLoaded', initGlitchEffect);
