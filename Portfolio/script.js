@@ -474,3 +474,83 @@ function initThemeToggle() {
 }
 
 document.addEventListener('DOMContentLoaded', initThemeToggle);
+
+// =========================================================================
+// FEATURE: TYPING EFFECT ON HERO TITLE
+// =========================================================================
+
+/**
+ * Clear the hero <h1> content and retype it character by character at
+ * ~80 ms/char, preserving the .text-gradient span around "Léo".
+ * Runs once on load — no loop.
+ *
+ * @returns {void}
+ */
+function initTypingEffect() {
+    var h1 = document.querySelector('#accueil .hero-title');
+    if (!h1) { return; }
+
+    var SPEED = 80; // ms per character
+
+    // The two parts of the title and their styles
+    var parts = [
+        { text: 'Leseigneur ',    cls: null },
+        { text: 'L\u00e9o',      cls: 'text-gradient' } // Léo
+    ];
+
+    // Clear the heading and place a blinking cursor
+    h1.innerHTML = '';
+    var cursor = document.createElement('span');
+    cursor.className = 'typing-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+    h1.appendChild(cursor);
+
+    var partIdx     = 0;
+    var charIdx     = 0;
+    var currentNode = null;
+
+    function typeNext() {
+        if (partIdx >= parts.length) {
+            // Typing complete — fade cursor out after a pause
+            setTimeout(function () {
+                cursor.classList.add('typing-cursor--done');
+            }, 800);
+            return;
+        }
+
+        var part = parts[partIdx];
+
+        // First character of a new part — create the target node
+        if (charIdx === 0) {
+            if (part.cls) {
+                currentNode = document.createElement('span');
+                currentNode.className = part.cls;
+            } else {
+                currentNode = document.createTextNode('');
+            }
+            h1.insertBefore(currentNode, cursor);
+        }
+
+        // Append one character
+        if (part.cls) {
+            currentNode.textContent += part.text[charIdx];
+        } else {
+            currentNode.nodeValue += part.text[charIdx];
+        }
+
+        charIdx++;
+
+        if (charIdx >= part.text.length) {
+            partIdx++;
+            charIdx     = 0;
+            currentNode = null;
+        }
+
+        setTimeout(typeNext, SPEED);
+    }
+
+    // Wait for hero CSS animations to complete before starting
+    setTimeout(typeNext, 600);
+}
+
+document.addEventListener('DOMContentLoaded', initTypingEffect);
