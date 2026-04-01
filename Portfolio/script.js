@@ -1,0 +1,428 @@
+/**
+ * Portfolio — script.js
+ *
+ * Interactive features:
+ *   1. Hamburger menu (button injected via JS, not hardcoded in HTML)
+ *   2. Scroll animations (fade-in + slide-up via IntersectionObserver)
+ *   3. Active nav link highlight (IntersectionObserver on sections)
+ *   4. Animated counters (stat numbers count up from 0)
+ *
+ * Vanilla JS only — no frameworks, no external dependencies.
+ */
+
+(function () {
+    'use strict';
+
+    // =========================================================================
+    // 1. HAMBURGER MENU
+    // =========================================================================
+    //
+    // Creates the toggle button dynamically, appends it to .nav-container,
+    // and animates the nav-links slide in/out via the .is-open class.
+
+    /**
+     * Build and inject the hamburger <button> into the nav container.
+     * Binds click and close-on-link-click events.
+     *
+     * @returns {void}
+     */
+    function initHamburgerMenu() {
+        var navContainer = document.querySelector('.nav-container');
+        var navMenu      = document.getElementById('nav-menu');
+
+        if (!navContainer || !navMenu) {
+            return;
+        }
+
+        // Build button with three animated bars
+        var btn = document.createElement('button');
+        btn.className = 'nav-toggle';
+        btn.id        = 'nav-toggle';
+        btn.setAttribute('aria-label',    'Ouvrir le menu');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-controls', 'nav-menu');
+        btn.setAttribute('type',          'button');
+
+        for (var i = 0; i < 3; i++) {
+            var bar = document.createElement('span');
+            bar.className = 'hamburger-bar';
+            btn.appendChild(bar);
+        }
+
+        navContainer.appendChild(btn);
+
+        // Toggle open / close
+        btn.addEventListener('click', function () {
+            var isOpen = navMenu.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        // Close when any navigation link is clicked
+        navMenu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                navMenu.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+
+    // =========================================================================
+    // 2. SCROLL ANIMATIONS
+    // =========================================================================
+    //
+    // Targets: .stat-box, .skill-category, .project-card,
+    //          .timeline-item, .comparison-card
+    //
+    // Elements that already have .reveal in the HTML keep it.
+    // Elements that don't have it receive it programmatically so the
+    // same CSS transition pair (opacity + transform) handles everything.
+    // Stagger delays are applied to grid siblings for a cascading effect.
+
+    /** Selectors that must animate on scroll. */
+    var SCROLL_ANIMATED_SELECTORS = [
+        '.stat-box',
+        '.skill-category',
+        '.project-card',
+        '.timeline-item',
+        '.comparison-card'
+    ];
+
+    /**
+     * Ensure every targeted element carries the .reveal class so the
+     * IntersectionObserver can handle it uniformly.
+     *
+     * @returns {void}
+     */
+    function addRevealClasses() {
+        SCROLL_ANIMATED_SELECTORS.forEach(function (selector) {
+            document.querySelectorAll(selector).forEach(function (el) {
+                if (!el.classList.contains('reveal')) {
+                    el.classList.add('reveal');
+                }
+            });
+        });
+    }
+
+    /**
+     * Add progressive transition-delay to siblings inside skill
+     * and project grids so they cascade in one after another.
+     *
+     * @returns {void}
+     */
+    function applyStaggerDelays() {
+        var staggered = document.querySelectorAll(
+            '.skills-grid .reveal, .projects-grid .reveal'
+        );
+        staggered.forEach(function (el, index) {
+            el.style.transitionDelay = (index % 4 * 0.1) + 's';
+        });
+    }
+
+    /**
+     * Observe every .reveal element; add .visible when it enters
+     * the viewport to trigger the CSS fade-in + slide-up transition.
+     *
+     * @returns {void}
+     */
+    function initScrollAnimations() {
+        addRevealClasses();
+        applyStaggerDelays();
+
+        var observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+        );
+
+        document.querySelectorAll('.reveal').forEach(function (el) {
+            observer.observe(el);
+        });
+    }
+
+    // =========================================================================
+    // 3. ACTIVE NAV LINK
+    // =========================================================================
+    //
+    // Uses a narrow IntersectionObserver band (-30% / -60%) so the active
+    // state switches when the section title reaches the upper third of the
+    // viewport — giving a natural feel regardless of section height.
+
+    /**
+     * Detect the current section on scroll and apply .active to the
+     * corresponding nav link.
+     *
+     * @returns {void}
+     */
+    function initActiveNavLink() {
+        var sections = document.querySelectorAll('section[id]');
+        var navLinks = document.querySelectorAll('.nav-link');
+
+        if (!sections.length || !navLinks.length) {
+            return;
+        }
+
+        var observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    var targetId = entry.target.id;
+                    navLinks.forEach(function (link) {
+                        link.classList.toggle(
+                            'active',
+                            link.getAttribute('href') === '#' + targetId
+                        );
+                    });
+                });
+            },
+            { rootMargin: '-30% 0px -60% 0px' }
+        );
+
+        sections.forEach(function (section) {
+            observer.observe(section);
+        });
+    }
+
+    // =========================================================================
+    // 4. ANIMATED COUNTERS
+    // =========================================================================
+    //
+    // Parses the text of each .stat-number (e.g. "10+", "100%", "2"),
+    // stores it in data-target, then animates from 0 to the numeric target
+    // using requestAnimationFrame and a cubic ease-out curve.
+
+    /**
+     * Cubic ease-out easing function.
+     *
+     * @param   {number} t - Progress in [0, 1].
+     * @returns {number}   - Eased value in [0, 1].
+     */
+    function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+    }
+
+    /**
+     * Animate a single counter element from 0 to its target value.
+     *
+     * @param {HTMLElement} el - The .stat-number element.
+     * @returns {void}
+     */
+    function runCounter(el) {
+        var original = el.getAttribute('data-target');
+        var target   = parseInt(original, 10);
+        var suffix   = original.replace(/^\d+/, ''); // "+", "%", or ""
+        var duration = 1600;
+        var startTs  = null;
+
+        el.textContent = '0' + suffix;
+
+        function tick(timestamp) {
+            if (startTs === null) {
+                startTs = timestamp;
+            }
+
+            var elapsed  = timestamp - startTs;
+            var progress = Math.min(elapsed / duration, 1);
+            var current  = Math.floor(easeOutCubic(progress) * target);
+
+            el.textContent = current + suffix;
+
+            if (progress < 1) {
+                requestAnimationFrame(tick);
+            } else {
+                el.textContent = original; // restore exact original string
+            }
+        }
+
+        requestAnimationFrame(tick);
+    }
+
+    /**
+     * Observe every .stat-number; trigger runCounter() once it enters
+     * the viewport.
+     *
+     * @returns {void}
+     */
+    function initCounters() {
+        var statNumbers = document.querySelectorAll('.stat-number');
+
+        if (!statNumbers.length) {
+            return;
+        }
+
+        // Cache original values before any counter animation modifies them
+        statNumbers.forEach(function (el) {
+            el.setAttribute('data-target', el.textContent.trim());
+        });
+
+        var observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    runCounter(entry.target);
+                    observer.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.6 }
+        );
+
+        statNumbers.forEach(function (el) {
+            observer.observe(el);
+        });
+    }
+
+    // =========================================================================
+    // SUPPORTING FEATURES
+    // =========================================================================
+
+    /**
+     * Animate skill progress bars to their data-width value when the
+     * parent .skill-category enters the viewport.
+     *
+     * @returns {void}
+     */
+    function initSkillBars() {
+        var observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    entry.target.querySelectorAll('.skill-progress').forEach(function (bar) {
+                        bar.style.width = (bar.dataset.width || 0) + '%';
+                    });
+                    observer.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.2 }
+        );
+
+        document.querySelectorAll('.skill-category').forEach(function (cat) {
+            observer.observe(cat);
+        });
+    }
+
+    /**
+     * Show/hide the scroll-to-top button and handle its click.
+     *
+     * @returns {void}
+     */
+    function initScrollToTop() {
+        var btn = document.getElementById('scroll-top');
+
+        if (!btn) {
+            return;
+        }
+
+        window.addEventListener(
+            'scroll',
+            function () {
+                btn.classList.toggle('visible', window.scrollY > 500);
+            },
+            { passive: true }
+        );
+
+        btn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    /**
+     * Add .scrolled to #navbar after the user scrolls past the hero,
+     * increasing the background opacity and adding a shadow.
+     *
+     * @returns {void}
+     */
+    function initNavbarScrollEffect() {
+        var navbar = document.getElementById('navbar');
+
+        if (!navbar) {
+            return;
+        }
+
+        window.addEventListener(
+            'scroll',
+            function () {
+                navbar.classList.toggle('scrolled', window.scrollY > 20);
+            },
+            { passive: true }
+        );
+    }
+
+    /**
+     * Handle the contact form submission: open a pre-filled mailto link,
+     * display a success message, and reset the form after 4 seconds.
+     *
+     * @returns {void}
+     */
+    function initContactForm() {
+        var form      = document.getElementById('contact-form');
+        var feedback  = document.getElementById('form-feedback');
+
+        if (!form || !feedback) {
+            return;
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var submitBtn      = form.querySelector('button[type="submit"]');
+            var originalLabel  = submitBtn.innerHTML;
+
+            var subject = encodeURIComponent(
+                document.getElementById('subject').value
+            );
+            var body = encodeURIComponent(
+                'De\u00a0: ' +
+                document.getElementById('name').value +
+                ' (' + document.getElementById('email').value + ')\n\n' +
+                document.getElementById('message').value
+            );
+
+            window.location.href =
+                'mailto:leo.leseigneur@orange.fr' +
+                '?subject=' + subject +
+                '&body='    + body;
+
+            submitBtn.disabled   = true;
+            submitBtn.textContent = 'Message pr\u00eat \u2713';
+
+            feedback.textContent = 'Votre client mail va s\u2019ouvrir avec le message pr\u00e9-rempli. Merci\u00a0!';
+            feedback.className   = 'form-feedback-success';
+
+            setTimeout(function () {
+                form.reset();
+                submitBtn.disabled  = false;
+                submitBtn.innerHTML = originalLabel;
+                feedback.className  = '';
+                feedback.textContent = '';
+            }, 4000);
+        });
+    }
+
+    // =========================================================================
+    // INIT
+    // =========================================================================
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initHamburgerMenu();
+        initNavbarScrollEffect();
+        initScrollAnimations();
+        initActiveNavLink();
+        initCounters();
+        initSkillBars();
+        initScrollToTop();
+        initContactForm();
+    });
+
+}());
