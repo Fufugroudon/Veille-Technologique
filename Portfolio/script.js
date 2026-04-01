@@ -554,3 +554,61 @@ function initTypingEffect() {
 }
 
 document.addEventListener('DOMContentLoaded', initTypingEffect);
+
+// =========================================================================
+// FEATURE: TOOLTIPS ON PROJECT TAGS
+// =========================================================================
+
+/** Short descriptions keyed by tag text content. */
+var TAG_DESCRIPTIONS = {
+    'Linux':      'Syst\u00e8me d\'exploitation open source',
+    'Apache':     'Serveur web HTTP / HTTPS',
+    'Bash':       'Scripting shell Unix/Linux',
+    'SSL':        'Chiffrement et certificats HTTPS',
+    'VMware':     'Hyperviseur de virtualisation',
+    'R\u00e9seau': 'Configuration LAN / WAN',
+    'pfSense':    'Pare-feu BSD open source',
+    'VLAN':       'Segmentation r\u00e9seau logique',
+    'Python':     'Langage de programmation polyvalent',
+    'TI-Python':  'Python embarqu\u00e9 sur calculatrice TI',
+    'JSON':       'Format d\'échange de donn\u00e9es l\u00e9ger',
+    'C#':         'Langage orient\u00e9 objet Microsoft',
+    '.NET':       'Framework applicatif Microsoft',
+    'Debugging':  'Analyse et correction de bugs',
+    'Kali Linux': 'Distribution Linux pour le pentesting',
+    'Nmap':       'Scanner de ports et d\'h\u00f4tes r\u00e9seau',
+    'Pentesting': 'Tests d\'intrusion autoris\u00e9s',
+    'HTML/CSS':   'Langages de structure et de style web',
+    'o2switch':   'H\u00e9bergement mutualis\u00e9 fran\u00e7ais',
+    'JavaScript': 'Langage de script c\u00f4t\u00e9 client',
+    'PHP':        'Langage de script c\u00f4t\u00e9 serveur',
+    'MySQL':      'Syst\u00e8me de gestion de base de donn\u00e9es',
+    'Git':        'Logiciel de gestion de versions',
+    'Docker':     'Plateforme de conteneurisation'
+};
+
+/**
+ * Attach a tooltip <span> to every .tag whose text matches TAG_DESCRIPTIONS.
+ * Adds data-tooltip attribute and a .has-tooltip class; tooltip visibility
+ * is driven entirely by CSS — no JS hover listeners needed.
+ *
+ * @returns {void}
+ */
+function initTagTooltips() {
+    document.querySelectorAll('.tag').forEach(function (tag) {
+        var text = tag.textContent.trim();
+        var desc = TAG_DESCRIPTIONS[text];
+        if (!desc) { return; }
+
+        tag.setAttribute('data-tooltip', desc);
+        tag.classList.add('has-tooltip');
+
+        var tip = document.createElement('span');
+        tip.className = 'tag-tooltip';
+        tip.textContent = desc;
+        tip.setAttribute('role', 'tooltip');
+        tag.appendChild(tip);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initTagTooltips);
