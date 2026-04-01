@@ -884,7 +884,7 @@ nav.scrolled {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  /* overflow: hidden removed — kept on .project-image only so tooltips are not clipped */
   display: flex;
   flex-direction: column;
   transition: opacity var(--t-slow), border-color var(--t), box-shadow var(--t), transform var(--t);
@@ -948,6 +948,7 @@ nav.scrolled {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  overflow: visible; /* allow .tag tooltips to escape the card boundary */
 }
 
 .project-content h3 {
@@ -969,6 +970,7 @@ nav.scrolled {
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 0.5rem;
+  overflow: visible; /* must not clip tooltip popups */
 }
 
 .tag {
