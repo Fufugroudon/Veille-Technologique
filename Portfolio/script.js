@@ -707,3 +707,38 @@ function initParticles() {
 }
 
 document.addEventListener('DOMContentLoaded', initParticles);
+
+// =========================================================================
+// FEATURE: READING PROGRESS BAR
+// =========================================================================
+
+/**
+ * Inject a fixed 3 px bar at the very top of the viewport (above the nav)
+ * that fills left-to-right as the user scrolls the full page height.
+ *
+ * @returns {void}
+ */
+function initReadingProgressBar() {
+    var bar = document.createElement('div');
+    bar.id = 'reading-progress';
+    bar.setAttribute('aria-hidden',    'true');
+    bar.setAttribute('role',           'progressbar');
+    bar.setAttribute('aria-valuemin',  '0');
+    bar.setAttribute('aria-valuemax',  '100');
+    bar.setAttribute('aria-valuenow',  '0');
+
+    document.body.insertBefore(bar, document.body.firstChild);
+
+    window.addEventListener('scroll', function () {
+        var scrollTop = window.scrollY || document.documentElement.scrollTop;
+        var maxScroll = document.documentElement.scrollHeight -
+                        document.documentElement.clientHeight;
+        var pct       = maxScroll > 0 ? (scrollTop / maxScroll) * 100 : 0;
+        var clamped   = Math.min(pct, 100);
+
+        bar.style.width = clamped.toFixed(1) + '%';
+        bar.setAttribute('aria-valuenow', Math.round(clamped));
+    }, { passive: true });
+}
+
+document.addEventListener('DOMContentLoaded', initReadingProgressBar);
