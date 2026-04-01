@@ -634,11 +634,68 @@ function initParticles() {
     canvas.setAttribute('aria-hidden', 'true');
     section.insertBefore(canvas, section.firstChild);
 
+    // ── Mouse / touch tracking (on section, canvas has pointer-events:none) ──
+
+    function canvasPos(clientX, clientY) {
+        var r = canvas.getBoundingClientRect();
+        return { x: clientX - r.left, y: clientY - r.top };
+    }
+
+    function spawnBurst(cx, cy) {
+        var n = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < n; i++) {
+            var angle = (i / n) * Math.PI * 2;
+            var speed = rand(1.5, 3.5);
+            bursts.push({
+                x: cx, y: cy,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                alpha: 1,
+                r: rand(2, 4)
+            });
+        }
+    }
+
+    section.addEventListener('mousemove', function (e) {
+        var p = canvasPos(e.clientX, e.clientY);
+        mouseX = p.x; mouseY = p.y;
+    }, { passive: true });
+
+    section.addEventListener('mouseleave', function () {
+        mouseX = -9999; mouseY = -9999;
+    });
+
+    section.addEventListener('click', function (e) {
+        var p = canvasPos(e.clientX, e.clientY);
+        spawnBurst(p.x, p.y);
+    });
+
+    section.addEventListener('touchmove', function (e) {
+        var t = e.touches[0];
+        var p = canvasPos(t.clientX, t.clientY);
+        mouseX = p.x; mouseY = p.y;
+    }, { passive: true });
+
+    section.addEventListener('touchstart', function (e) {
+        var t = e.touches[0];
+        var p = canvasPos(t.clientX, t.clientY);
+        mouseX = p.x; mouseY = p.y;
+        spawnBurst(p.x, p.y);
+    }, { passive: true });
+
+    section.addEventListener('touchend', function () {
+        mouseX = -9999; mouseY = -9999;
+    }, { passive: true });
+
     var ctx      = canvas.getContext('2d');
     var pts      = [];
     var COUNT    = 80;
     var MAX_DIST = 120;
     var raf      = null;
+    var mouseX   = -9999;
+    var mouseY   = -9999;
+    var bursts   = [];
+    var REPEL_R  = 150;
 
     function rand(a, b) { return a + Math.random() * (b - a); }
 
@@ -664,6 +721,18 @@ function initParticles() {
 
         for (var i = 0; i < pts.length; i++) {
             var p = pts[i];
+
+            // Repel from cursor
+            var mdx = p.x - mouseX;
+            var mdy = p.y - mouseY;
+            var md  = Math.sqrt(mdx * mdx + mdy * mdy);
+            if (md < REPEL_R && md > 0.5) {
+                var force = (REPEL_R - md) / REPEL_R * 0.5;
+                p.vx += (mdx / md) * force;
+                p.vy += (mdy / md) * force;
+                var spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                if (spd > 2) { p.vx = p.vx / spd * 2; p.vy = p.vy / spd * 2; }
+            }
 
             p.x += p.vx;
             p.y += p.vy;
@@ -691,6 +760,21 @@ function initParticles() {
                     ctx.stroke();
                 }
             }
+        }
+
+        // Animate burst particles (click / tap effect)
+        for (var b = bursts.length - 1; b >= 0; b--) {
+            var bp = bursts[b];
+            bp.x     += bp.vx;
+            bp.y     += bp.vy;
+            bp.vx    *= 0.96;
+            bp.vy    *= 0.96;
+            bp.alpha -= 0.018;
+            if (bp.alpha <= 0) { bursts.splice(b, 1); continue; }
+            ctx.beginPath();
+            ctx.arc(bp.x, bp.y, bp.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(96, 165, 250, ' + bp.alpha.toFixed(3) + ')';
+            ctx.fill();
         }
 
         raf = requestAnimationFrame(frame);
