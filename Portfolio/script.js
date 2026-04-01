@@ -426,3 +426,51 @@
     });
 
 }());
+
+// =========================================================================
+// FEATURE: DARK / LIGHT MODE TOGGLE
+// =========================================================================
+
+// Apply stored preference immediately (before paint) to prevent FOUC
+(function () {
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
+    }
+}());
+
+/**
+ * Inject a sun/moon toggle button into the nav container,
+ * apply the stored theme on load, and persist preference in localStorage.
+ *
+ * @returns {void}
+ */
+function initThemeToggle() {
+    var navContainer = document.querySelector('.nav-container');
+    if (!navContainer) { return; }
+
+    var btn = document.createElement('button');
+    btn.className = 'theme-toggle';
+    btn.id        = 'theme-toggle';
+    btn.setAttribute('aria-label',  'Basculer le th\u00e8me clair/sombre');
+    btn.setAttribute('aria-pressed', 'false');
+    btn.setAttribute('type',         'button');
+
+    var isLight = document.body.classList.contains('light-mode');
+
+    function applyTheme(light) {
+        document.body.classList.toggle('light-mode', light);
+        btn.textContent = light ? '\uD83C\uDF19' : '\u2600\uFE0F'; // 🌙 or ☀️
+        btn.setAttribute('aria-pressed', light ? 'true' : 'false');
+    }
+
+    applyTheme(isLight);
+    navContainer.appendChild(btn);
+
+    btn.addEventListener('click', function () {
+        isLight = !isLight;
+        applyTheme(isLight);
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initThemeToggle);

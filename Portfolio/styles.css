@@ -1564,3 +1564,62 @@ footer {
   .veille-icon-grid { grid-template-columns: 1fr 1fr; }
   .section-header h2 { font-size: 1.75rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   THEME TOGGLE BUTTON
+═══════════════════════════════════════════════════════════════ */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.3rem 0.5rem;
+  transition: border-color var(--t), background var(--t);
+}
+
+.theme-toggle:hover {
+  background: var(--accent-glow);
+  border-color: var(--border-hover);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+═══════════════════════════════════════════════════════════════ */
+body.light-mode {
+  --dark:           #f8fafc;
+  --dark-secondary: #f1f5f9;
+  --bg-card:        #ffffff;
+  --bg-card-hover:  #f8fafc;
+  --text:           #0f172a;
+  --text-muted:     #475569;
+  --text-faint:     #94a3b8;
+  --border:         rgba(59, 130, 246, 0.22);
+  --border-hover:   rgba(59, 130, 246, 0.5);
+  --accent-glow:    rgba(59, 130, 246, 0.1);
+  --glow-sm:        0 0 20px rgba(59, 130, 246, 0.12);
+  --glow-md:        0 0 40px rgba(59, 130, 246, 0.18);
+  --glow-lg:        0 0 60px rgba(59, 130, 246, 0.24);
+  --shadow:         0 4px 24px rgba(0, 0, 0, 0.08);
+  background: var(--dark);
+  color: var(--text);
+}
+
+body.light-mode nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+
+body.light-mode nav.scrolled {
+  background: rgba(248, 250, 252, 0.97);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .hero-orb {
+  opacity: 0.3;
+}
+
+body.light-mode .hero-grid {
+  background-image: radial-gradient(circle, rgba(59, 130, 246, 0.2) 1px, transparent 1px);
+}
