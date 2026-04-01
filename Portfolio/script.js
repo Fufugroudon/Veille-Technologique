@@ -990,3 +990,55 @@ function initScrambleText() {
 }
 
 document.addEventListener('DOMContentLoaded', initScrambleText);
+
+// =========================================================================
+// FEATURE: LIVE CLOCK IN FOOTER
+// =========================================================================
+
+/**
+ * Inject a live HH:MM:SS clock + French date into the footer,
+ * updating every second via setInterval.
+ *
+ * @returns {void}
+ */
+function initLiveClock() {
+    var footer = document.querySelector('footer .footer-inner');
+    if (!footer) { return; }
+
+    var DAYS   = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+    var MONTHS = ['janvier','f\u00e9vrier','mars','avril','mai','juin',
+                  'juillet','ao\u00fbt','septembre','octobre','novembre','d\u00e9cembre'];
+
+    var wrap = document.createElement('div');
+    wrap.className = 'footer-clock';
+
+    var timeEl = document.createElement('div');
+    timeEl.className = 'footer-clock-time';
+
+    var dateEl = document.createElement('div');
+
+    wrap.appendChild(timeEl);
+    wrap.appendChild(dateEl);
+    footer.appendChild(wrap);
+
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+    function tick() {
+        var now  = new Date();
+        var h    = pad(now.getHours());
+        var m    = pad(now.getMinutes());
+        var s    = pad(now.getSeconds());
+        var day  = DAYS[now.getDay()];
+        var date = now.getDate();
+        var mon  = MONTHS[now.getMonth()];
+        var yr   = now.getFullYear();
+
+        timeEl.textContent = h + ':' + m + ':' + s;
+        dateEl.textContent = day + ' ' + date + ' ' + mon + ' ' + yr;
+    }
+
+    tick();
+    setInterval(tick, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', initLiveClock);
