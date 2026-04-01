@@ -1042,3 +1042,148 @@ function initLiveClock() {
 }
 
 document.addEventListener('DOMContentLoaded', initLiveClock);
+
+// =========================================================================
+// FEATURE: MATRIX RAIN EASTER EGG
+// =========================================================================
+
+/**
+ * Launch a full-screen Matrix rain effect:
+ *   Desktop : Konami code  ↑↑↓↓←→←→BA
+ *   Mobile  : triple-tap the .nav-brand within 1 second
+ * Plays for 4 s then fades out.
+ * A synthetic Web Audio beep fires on trigger (no external files).
+ *
+ * @returns {void}
+ */
+function initMatrixEasterEgg() {
+    var CHARS = '\u30A1\u30A2\u30A3\u30A4\u30A5\u30A6\u30A7\u30A8\u30A9\u30AA' +
+                '\u30AB\u30AC\u30AD\u30AE\u30AF\u30B0\u30B1\u30B2\u30B3\u30B4' +
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    // ── Konami code detector ──────────────────────────────────────────────
+    var KONAMI  = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+    var konamiIdx = 0;
+
+    document.addEventListener('keydown', function (e) {
+        if (e.keyCode === KONAMI[konamiIdx]) {
+            konamiIdx++;
+            if (konamiIdx === KONAMI.length) { konamiIdx = 0; launchMatrix(); }
+        } else {
+            konamiIdx = 0;
+        }
+    });
+
+    // ── Triple-tap on nav-brand (mobile) ──────────────────────────────────
+    var brand    = document.querySelector('.nav-brand');
+    var tapCount = 0;
+    var tapTimer = null;
+
+    if (brand) {
+        brand.addEventListener('touchstart', function (e) {
+            e.preventDefault();
+            tapCount++;
+            clearTimeout(tapTimer);
+            tapTimer = setTimeout(function () { tapCount = 0; }, 1000);
+            if (tapCount >= 3) { tapCount = 0; launchMatrix(); }
+        }, { passive: false });
+    }
+
+    // ── Beep via Web Audio API ────────────────────────────────────────────
+    function playBeep() {
+        try {
+            var AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) { return; }
+            var ctx  = new AudioCtx();
+            var osc  = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(440, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.3);
+        } catch (err) { /* AudioContext blocked — silent fallback */ }
+    }
+
+    // ── Matrix canvas renderer ────────────────────────────────────────────
+    function launchMatrix() {
+        if (document.getElementById('matrix-overlay')) { return; } // already running
+
+        playBeep();
+
+        var overlay = document.createElement('div');
+        overlay.id = 'matrix-overlay';
+
+        var cvs = document.createElement('canvas');
+        cvs.id  = 'matrix-canvas';
+        overlay.appendChild(cvs);
+
+        var msg = document.createElement('div');
+        msg.id  = 'matrix-message';
+        msg.textContent = 'ACC\u00c8S AUTORIS\u00c9';   // ACCÈS AUTORISÉ
+        overlay.appendChild(msg);
+
+        document.body.appendChild(overlay);
+
+        // Force reflow then fade in
+        overlay.getBoundingClientRect();
+        overlay.classList.add('matrix-visible');
+
+        var ctx  = cvs.getContext('2d');
+        var W, H, cols, drops;
+        var FONT = 14;
+        var raf2 = null;
+
+        function resize() {
+            W = cvs.width  = window.innerWidth;
+            H = cvs.height = window.innerHeight;
+            cols  = Math.floor(W / FONT);
+            drops = [];
+            for (var i = 0; i < cols; i++) {
+                drops[i] = Math.floor(Math.random() * -H / FONT);
+            }
+        }
+
+        function drawFrame() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, W, H);
+            ctx.fillStyle = '#00ff41';
+            ctx.font      = FONT + 'px monospace';
+
+            for (var c = 0; c < cols; c++) {
+                var ch = CHARS[Math.floor(Math.random() * CHARS.length)];
+                ctx.fillText(ch, c * FONT, drops[c] * FONT);
+                if (drops[c] * FONT > H && Math.random() > 0.975) {
+                    drops[c] = 0;
+                }
+                drops[c]++;
+            }
+            raf2 = requestAnimationFrame(drawFrame);
+        }
+
+        resize();
+        drawFrame();
+
+        // Click / tap to dismiss early
+        overlay.addEventListener('click',      dismiss);
+        overlay.addEventListener('touchstart', dismiss, { passive: true });
+
+        // Auto-dismiss after 4 s
+        var autoTimer = setTimeout(dismiss, 4000);
+
+        function dismiss() {
+            clearTimeout(autoTimer);
+            cancelAnimationFrame(raf2);
+            overlay.classList.remove('matrix-visible');
+            setTimeout(function () {
+                if (overlay.parentNode) { overlay.parentNode.removeChild(overlay); }
+            }, 450);
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', initMatrixEasterEgg);
