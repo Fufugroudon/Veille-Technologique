@@ -863,3 +863,64 @@ function initGlitchEffect() {
 }
 
 document.addEventListener('DOMContentLoaded', initGlitchEffect);
+
+// =========================================================================
+// FEATURE: 3D TILT ON .project-card
+// =========================================================================
+
+/**
+ * Apply perspective tilt + moving shine on .project-card mousemove.
+ * On touch: shows the shine briefly on touchstart, no tilt (avoids jank).
+ * Resets smoothly on mouseleave.
+ *
+ * @returns {void}
+ */
+function initCardTilt() {
+    var MAX_TILT = 12; // degrees
+    var isTouchDevice = window.matchMedia('(hover: none)').matches;
+
+    document.querySelectorAll('.project-card').forEach(function (card) {
+        // Inject shine overlay
+        var shine = document.createElement('div');
+        shine.className = 'card-shine';
+        card.appendChild(shine);
+
+        if (isTouchDevice) {
+            // Touch: flash shine, no tilt
+            card.addEventListener('touchstart', function () {
+                shine.style.opacity = '1';
+                setTimeout(function () { shine.style.opacity = ''; }, 400);
+            }, { passive: true });
+            return;
+        }
+
+        card.addEventListener('mousemove', function (e) {
+            var rect    = card.getBoundingClientRect();
+            var cx      = rect.left + rect.width  / 2;
+            var cy      = rect.top  + rect.height / 2;
+            var dx      = (e.clientX - cx) / (rect.width  / 2); // -1..1
+            var dy      = (e.clientY - cy) / (rect.height / 2); // -1..1
+            var rotY    =  dx * MAX_TILT;
+            var rotX    = -dy * MAX_TILT;
+
+            card.style.transition = 'transform 0.1s ease, box-shadow var(--t)';
+            card.style.transform  =
+                'perspective(800px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) scale(1.02)';
+
+            // Move shine to follow cursor
+            var pctX = ((e.clientX - rect.left) / rect.width  * 100).toFixed(1);
+            var pctY = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
+            shine.style.background =
+                'radial-gradient(circle at ' + pctX + '% ' + pctY + '%, ' +
+                'rgba(255,255,255,0.14) 0%, transparent 55%)';
+        });
+
+        card.addEventListener('mouseleave', function () {
+            card.style.transition = 'transform 0.5s ease, box-shadow var(--t)';
+            card.style.transform  = '';
+            shine.style.background = '';
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initCardTilt);
