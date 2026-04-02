@@ -1578,7 +1578,11 @@ function initTerminal() {
         printBlank();
         print('Commandes disponibles :', 'term-line-accent');
         Object.keys(COMMANDS).forEach(function (cmd) {
-            print('  ' + cmd.padEnd(10) + COMMANDS[cmd]);
+            printHTML(
+                '<span class="terminal-cmd-name">' + cmd + '</span>' +
+                '<span>' + COMMANDS[cmd] + '</span>',
+                'help-row'
+            );
         });
         printBlank();
     }

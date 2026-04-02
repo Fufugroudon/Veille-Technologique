@@ -1729,9 +1729,9 @@ body.light-mode .hero-grid {
   display: flex;
   flex-direction: column;
   width: min(1100px, calc(100% - 2rem));
-  min-height: 420px;
-  max-height: 600px;
-  height: clamp(420px, 80vh, 600px);
+  min-height: 300px;
+  max-height: 450px;
+  height: clamp(300px, 60vh, 450px);
   overflow: hidden;
   position: relative;
 }
@@ -1843,6 +1843,8 @@ body.light-mode .hero-grid {
 .term-output { scrollbar-width: thin; scrollbar-color: #3b82f6 #0f172a; }
 
 .term-line         { margin-bottom: 0.1rem; white-space: pre-wrap; word-break: break-word; }
+.term-line.help-row { display: flex; gap: 0.5rem; white-space: normal; }
+.terminal-cmd-name  { min-width: 120px; flex-shrink: 0; white-space: nowrap; color: rgba(0, 255, 65, 0.85); }
 .term-line-prompt  { color: #00ff41; }
 .term-line-error   { color: #ff5555; }
 .term-line-accent  { color: #60a5fa; }
