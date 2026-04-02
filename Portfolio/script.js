@@ -321,7 +321,7 @@
         const backToTop = document.createElement('button');
         backToTop.id = 'back-to-top';
         backToTop.setAttribute('type', 'button');
-        backToTop.setAttribute('aria-label', 'Retour en haut');
+        backToTop.setAttribute('aria-label', 'Retour en haut de page');
         backToTop.textContent = '↑';
         document.body.appendChild(backToTop);
 
@@ -587,6 +587,7 @@ function initThemeToggle() {
         document.body.classList.toggle('light-mode', light);
         btn.textContent = light ? '\uD83C\uDF19' : '\u2600\uFE0F'; // 🌙 or ☀️
         btn.setAttribute('aria-pressed', light ? 'true' : 'false');
+        btn.setAttribute('aria-label', light ? 'Activer le mode nuit' : 'Activer le mode jour');
     }
 
     applyTheme(isLight);
@@ -1410,7 +1411,7 @@ function initTerminal() {
 
     var navBtn = document.createElement('button');
     navBtn.className = 'terminal-nav-btn';
-    navBtn.setAttribute('aria-label', 'Ouvrir le terminal');
+    navBtn.setAttribute('aria-label', 'Ouvrir le terminal interactif');
     navBtn.setAttribute('type', 'button');
     navBtn.textContent = '>_';
     navContainer.appendChild(navBtn);
@@ -2166,7 +2167,7 @@ document.addEventListener('DOMContentLoaded', initTerminal);
         var btn = document.createElement('button');
         btn.id = 'creature-legend-btn';
         btn.setAttribute('type', 'button');
-        btn.setAttribute('aria-label', 'Bestiaire mythologique');
+        btn.setAttribute('aria-label', 'Ouvrir le bestiaire mythologique');
         btn.setAttribute('title', 'Bestiaire mythologique');
 
         var badge = document.createElement('span');
@@ -2182,6 +2183,7 @@ document.addEventListener('DOMContentLoaded', initTerminal);
         panel.id = 'creature-legend-panel';
         panel.setAttribute('aria-hidden', 'true');
         panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-modal', 'true');
         panel.setAttribute('aria-label', 'Bestiaire mythologique');
 
         // Header
