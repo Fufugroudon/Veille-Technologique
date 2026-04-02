@@ -2035,17 +2035,10 @@ body.light-mode .hero-grid {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   PROJECT TAG TOOLTIPS
+   PROJECT TAG TOOLTIPS — global element (not clipped by card)
 ═══════════════════════════════════════════════════════════════ */
-.has-tooltip {
-  position: relative;
-}
-
-.tag-tooltip {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
+#global-tooltip {
+  position: fixed;
   background: #0a1628;
   color: var(--text);
   font-size: 0.7rem;
@@ -2055,13 +2048,19 @@ body.light-mode .hero-grid {
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--t-fast), transform var(--t-fast);
-  z-index: 200;
+  visibility: hidden;
+  transition: opacity var(--t-fast);
+  z-index: 9999;
   border: 1px solid var(--border-hover);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.tag-tooltip::after {
+#global-tooltip.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#global-tooltip::after {
   content: '';
   position: absolute;
   top: 100%;
@@ -2071,13 +2070,7 @@ body.light-mode .hero-grid {
   border-top-color: var(--border-hover);
 }
 
-.has-tooltip:hover .tag-tooltip,
-.has-tooltip:focus-within .tag-tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-body.light-mode .tag-tooltip {
+body.light-mode #global-tooltip {
   background: #ffffff;
   color: #0f172a;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

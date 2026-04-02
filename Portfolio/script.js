@@ -595,19 +595,56 @@ var TAG_DESCRIPTIONS = {
  * @returns {void}
  */
 function initTagTooltips() {
+    // Single global tooltip on <body> — never clipped by card overflow
+    var tip = document.createElement('div');
+    tip.id = 'global-tooltip';
+    tip.setAttribute('role', 'tooltip');
+    tip.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(tip);
+
+    var hideTimer = null;
+
+    function showTip(tag) {
+        var desc = TAG_DESCRIPTIONS[tag.textContent.trim()];
+        if (!desc) { return; }
+
+        clearTimeout(hideTimer);
+        tip.textContent = desc;
+        tip.classList.add('visible');
+
+        // Position above the tag using fixed coordinates
+        var r        = tag.getBoundingClientRect();
+        var tipW     = tip.offsetWidth;
+        var tipH     = tip.offsetHeight;
+        var left     = r.left + r.width / 2 - tipW / 2;
+        var top      = r.top  - tipH - 10;
+
+        // Clamp horizontally; flip below if not enough space above
+        left = Math.max(8, Math.min(left, window.innerWidth - tipW - 8));
+        if (top < 8) { top = r.bottom + 10; }
+
+        tip.style.left = left + 'px';
+        tip.style.top  = top  + 'px';
+    }
+
+    function hideTip() { tip.classList.remove('visible'); }
+
     document.querySelectorAll('.tag').forEach(function (tag) {
-        var text = tag.textContent.trim();
-        var desc = TAG_DESCRIPTIONS[text];
+        var desc = TAG_DESCRIPTIONS[tag.textContent.trim()];
         if (!desc) { return; }
 
         tag.setAttribute('data-tooltip', desc);
-        tag.classList.add('has-tooltip');
 
-        var tip = document.createElement('span');
-        tip.className = 'tag-tooltip';
-        tip.textContent = desc;
-        tip.setAttribute('role', 'tooltip');
-        tag.appendChild(tip);
+        tag.addEventListener('mouseenter', function () { showTip(tag); });
+        tag.addEventListener('mouseleave', hideTip);
+
+        // Mobile: show on tap, auto-hide after 1.5 s
+        tag.addEventListener('touchstart', function (e) {
+            e.preventDefault();
+            showTip(tag);
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(hideTip, 1500);
+        }, { passive: false });
     });
 }
 
