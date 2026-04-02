@@ -2137,3 +2137,147 @@ document.addEventListener('DOMContentLoaded', initTerminal);
 
     document.addEventListener('DOMContentLoaded', initCreatureEasterEgg);
 }());
+
+// =============================================================================
+// CREATURE LEGEND POPUP — footer bottom-right
+// =============================================================================
+(function () {
+    'use strict';
+
+    var BESTIARY = {
+        '\uD83D\uDC09': { name: 'Dragon',          desc: 'Cr\u00e9ature l\u00e9gendaire crachant du feu, symbole de puissance en Orient comme en Occident.' },
+        '\uD83E\uDD85': { name: 'Ph\u00e9nix',     desc: 'Oiseau immortel renaissant de ses cendres, symbole de r\u00e9surrection dans la mythologie grecque.' },
+        '\uD83C\uDF0A': { name: 'L\u00e9viathan',  desc: 'Monstre marin colossal des profondeurs, issu de la tradition h\u00e9bra\u00efque et biblique.' },
+        '\u26A1':       { name: 'Thor',             desc: 'Dieu nordique du tonnerre, fils d\u2019Odin, ma\u00eetre de Mjolnir, protecteur des hommes.' },
+        '\uD83D\uDC3A': { name: 'Fenrir',           desc: 'Loup g\u00e9ant de la mythologie nordique, fils de Loki, destin\u00e9 \u00e0 d\u00e9vorer Odin lors du Ragnar\u00f6k.' },
+        '\uD83E\uDD81': { name: 'Lion de N\u00e9m\u00e9e', desc: 'Lion invuln\u00e9rable tu\u00e9 par H\u00e9racl\u00e8s lors de son premier travail, peau devenue son armure.' },
+        '\uD83D\uDC0D': { name: 'Serpent',          desc: 'Figure ambivalente dans toutes les mythologies\u00a0: sagesse, chaos ou renaissance selon les cultures.' },
+        '\uD83E\uDD84': { name: 'Licorne',          desc: 'Cheval ail\u00e9 \u00e0 corne unique, symbole de puret\u00e9 et de magie dans les l\u00e9gendes europ\u00e9ennes.' },
+        '\uD83C\uDF19': { name: 'S\u00e9l\u00e9n\u00e9', desc: 'D\u00e9esse grecque de la Lune, s\u0153ur d\u2019H\u00e9lios, conduisant son char lunaire \u00e0 travers le ciel nocturne.' },
+        '\uD83D\uDD31': { name: 'Pos\u00e9idon',   desc: 'Dieu grec des mers et des tremblements de terre, fr\u00e8re de Zeus, ma\u00eetre du trident.' },
+        '\uD83D\uDC12': { name: 'Sun Wukong',       desc: 'Roi Singe de la mythologie chinoise, h\u00e9ros de La P\u00e9r\u00e9grination vers l\u2019Ouest, ma\u00eetre des 72 transformations.' },
+        '\uD83D\uDC80': { name: 'Hel',              desc: 'D\u00e9esse nordique des morts, fille de Loki, souveraine de Niflheim, royaume des \u00e2mes d\u00e9funtes.' },
+        '\uD83E\uDD8A': { name: 'Kitsune',          desc: 'Renard \u00e0 plusieurs queues de la mythologie japonaise, esprit rus\u00e9 et sage pouvant prendre forme humaine.' },
+        '\uD83C\uDF38': { name: 'Amaterasu',        desc: 'Grande d\u00e9esse shinto du Soleil, souveraine des cieux, anc\u00eatre mythique de la famille imp\u00e9riale japonaise.' }
+    };
+
+    function initCreatureLegend() {
+        // ── Trigger button ────────────────────────────────────────────────
+        var btn = document.createElement('button');
+        btn.id = 'creature-legend-btn';
+        btn.setAttribute('type', 'button');
+        btn.setAttribute('aria-label', 'Bestiaire mythologique');
+        btn.setAttribute('title', 'Bestiaire mythologique');
+
+        var badge = document.createElement('span');
+        badge.className = 'creature-legend-badge';
+        badge.textContent = '?';
+        btn.textContent = '\uD83D\uDC09';
+        btn.appendChild(badge);
+
+        document.body.appendChild(btn);
+
+        // ── Panel ─────────────────────────────────────────────────────────
+        var panel = document.createElement('div');
+        panel.id = 'creature-legend-panel';
+        panel.setAttribute('aria-hidden', 'true');
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-label', 'Bestiaire mythologique');
+
+        // Header
+        var header = document.createElement('div');
+        header.className = 'creature-legend-header';
+
+        var title = document.createElement('span');
+        title.className = 'creature-legend-title';
+        title.textContent = '\uD83D\uDCDA Bestiaire Mythologique';
+
+        var closeBtn = document.createElement('button');
+        closeBtn.className = 'creature-legend-close';
+        closeBtn.setAttribute('type', 'button');
+        closeBtn.setAttribute('aria-label', 'Fermer');
+        closeBtn.textContent = '\u2715';
+
+        header.appendChild(title);
+        header.appendChild(closeBtn);
+        panel.appendChild(header);
+
+        // Rows
+        var list = document.createElement('div');
+        list.className = 'creature-legend-list';
+
+        var keys = Object.keys(BESTIARY);
+        keys.forEach(function (emoji, i) {
+            var entry = BESTIARY[emoji];
+            var row = document.createElement('div');
+            row.className = 'creature-legend-row' + (i === keys.length - 1 ? ' last' : '');
+
+            var emojiEl = document.createElement('span');
+            emojiEl.className = 'creature-legend-emoji';
+            emojiEl.textContent = emoji;
+
+            var info = document.createElement('div');
+            info.className = 'creature-legend-info';
+
+            var nameEl = document.createElement('span');
+            nameEl.className = 'creature-legend-name';
+            nameEl.textContent = entry.name;
+
+            var descEl = document.createElement('span');
+            descEl.className = 'creature-legend-desc';
+            descEl.textContent = entry.desc;
+
+            info.appendChild(nameEl);
+            info.appendChild(descEl);
+            row.appendChild(emojiEl);
+            row.appendChild(info);
+            list.appendChild(row);
+        });
+
+        panel.appendChild(list);
+        document.body.appendChild(panel);
+
+        // ── Open / close ──────────────────────────────────────────────────
+        var isOpen = false;
+
+        function openPanel() {
+            panel.classList.add('creature-legend-open');
+            panel.setAttribute('aria-hidden', 'false');
+            isOpen = true;
+        }
+
+        function closePanel() {
+            panel.classList.remove('creature-legend-open');
+            panel.setAttribute('aria-hidden', 'true');
+            isOpen = false;
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            isOpen ? closePanel() : openPanel();
+        });
+
+        closeBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            closePanel();
+        });
+
+        document.addEventListener('click', function (e) {
+            if (isOpen && !panel.contains(e.target) && e.target !== btn) {
+                closePanel();
+            }
+        });
+
+        document.addEventListener('touchstart', function (e) {
+            if (isOpen && !panel.contains(e.target) && e.target !== btn) {
+                closePanel();
+            }
+        }, { passive: true });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && isOpen) { closePanel(); }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initCreatureLegend);
+}());

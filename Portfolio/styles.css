@@ -2370,3 +2370,151 @@ body.light-mode #global-tooltip {
 }
 
 .footer-terms-link:hover { color: var(--accent-light); }
+
+/* ═══════════════════════════════════════════════════════════════
+   CREATURE LEGEND BUTTON & PANEL
+═══════════════════════════════════════════════════════════════ */
+#creature-legend-btn {
+  position: fixed;
+  bottom: 5rem;
+  right: 1.5rem;
+  width: 46px;
+  height: 46px;
+  background: var(--dark-secondary);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 900;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: fixed; /* ensure fixed even if inherited */
+}
+
+#creature-legend-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.25);
+}
+
+.creature-legend-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Panel */
+#creature-legend-panel {
+  position: fixed;
+  bottom: 9rem;
+  right: 1.5rem;
+  max-width: 320px;
+  width: min(320px, calc(90vw));
+  background: var(--dark-secondary);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  max-height: 60vh;
+  overflow-y: auto;
+  z-index: 9990;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 #0f172a;
+}
+
+#creature-legend-panel::-webkit-scrollbar       { width: 4px; }
+#creature-legend-panel::-webkit-scrollbar-track  { background: #0f172a; border-radius: 4px; }
+#creature-legend-panel::-webkit-scrollbar-thumb  { background: #3b82f6; border-radius: 4px; }
+
+#creature-legend-panel.creature-legend-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Panel header */
+.creature-legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.creature-legend-title {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.creature-legend-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.15s;
+  margin: -0.5rem -0.5rem -0.5rem 0;
+}
+
+.creature-legend-close:hover { color: var(--text); }
+
+/* Rows */
+.creature-legend-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.creature-legend-row.last { border-bottom: none; }
+
+.creature-legend-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+
+.creature-legend-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.creature-legend-name {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.creature-legend-desc {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  display: block;
+}
