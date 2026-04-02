@@ -1928,8 +1928,10 @@ body.light-mode .hero-grid {
    3D TILT — .project-card
 ═══════════════════════════════════════════════════════════════ */
 .project-card {
-  transform-style: preserve-3d;
+  transform-style: flat;      /* prevent children escaping the card plane */
   will-change: transform;
+  isolation: isolate;          /* new stacking context — contains z-index children */
+  overflow: hidden;            /* clip .card-shine to the rounded card boundary */
 }
 
 .card-shine {
