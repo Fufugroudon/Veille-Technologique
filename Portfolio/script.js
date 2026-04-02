@@ -1061,19 +1061,27 @@ function initLiveClock() {
     function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
     function tick() {
-        var now  = new Date();
-        var h    = pad(now.getHours());
-        var m    = pad(now.getMinutes());
-        var s    = pad(now.getSeconds());
-        var day  = DAYS[now.getDay()];
-        var date = now.getDate();
-        var mon  = MONTHS[now.getMonth()];
-        var yr   = now.getFullYear();
+        var tz  = localStorage.getItem('preferred_timezone') || undefined;
+        var now = new Date();
 
+        var timeOpts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        var dateOpts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        if (tz) { timeOpts.timeZone = tz; dateOpts.timeZone = tz; }
+
+        var tp = new Intl.DateTimeFormat('fr-FR', timeOpts).formatToParts(now);
+        var h  = tp.find(function (p) { return p.type === 'hour';   }).value;
+        var m  = tp.find(function (p) { return p.type === 'minute'; }).value;
+        var s  = tp.find(function (p) { return p.type === 'second'; }).value;
         timeEl.textContent = h + ':' + m + ':' + s;
-        var dayStr = day.charAt(0).toUpperCase() + day.slice(1);
-        var monStr = mon.charAt(0).toUpperCase() + mon.slice(1);
-        dateEl.textContent = dayStr + ' ' + date + ' ' + monStr + ' ' + yr;
+
+        var dp     = new Intl.DateTimeFormat('fr-FR', dateOpts).formatToParts(now);
+        var dayStr = dp.find(function (p) { return p.type === 'weekday'; }).value;
+        var dateNum= dp.find(function (p) { return p.type === 'day';     }).value;
+        var monStr = dp.find(function (p) { return p.type === 'month';   }).value;
+        var yr     = dp.find(function (p) { return p.type === 'year';    }).value;
+        dayStr = dayStr.charAt(0).toUpperCase() + dayStr.slice(1);
+        monStr = monStr.charAt(0).toUpperCase() + monStr.slice(1);
+        dateEl.textContent = dayStr + ' ' + dateNum + ' ' + monStr + ' ' + yr;
     }
 
     tick();
@@ -1242,15 +1250,25 @@ document.addEventListener('DOMContentLoaded', initMatrixEasterEgg);
 function initTerminal() {
     // ── Command registry ─────────────────────────────────────────────────
     var COMMANDS = {
-        help:    'Liste toutes les commandes disponibles',
-        whoami:  'Affiche le profil de L\u00e9o',
-        skills:  'Graphique ASCII des comp\u00e9tences',
-        contact: 'Email et liens de contact',
-        secret:  'D\u00e9clenche le Matrix rain',
-        hack:    'Simulation de hacking (pour rire)',
-        weather: 'M\u00e9t\u00e9o en direct (Open-Meteo)',
-        clear:   'Vide le terminal',
-        exit:    'Ferme le terminal'
+        help:     'Liste toutes les commandes disponibles',
+        whoami:   'Affiche le profil de L\u00e9o',
+        skills:   'Graphique ASCII des comp\u00e9tences',
+        contact:  'Email et liens de contact',
+        secret:   'D\u00e9clenche le Matrix rain',
+        hack:     'Simulation de hacking (pour rire)',
+        weather:  'M\u00e9t\u00e9o en direct (g\u00e9olocalisation)',
+        timezone: 'Changer le fuseau horaire de l\'horloge',
+        clear:    'Vide le terminal',
+        exit:     'Ferme le terminal'
+    };
+
+    var TIMEZONE_MAP = {
+        'europe':   'Europe/Paris',
+        'london':   'Europe/London',
+        'new-york': 'America/New_York',
+        'tokyo':    'Asia/Tokyo',
+        'sydney':   'Australia/Sydney',
+        'utc':      'UTC'
     };
 
     // ── Build DOM ─────────────────────────────────────────────────────────
@@ -1524,13 +1542,6 @@ function initTerminal() {
     }
 
     function cmdWeather() {
-        print('  R\u00e9cup\u00e9ration de la m\u00e9t\u00e9o pour M\u00e9ru...', 'term-line-muted');
-        // Open-Meteo: Méru (49.2300N, 2.1300E), WMO weather codes
-        var url = 'https://api.open-meteo.com/v1/forecast' +
-                  '?latitude=49.23&longitude=2.13' +
-                  '&current=temperature_2m,wind_speed_10m,weather_code' +
-                  '&wind_speed_unit=kmh&timezone=Europe%2FParis';
-
         var WMO = {
             0:'Ciel d\u00e9gag\u00e9 \u2600\uFE0F', 1:'Principalement d\u00e9gag\u00e9', 2:'Partiellement nuageux \u26C5',
             3:'Couvert \u2601\uFE0F', 45:'Brouillard \uD83C\uDF2B\uFE0F', 48:'Brouillard givrant',
@@ -1538,38 +1549,114 @@ function initTerminal() {
             95:'Orage \u26C8\uFE0F', 99:'Orage + gr\u00eale'
         };
 
-        fetch(url)
-            .then(function (r) { return r.json(); })
-            .then(function (d) {
-                var c    = d.current;
-                var cond = WMO[c.weather_code] || 'Code ' + c.weather_code;
-                printBlank();
-                buildAsciiBox([
-                    'M\u00e9t\u00e9o \u2014 M\u00e9ru, FR',
-                    'Temp.  : ' + c.temperature_2m + '\u00b0C',
-                    'Vent   : ' + c.wind_speed_10m + ' km/h',
-                    cond
-                ]).forEach(function (line) { print('  ' + line); });
-                printBlank();
-            })
-            .catch(function () {
-                print('  \u26A0\uFE0F Impossible de r\u00e9cup\u00e9rer la m\u00e9t\u00e9o.', 'term-line-error');
+        function fetchAndDisplay(lat, lon, cityLabel) {
+            var tz  = localStorage.getItem('preferred_timezone') || 'Europe/Paris';
+            var url = 'https://api.open-meteo.com/v1/forecast' +
+                      '?latitude='  + lat + '&longitude=' + lon +
+                      '&current=temperature_2m,wind_speed_10m,weather_code' +
+                      '&wind_speed_unit=kmh&timezone=' + encodeURIComponent(tz);
+
+            fetch(url)
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    var c    = d.current;
+                    var cond = WMO[c.weather_code] || 'Code ' + c.weather_code;
+                    printBlank();
+                    buildAsciiBox([
+                        'M\u00e9t\u00e9o \u2014 ' + cityLabel,
+                        'Temp.  : ' + c.temperature_2m + '\u00b0C',
+                        'Vent   : ' + c.wind_speed_10m + ' km/h',
+                        cond
+                    ]).forEach(function (line) { print('  ' + line); });
+                    printBlank();
+                })
+                .catch(function () {
+                    print('  \u26A0\uFE0F Impossible de r\u00e9cup\u00e9rer la m\u00e9t\u00e9o.', 'term-line-error');
+                });
+        }
+
+        function fallback() {
+            fetchAndDisplay(49.2333, 2.1333, 'M\u00e9ru, FR (position par d\u00e9faut)');
+        }
+
+        if (!navigator.geolocation) {
+            print('  G\u00e9olocalisation non disponible. Utilisation de M\u00e9ru...', 'term-line-muted');
+            fallback();
+            return;
+        }
+
+        print('  R\u00e9cup\u00e9ration de la position...', 'term-line-muted');
+
+        navigator.geolocation.getCurrentPosition(
+            function (pos) {
+                var lat = pos.coords.latitude;
+                var lon = pos.coords.longitude;
+
+                // Reverse-geocode with Nominatim (no API key required)
+                fetch('https://nominatim.openstreetmap.org/reverse?lat=' + lat +
+                      '&lon=' + lon + '&format=json')
+                    .then(function (r) { return r.json(); })
+                    .then(function (geo) {
+                        var addr     = geo.address || {};
+                        var city     = addr.city || addr.town || addr.village || addr.county || 'Position';
+                        var country  = addr.country_code ? addr.country_code.toUpperCase() : '';
+                        var label    = city + (country ? ', ' + country : '');
+                        fetchAndDisplay(lat, lon, label);
+                    })
+                    .catch(function () {
+                        fetchAndDisplay(lat, lon, lat.toFixed(2) + ', ' + lon.toFixed(2));
+                    });
+            },
+            function () {
+                print('  Acc\u00e8s refus\u00e9. Utilisation de M\u00e9ru...', 'term-line-muted');
+                fallback();
+            },
+            { timeout: 8000 }
+        );
+    }
+
+    function cmdTimezone(arg) {
+        if (!arg) {
+            var current = localStorage.getItem('preferred_timezone') || 'Europe/Paris (d\u00e9faut)';
+            printBlank();
+            print('  Usage: timezone <zone>', 'term-line-accent');
+            printBlank();
+            print('  Zone active : ' + current);
+            printBlank();
+            print('  Zones disponibles :');
+            Object.keys(TIMEZONE_MAP).forEach(function (k) {
+                print('    ' + k.padEnd(12) + '\u2192 ' + TIMEZONE_MAP[k]);
             });
+            printBlank();
+            return;
+        }
+
+        var iana = TIMEZONE_MAP[arg];
+        if (!iana) {
+            print('  Zone inconnue\u00a0: "' + arg + '". Tapez "timezone" pour la liste.', 'term-line-error');
+            return;
+        }
+
+        localStorage.setItem('preferred_timezone', iana);
+        print('  \u2713 Fuseau horaire d\u00e9fini sur ' + iana, 'term-line-accent');
     }
 
     // ── Command dispatcher ───────────────────────────────────────────────
     function dispatch(raw) {
-        var cmd = raw.trim().toLowerCase();
+        var parts  = raw.trim().split(/\s+/);
+        var cmd    = parts[0].toLowerCase();
+        var cmdArg = parts.slice(1).join(' ').toLowerCase();
         print('leo@portfolio:~$ ' + raw, 'term-line-prompt');
 
         switch (cmd) {
-            case 'help':    cmdHelp();    break;
-            case 'whoami':  cmdWhoami();  break;
-            case 'skills':  cmdSkills();  break;
-            case 'contact': cmdContact(); break;
-            case 'secret':  cmdSecret();  break;
-            case 'hack':    cmdHack();    break;
-            case 'weather': cmdWeather(); break;
+            case 'help':     cmdHelp();            break;
+            case 'whoami':   cmdWhoami();           break;
+            case 'skills':   cmdSkills();           break;
+            case 'contact':  cmdContact();          break;
+            case 'secret':   cmdSecret();           break;
+            case 'hack':     cmdHack();             break;
+            case 'weather':  cmdWeather();          break;
+            case 'timezone': cmdTimezone(cmdArg);   break;
             case 'clear':
                 while (output.firstChild) { output.removeChild(output.firstChild); }
                 break;
