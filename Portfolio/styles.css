@@ -1713,8 +1713,10 @@ body.light-mode .hero-grid {
   box-shadow: 0 0 60px rgba(0, 255, 65, 0.12), 0 20px 60px rgba(0,0,0,0.8);
   display: flex;
   flex-direction: column;
-  width: min(860px, 95vw);
-  height: min(560px, 90vh);
+  width: min(900px, calc(100% - 2rem));
+  min-height: 420px;
+  max-height: 600px;
+  height: clamp(420px, 80vh, 600px);
   overflow: hidden;
   position: relative;
 }
@@ -1893,8 +1895,6 @@ body.light-mode .hero-grid {
   .term-cheatsheet { display: none; }
   .term-pills { display: flex; }
   .term-window {
-    width: 95vw;
-    height: 90vh;
     border-radius: var(--radius);
   }
 }
