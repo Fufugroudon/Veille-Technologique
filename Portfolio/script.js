@@ -1266,16 +1266,23 @@ document.addEventListener('DOMContentLoaded', initMatrixEasterEgg);
 function initTerminal() {
     // ── Command registry ─────────────────────────────────────────────────
     var COMMANDS = {
-        help:     'Liste toutes les commandes disponibles',
-        whoami:   'Affiche le profil de L\u00e9o',
-        skills:   'Graphique ASCII des comp\u00e9tences',
-        contact:  'Email et liens de contact',
-        secret:   'D\u00e9clenche le Matrix rain',
-        hack:     'Simulation de hacking (pour rire)',
-        weather:  'M\u00e9t\u00e9o en direct (g\u00e9olocalisation)',
-        Timezone: 'Changer le fuseau horaire de l\'horloge',
-        clear:    'Vide le terminal',
-        exit:     'Ferme le terminal'
+        help:      'Liste toutes les commandes disponibles',
+        whoami:    'Affiche le profil de L\u00e9o',
+        skills:    'Graphique ASCII des comp\u00e9tences',
+        contact:   'Email et liens de contact',
+        fortune:   'Citation al\u00e9atoire (mythologie, tech, anime)',
+        blague:    'Blague s\u00e8che du jour',
+        ping:      'Mesure la latence vers lesnorrys.com',
+        countdown: 'Compte \u00e0 rebours avant la fin du BTS',
+        history:   'Historique des commandes de la session',
+        refresh:   'Recharge la page',
+        theme:     'Bascule clair / sombre',
+        secret:    'D\u00e9clenche le Matrix rain',
+        hack:      'Simulation de hacking (pour rire)',
+        weather:   'M\u00e9t\u00e9o en direct (g\u00e9olocalisation)',
+        Timezone:  'Changer le fuseau horaire de l\'horloge',
+        clear:     'Vide le terminal',
+        exit:      'Ferme le terminal'
     };
 
     var TIMEZONE_MAP = {
@@ -1658,6 +1665,131 @@ function initTerminal() {
         print('  \u2713 Fuseau horaire d\u00e9fini sur ' + iana, 'term-line-accent');
     }
 
+    // ── fortune ──────────────────────────────────────────────────────────
+    var FORTUNES = [
+        { text: 'Cattle die, kindred die \u2014 every man is mortal. But the glory of the great dead never dies.', src: '\u2014 H\u00e1vam\u00e1l' },
+        { text: 'A man who never shuts up knows very little.', src: '\u2014 H\u00e1vam\u00e1l' },
+        { text: 'Je sais que je suis pendu \u00e0 l\u2019arbre balay\u00e9 par le vent, bless\u00e9 par une lance, offert \u00e0 moi-m\u00eame \u2014 pour arracher les runes \u00e0 l\u2019ab\u00eeme.', src: '\u2014 H\u00e1vam\u00e1l (Odin d\u00e9couvre les runes)' },
+        { text: 'Soixante-douze m\u00e9tamorphoses \u2014 et l\u2019esprit-singe ne peut toujours pas s\u2019\u00e9chapper de sa propre nature.', src: '\u2014 Wu Cheng\u2019en, Le Voyage en Occident' },
+        { text: 'Je suis n\u00e9 de la pierre, nourri par le vent. Je ne dois ma vie \u00e0 personne \u2014 et pourtant me voil\u00e0 serviteur.', src: '\u2014 Le Voyage en Occident' },
+        { text: 'Even if we painstakingly piece together something lost, it doesn\u2019t mean things will go back to how they were.', src: '\u2014 Kentaro Miura, Berserk' },
+        { text: 'In this world, is the destiny of mankind controlled by some transcendental entity or law? At least it is true that man has no control, even over his own will.', src: '\u2014 Berserk, Kentaro Miura' },
+        { text: 'If you want to get to know someone, find out what makes them angry.', src: '\u2014 Ging Freecss, Hunter \u00d7 Hunter' },
+        { text: 'You should enjoy the little detours to the fullest. Because that\u2019s where you\u2019ll find the things more important than what you want.', src: '\u2014 Ging Freecss, Hunter \u00d7 Hunter' },
+        { text: 'A lesson without pain is meaningless. That\u2019s because no one can gain without sacrificing something.', src: '\u2014 Edward Elric, Fullmetal Alchemist' },
+        { text: 'Humankind cannot gain anything without first giving something in return. To obtain, something of equal value must be lost.', src: '\u2014 Fullmetal Alchemist, Law of Equivalent Exchange' },
+        { text: 'The strength to continue forward comes not from the light ahead, but from the darkness you\u2019ve already crossed.', src: '\u2014 Guts, Berserk (paraphrase)' },
+        { text: 'Security is not a product, but a process.', src: '\u2014 Bruce Schneier' },
+        { text: 'Programs must be written for people to read, and only incidentally for machines to execute.', src: '\u2014 Harold Abelson, SICP' },
+        { text: 'The quieter you become, the more you are able to hear.', src: '\u2014 Kali Linux' },
+        { text: 'Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.', src: '\u2014 Antoine de Saint-Exup\u00e9ry' },
+        { text: 'Any sufficiently advanced technology is indistinguishable from magic.', src: '\u2014 Arthur C. Clarke' },
+        { text: 'L\u2019ennui est le seuil du danger \u2014 c\u2019est l\u00e0 que naissent les vraies id\u00e9es.', src: '\u2014 Hisoka Morow, Hunter \u00d7 Hunter (paraphrase)' },
+        { text: 'What cannot be cured must be endured \u2014 and what is endured shapes what you become.', src: '\u2014 Casca, Berserk (paraphrase)' },
+        { text: 'The real voyage of discovery consists not in seeking new landscapes, but in having new eyes.', src: '\u2014 Marcel Proust' }
+    ];
+
+    function cmdFortune() {
+        var q = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
+        printBlank();
+        print('  \u201c' + q.text + '\u201d');
+        print('  ' + q.src, 'term-line-accent');
+        printBlank();
+    }
+
+    // ── blague ───────────────────────────────────────────────────────────
+    var BLAGUES = [
+        'Il y a 10 types de personnes\u00a0: ceux qui comprennent le binaire, et les autres.',
+        'Un SQL se prom\u00e8ne dans un bar, voit deux tables et demande\u00a0: \u00ab\u00a0Je peux JOIN\u00a0?\u00a0\u00bb',
+        'R\u00e9cursion\u00a0: voir \u00ab\u00a0R\u00e9cursion\u00a0\u00bb.',
+        'Mon code fonctionne. Je ne sais pas pourquoi. Je n\u2019y touche plus.',
+        '404\u00a0: blague introuvable.',
+        'Je ne dors pas \u2014 j\u2019attends que le build se termine.',
+        'L\u2019optimisme en informatique, c\u2019est croire que le bug est dans le code des autres.',
+        'rm -rf /. Rien \u00e0 voir. Circulez.',
+        'Un dev senior, c\u2019est un dev junior qui a appris \u00e0 dire \u00ab\u00a0\u00e7a d\u00e9pend\u00a0\u00bb.',
+        '\u00ab\u00a0\u00c7a marche en local\u00a0\u00bb \u2014 \u00e9pitaphe d\u2019un serveur de production.'
+    ];
+
+    function cmdBlague() {
+        var joke = BLAGUES[Math.floor(Math.random() * BLAGUES.length)];
+        printBlank();
+        print('  ' + joke, 'term-line-accent');
+        printBlank();
+    }
+
+    // ── ping ─────────────────────────────────────────────────────────────
+    function cmdPing() {
+        print('  PING lesnorrys.com\u2026', 'term-line-accent');
+        var t0 = performance.now();
+        var controller = new AbortController();
+        var timer = setTimeout(function () { controller.abort(); }, 5000);
+        fetch('https://lesnorrys.com', { mode: 'no-cors', signal: controller.signal })
+            .then(function () {
+                clearTimeout(timer);
+                var ms = Math.round(performance.now() - t0);
+                print('  PING lesnorrys.com \u2014 r\u00e9ponse en ' + ms + 'ms [OK]', 'term-line-accent');
+            })
+            .catch(function () {
+                clearTimeout(timer);
+                print('  PING lesnorrys.com \u2014 [TIMEOUT]', 'term-line-error');
+            });
+    }
+
+    // ── countdown ────────────────────────────────────────────────────────
+    function cmdCountdown() {
+        var end  = new Date('2027-05-31T00:00:00');
+        var diff = end - Date.now();
+        printBlank();
+        if (diff <= 0) {
+            print('  BTS termin\u00e9\u00a0! \ud83c\udf93', 'term-line-accent');
+            printBlank();
+            return;
+        }
+        var days    = Math.floor(diff / 86400000);
+        var hours   = Math.floor((diff % 86400000) / 3600000);
+        var minutes = Math.floor((diff % 3600000) / 60000);
+        var seconds = Math.floor((diff % 60000) / 1000);
+        buildAsciiBox([
+            'Fin du BTS SIO SISR \u2014 31 mai 2027',
+            '',
+            days + ' jours, ' + hours + ' heures, ' + minutes + ' minutes, ' + seconds + ' secondes'
+        ]).forEach(function (l) { print('  ' + l); });
+        printBlank();
+    }
+
+    // ── history ──────────────────────────────────────────────────────────
+    function cmdHistory() {
+        if (history.length === 0) {
+            print('  Aucune commande dans l\u2019historique.', 'term-line-accent');
+            return;
+        }
+        printBlank();
+        history.slice().reverse().forEach(function (cmd, i) {
+            print('  ' + String(i + 1).padStart(3) + '  ' + cmd);
+        });
+        printBlank();
+    }
+
+    // ── refresh ──────────────────────────────────────────────────────────
+    function cmdRefresh() {
+        print('  Rechargement\u2026', 'term-line-accent');
+        setTimeout(function () { location.reload(); }, 600);
+    }
+
+    // ── theme ────────────────────────────────────────────────────────────
+    function cmdTheme() {
+        var toggleBtn = document.getElementById('theme-toggle');
+        if (toggleBtn) {
+            toggleBtn.click();
+        } else {
+            var light = document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', light ? 'light' : 'dark');
+        }
+        var isLight = document.body.classList.contains('light-mode');
+        print('  Th\u00e8me\u00a0: ' + (isLight ? 'clair \u2600\ufe0f' : 'sombre \ud83c\udf19'), 'term-line-accent');
+    }
+
     // ── Command dispatcher ───────────────────────────────────────────────
     function dispatch(raw) {
         var parts  = raw.trim().split(/\s+/);
@@ -1666,14 +1798,21 @@ function initTerminal() {
         print('leo@portfolio:~$ ' + raw, 'term-line-prompt');
 
         switch (cmd) {
-            case 'help':     cmdHelp();            break;
-            case 'whoami':   cmdWhoami();           break;
-            case 'skills':   cmdSkills();           break;
-            case 'contact':  cmdContact();          break;
-            case 'secret':   cmdSecret();           break;
-            case 'hack':     cmdHack();             break;
-            case 'weather':  cmdWeather();          break;
-            case 'timezone': cmdTimezone(cmdArg);   break;
+            case 'help':      cmdHelp();            break;
+            case 'whoami':    cmdWhoami();           break;
+            case 'skills':    cmdSkills();           break;
+            case 'contact':   cmdContact();          break;
+            case 'fortune':   cmdFortune();          break;
+            case 'blague':    cmdBlague();           break;
+            case 'ping':      cmdPing();             break;
+            case 'countdown': cmdCountdown();        break;
+            case 'history':   cmdHistory();          break;
+            case 'refresh':   cmdRefresh();          break;
+            case 'theme':     cmdTheme();            break;
+            case 'secret':    cmdSecret();           break;
+            case 'hack':      cmdHack();             break;
+            case 'weather':   cmdWeather();          break;
+            case 'timezone':  cmdTimezone(cmdArg);   break;
             case 'clear':
                 while (output.firstChild) { output.removeChild(output.firstChild); }
                 break;
