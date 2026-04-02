@@ -2518,3 +2518,14 @@ body.light-mode #global-tooltip {
   line-height: 1.4;
   display: block;
 }
+
+.creature-legend-hint {
+  background: rgba(59, 130, 246, 0.08);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  font-style: italic;
+}

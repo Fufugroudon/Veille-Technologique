@@ -2281,3 +2281,24 @@ document.addEventListener('DOMContentLoaded', initTerminal);
 
     document.addEventListener('DOMContentLoaded', initCreatureLegend);
 }());
+
+// =============================================================================
+// CREATURE LEGEND — triple-click hint
+// =============================================================================
+(function () {
+    'use strict';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var panel = document.getElementById('creature-legend-panel');
+        if (!panel) { return; }
+
+        var list = panel.querySelector('.creature-legend-list');
+        if (!list) { return; }
+
+        var hint = document.createElement('p');
+        hint.className   = 'creature-legend-hint';
+        hint.textContent = '\uD83D\uDCA1 Triple-clic sur le fond de l\u2019accueil pour invoquer une cr\u00e9ature';
+
+        panel.insertBefore(hint, list);
+    });
+}());
