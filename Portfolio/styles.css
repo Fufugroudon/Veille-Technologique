@@ -2569,3 +2569,24 @@ body.light-mode #global-tooltip {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
+
+/* ── MOBILE TAP TARGETS ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links a,
+  .nav-links button,
+  .theme-toggle,
+  .terminal-nav-btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #back-to-top,
+  #creature-legend-btn,
+  #scroll-down-btn {
+    min-width: 48px;
+    min-height: 48px;
+  }
+}

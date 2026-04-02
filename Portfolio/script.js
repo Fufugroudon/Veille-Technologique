@@ -1555,12 +1555,14 @@ function initTerminal() {
 
     function openTerm() {
         modal.classList.add('term-open');
+        document.body.style.overflow = 'hidden';
         input.focus();
         if (output.childNodes.length === 0) { printWelcome(); }
     }
 
     function closeTerm() {
         modal.classList.remove('term-open');
+        document.body.style.overflow = '';
         navBtn.focus();
     }
 
