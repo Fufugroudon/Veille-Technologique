@@ -382,25 +382,39 @@
      * @returns {void}
      */
     function initContactForm() {
-        var form      = document.getElementById('contact-form');
-        var feedback  = document.getElementById('form-feedback');
-        var overlay   = document.getElementById('terms-modal');
-        var acceptBtn = document.getElementById('terms-accept');
-        var refuseBtn = document.getElementById('terms-refuse');
+        var form    = document.getElementById('contact-form');
+        var feedback = document.getElementById('form-feedback');
+        var overlay  = document.getElementById('terms-modal');
 
         if (!form || !feedback) { return; }
+
+        var modalSource = null;
 
         function closeModal() {
             if (!overlay) { return; }
             overlay.classList.remove('terms-open');
             overlay.setAttribute('aria-hidden', 'true');
+            modalSource = null;
         }
 
-        function openModal() {
+        function openModal(source) {
             if (!overlay) { return; }
+            modalSource = source;
+
+            var actions = overlay.querySelector('.terms-actions');
+            if (source === 'footer') {
+                actions.innerHTML =
+                    '<button type="button" class="btn btn-primary terms-btn-action">Fermer</button>';
+            } else {
+                actions.innerHTML =
+                    '<button type="button" class="btn btn-primary terms-btn-action">J\u2019accepte</button>' +
+                    '<button type="button" class="btn btn-outline terms-btn-close">Refuser</button>';
+            }
+
             overlay.classList.add('terms-open');
             overlay.setAttribute('aria-hidden', 'false');
-            if (acceptBtn) { acceptBtn.focus(); }
+            var firstBtn = actions.querySelector('button');
+            if (firstBtn) { firstBtn.focus(); }
         }
 
         function doSubmit() {
@@ -435,21 +449,19 @@
 
         form.addEventListener('submit', function (e) {
             e.preventDefault();
-            openModal();
+            openModal('form');
         });
-
-        if (acceptBtn) {
-            acceptBtn.addEventListener('click', function () {
-                closeModal();
-                doSubmit();
-            });
-        }
-
-        if (refuseBtn) { refuseBtn.addEventListener('click', closeModal); }
 
         if (overlay) {
             overlay.addEventListener('click', function (e) {
-                if (e.target === overlay) { closeModal(); }
+                if (e.target === overlay) { closeModal(); return; }
+                if (e.target.classList.contains('terms-btn-close')) { closeModal(); return; }
+                if (e.target.classList.contains('terms-btn-action')) {
+                    var shouldSubmit = (modalSource === 'form');
+                    closeModal();
+                    if (shouldSubmit) { doSubmit(); }
+                    return;
+                }
             });
         }
 
@@ -458,7 +470,7 @@
         if (cgLink) {
             cgLink.addEventListener('click', function (e) {
                 e.preventDefault();
-                openModal();
+                openModal('footer');
             });
         }
     }
