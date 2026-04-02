@@ -1347,6 +1347,23 @@ function initTerminal() {
 
     function printBlank() { print(''); }
 
+    /**
+     * Build a padded ASCII box around an array of text lines.
+     * Each line is right-padded to the longest line width.
+     * Returns an array of strings (each is one rendered row).
+     *
+     * @param  {string[]} lines - Content lines (no leading/trailing spaces needed)
+     * @returns {string[]}
+     */
+    function buildAsciiBox(lines) {
+        var maxLen = lines.reduce(function (m, l) { return Math.max(m, l.length); }, 0);
+        var bar    = '\u2500'.repeat(maxLen + 2);
+        var rows   = lines.map(function (l) {
+            return '\u2502 ' + l + ' '.repeat(maxLen - l.length) + ' \u2502';
+        });
+        return ['\u250c' + bar + '\u2510'].concat(rows).concat(['\u2514' + bar + '\u2518']);
+    }
+
     function openTerm() {
         modal.classList.add('term-open');
         input.focus();
@@ -1380,15 +1397,14 @@ function initTerminal() {
 
     function cmdWhoami() {
         printBlank();
-        print('  \u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557');
-        print('  \u2551  Leseigneur L\u00e9o                       \u2551');
-        print('  \u2551  \u00c9tudiant BTS SIO option SISR          \u2551');
-        print('  \u2551  Ensitech, Cergy                        \u2551');
-        print('  \u2551  Futur ing\u00e9nieur en cybers\u00e9curit\u00e9      \u2551');
-        print('  \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d');
+        buildAsciiBox([
+            'Leseigneur L\u00e9o',
+            '\u00c9tudiant BTS SIO option SISR',
+            'Ensitech, Cergy'
+        ]).forEach(function (line) { print('  ' + line); });
         printBlank();
         print('  Passions  : Infrastructure, r\u00e9seaux, cybers\u00e9curit\u00e9');
-        print('  Fun fact  : Aspirant arm\u00e9e de l\'air fran\u00e7aise \u2708\uFE0F');
+        print('  Fun fact  : Passionn\u00e9 par l\'informatique de mani\u00e8re g\u00e9n\u00e9rale');
         print('  Stack     : Linux, Apache, pfSense, Python, C#');
         printBlank();
     }
@@ -1402,14 +1418,15 @@ function initTerminal() {
             { name: 'C# / .NET',       pct: 60 },
             { name: 'HTML/CSS',        pct: 72 }
         ];
-        printBlank();
-        print('  Comp\u00e9tences :', 'term-line-accent');
-        skills.forEach(function (s) {
+        var lines = skills.map(function (s) {
             var bars   = Math.round(s.pct / 5);
             var filled = '\u2588'.repeat(bars);
             var empty  = '\u2591'.repeat(20 - bars);
-            print('  ' + s.name.padEnd(18) + ' [' + filled + empty + '] ' + s.pct + '%');
+            return s.name.padEnd(16) + ' [' + filled + empty + '] ' + s.pct + '%';
         });
+        printBlank();
+        print('  Comp\u00e9tences :', 'term-line-accent');
+        buildAsciiBox(lines).forEach(function (line) { print('  ' + line); });
         printBlank();
     }
 
@@ -1490,13 +1507,12 @@ function initTerminal() {
                 var c    = d.current;
                 var cond = WMO[c.weather_code] || 'Code ' + c.weather_code;
                 printBlank();
-                print('  \u250C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510');
-                print('  \u2502  M\u00e9t\u00e9o — M\u00e9ru, FR  \u2502');
-                print('  \u251C\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524');
-                print('  \u2502  Temp.  : ' + c.temperature_2m + '\u00b0C          \u2502');
-                print('  \u2502  Vent   : ' + c.wind_speed_10m + ' km/h      \u2502');
-                print('  \u2502  ' + cond.padEnd(20) + '\u2502');
-                print('  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518');
+                buildAsciiBox([
+                    'M\u00e9t\u00e9o \u2014 M\u00e9ru, FR',
+                    'Temp.  : ' + c.temperature_2m + '\u00b0C',
+                    'Vent   : ' + c.wind_speed_10m + ' km/h',
+                    cond
+                ]).forEach(function (line) { print('  ' + line); });
                 printBlank();
             })
             .catch(function () {
