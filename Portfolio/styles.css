@@ -1784,7 +1784,8 @@ body.light-mode .hero-grid {
 
 /* Cheat-sheet (desktop sidebar) */
 .term-cheatsheet {
-  width: 200px;
+  min-width: 280px;
+  max-width: 320px;
   flex-shrink: 0;
   background: rgba(0,255,65,0.03);
   border-left: 1px solid rgba(0,255,65,0.1);
