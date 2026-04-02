@@ -519,6 +519,21 @@
                 openModal('footer');
             });
         }
+
+        // ── Char counter ─────────────────────────────────────────────────
+        var msgArea = document.getElementById('message');
+        if (msgArea) {
+            var counter = document.createElement('div');
+            counter.className   = 'char-counter';
+            counter.textContent = '0 / 2000 caract\u00e8res';
+            msgArea.parentNode.insertBefore(counter, msgArea.nextSibling);
+
+            msgArea.addEventListener('input', function () {
+                var len = msgArea.value.length;
+                counter.textContent = len + ' / 2000 caract\u00e8res';
+                counter.classList.toggle('char-counter-danger', len > 1800);
+            });
+        }
     }
 
     // =========================================================================
