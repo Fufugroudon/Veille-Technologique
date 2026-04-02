@@ -2376,8 +2376,8 @@ body.light-mode #global-tooltip {
 ═══════════════════════════════════════════════════════════════ */
 #creature-legend-btn {
   position: fixed;
-  bottom: 5rem;
-  right: 1.5rem;
+  bottom: 1.5rem;
+  left: 1.5rem;
   width: 46px;
   height: 46px;
   background: var(--dark-secondary);
@@ -2420,10 +2420,10 @@ body.light-mode #global-tooltip {
 /* Panel */
 #creature-legend-panel {
   position: fixed;
-  bottom: 9rem;
-  right: 1.5rem;
+  bottom: 5rem;
+  left: 1.5rem;
   max-width: 320px;
-  width: min(320px, calc(90vw));
+  width: min(320px, calc(100vw - 3rem));
   background: var(--dark-secondary);
   border: 1px solid rgba(59, 130, 246, 0.3);
   border-radius: 12px;
