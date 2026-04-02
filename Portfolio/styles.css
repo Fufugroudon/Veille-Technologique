@@ -1834,7 +1834,7 @@ body.light-mode .hero-grid {
   scroll-behavior: smooth;
 }
 
-.term-output::-webkit-scrollbar          { width: 6px; }
+.term-output::-webkit-scrollbar          { width: 6px; height: 6px; }
 .term-output::-webkit-scrollbar-track   { background: #0f172a; border-radius: 4px; }
 .term-output::-webkit-scrollbar-thumb   { background: #3b82f6; border-radius: 4px; }
 .term-output::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
