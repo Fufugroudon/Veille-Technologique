@@ -2563,3 +2563,9 @@ body.light-mode #global-tooltip {
   0%, 100% { transform: translateX(-50%) translateY(0);    }
   50%       { transform: translateX(-50%) translateY(8px); }
 }
+
+/* ── FOCUS VISIBLE ─────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}

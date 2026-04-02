@@ -1561,6 +1561,7 @@ function initTerminal() {
 
     function closeTerm() {
         modal.classList.remove('term-open');
+        navBtn.focus();
     }
 
     function printWelcome() {
@@ -2246,12 +2247,14 @@ document.addEventListener('DOMContentLoaded', initTerminal);
             panel.classList.add('creature-legend-open');
             panel.setAttribute('aria-hidden', 'false');
             isOpen = true;
+            closeBtn.focus();
         }
 
         function closePanel() {
             panel.classList.remove('creature-legend-open');
             panel.setAttribute('aria-hidden', 'true');
             isOpen = false;
+            btn.focus();
         }
 
         btn.addEventListener('click', function (e) {
