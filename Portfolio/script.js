@@ -1432,7 +1432,11 @@ function initTerminal() {
         var KONAMI_SEQ = [38,38,40,40,37,39,37,39,66,65];
         var i = 0;
         var t = setInterval(function () {
-            if (i >= KONAMI_SEQ.length) { clearInterval(t); return; }
+            if (i >= KONAMI_SEQ.length) {
+                clearInterval(t);
+                print('  Raccourci\u00a0: \u2191\u2191\u2193\u2193\u2190\u2192\u2190\u2192BA (desktop) \u2014 Triple tap sur le logo (mobile)', 'term-line-hint');
+                return;
+            }
             document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: KONAMI_SEQ[i], bubbles: true }));
             i++;
         }, 30);
