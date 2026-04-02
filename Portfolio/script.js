@@ -1257,7 +1257,7 @@ function initTerminal() {
         secret:   'D\u00e9clenche le Matrix rain',
         hack:     'Simulation de hacking (pour rire)',
         weather:  'M\u00e9t\u00e9o en direct (g\u00e9olocalisation)',
-        timezone: 'Changer le fuseau horaire de l\'horloge',
+        Timezone: 'Changer le fuseau horaire de l\'horloge',
         clear:    'Vide le terminal',
         exit:     'Ferme le terminal'
     };
@@ -1625,7 +1625,8 @@ function initTerminal() {
             printBlank();
             print('  Zones disponibles :');
             Object.keys(TIMEZONE_MAP).forEach(function (k) {
-                print('    ' + k.padEnd(12) + '\u2192 ' + TIMEZONE_MAP[k]);
+                var displayKey = k === 'utc' ? 'UTC' : k.split('-').map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join('-');
+                print('    ' + displayKey.padEnd(12) + '\u2192 ' + TIMEZONE_MAP[k]);
             });
             printBlank();
             return;
