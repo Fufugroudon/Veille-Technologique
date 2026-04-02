@@ -332,7 +332,7 @@
             { passive: true }
         );
 
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
