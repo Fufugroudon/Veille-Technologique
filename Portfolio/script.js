@@ -318,22 +318,23 @@
      * @returns {void}
      */
     function initScrollToTop() {
-        var btn = document.getElementById('scroll-top');
+        const backToTop = document.createElement('button');
+        backToTop.id = 'back-to-top';
+        backToTop.setAttribute('type', 'button');
+        backToTop.setAttribute('aria-label', 'Retour en haut');
+        backToTop.textContent = '↑';
+        document.body.appendChild(backToTop);
 
-        if (!btn) {
-            return;
-        }
+        window.addEventListener('scroll', () => {
+            backToTop.style.opacity = window.scrollY > 300 ? '1' : '0';
+            backToTop.style.pointerEvents = window.scrollY > 300 ? 'auto' : 'none';
+        });
 
-        window.addEventListener(
-            'scroll',
-            function () {
-                btn.classList.toggle('visible', window.scrollY > 500);
-            },
-            { passive: true }
-        );
-
-        btn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+            document.body.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
