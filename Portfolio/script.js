@@ -330,11 +330,26 @@
             backToTop.style.pointerEvents = window.scrollY > 300 ? 'auto' : 'none';
         });
 
+        function smoothScrollToTop(duration) {
+            const scrollingElement = document.scrollingElement || document.documentElement;
+            const start = scrollingElement.scrollTop;
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 4);
+                scrollingElement.scrollTop = start * (1 - ease);
+                if (progress < 1) requestAnimationFrame(step);
+            }
+
+            requestAnimationFrame(step);
+        }
+
         backToTop.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
-            document.body.scrollTo({ top: 0, behavior: 'smooth' });
+            smoothScrollToTop(800);
         });
     }
 
