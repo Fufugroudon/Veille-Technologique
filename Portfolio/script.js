@@ -876,7 +876,7 @@ document.addEventListener('DOMContentLoaded', initGlitchEffect);
  * @returns {void}
  */
 function initCardTilt() {
-    var MAX_TILT = 12; // degrees
+    var MAX_TILT = 6; // degrees
     var isTouchDevice = window.matchMedia('(hover: none)').matches;
 
     document.querySelectorAll('.project-card').forEach(function (card) {
@@ -912,7 +912,7 @@ function initCardTilt() {
             var pctY = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
             shine.style.background =
                 'radial-gradient(circle at ' + pctX + '% ' + pctY + '%, ' +
-                'rgba(255,255,255,0.14) 0%, transparent 55%)';
+                'rgba(255,255,255,0.08) 0%, transparent 55%)';
         });
 
         card.addEventListener('mouseleave', function () {
