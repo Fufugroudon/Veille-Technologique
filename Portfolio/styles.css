@@ -2138,3 +2138,157 @@ body.light-mode #global-tooltip {
   pointer-events: none;
   transition: width 0.1s linear;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   404 GLITCH PAGE
+═══════════════════════════════════════════════════════════════ */
+.error-404-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 6rem 1rem 2rem;
+}
+
+.error-404-container {
+  max-width: 640px;
+  width: 100%;
+}
+
+.error-404-terminal {
+  background: #0b1120;
+  border: 1px solid rgba(0, 255, 65, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0, 255, 65, 0.08);
+  font-family: 'Courier New', monospace;
+}
+
+.error-404-titlebar {
+  background: #1a2535;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.error-404-hostname {
+  margin-left: auto;
+  color: rgba(0, 255, 65, 0.5);
+  font-size: 0.75rem;
+}
+
+.error-404-body {
+  padding: 2rem 2.5rem 2.5rem;
+  text-align: center;
+}
+
+.error-404-cmd {
+  color: rgba(0, 255, 65, 0.5);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.error-404-prompt { color: #00ff41; }
+
+/* Glitch heading */
+.glitch-404 {
+  position: relative;
+  display: inline-block;
+  color: #00ff41;
+  font-family: 'Courier New', monospace;
+  font-size: clamp(5rem, 20vw, 9rem);
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 30px rgba(0, 255, 65, 0.6);
+  animation: glitch-flicker-404 4s infinite;
+  line-height: 1;
+}
+
+.glitch-404::before,
+.glitch-404::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0.85;
+}
+
+.glitch-404::before {
+  color: #ff0066;
+  animation: glitch-404-a 3s infinite steps(1);
+  clip-path: polygon(0 15%, 100% 15%, 100% 40%, 0 40%);
+}
+
+.glitch-404::after {
+  color: #00ffff;
+  animation: glitch-404-b 3.5s infinite steps(1);
+  clip-path: polygon(0 60%, 100% 60%, 100% 85%, 0 85%);
+}
+
+@keyframes glitch-flicker-404 {
+  0%, 94%, 100% { opacity: 1; }
+  95%           { opacity: 0.3; }
+  96%           { opacity: 1; }
+  97%           { opacity: 0.7; }
+  98%           { opacity: 1; }
+  99%           { opacity: 0.5; }
+}
+
+@keyframes glitch-404-a {
+  0%, 88%, 100% { transform: translateX(0); }
+  89%           { transform: translateX(-5px); }
+  91%           { transform: translateX(5px); }
+  93%           { transform: translateX(-3px); }
+}
+
+@keyframes glitch-404-b {
+  0%, 82%, 100% { transform: translateX(0); }
+  83%           { transform: translateX(4px); }
+  85%           { transform: translateX(-4px); }
+  87%           { transform: translateX(2px); }
+}
+
+.error-404-label {
+  color: rgba(0, 255, 65, 0.6);
+  font-family: 'Courier New', monospace;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.error-404-msg {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.error-404-egg {
+  color: #00ff41;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  min-height: 1.4em;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.error-404-egg.visible { opacity: 1; }
+
+.error-404-back {
+  display: inline-flex;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+}
+
+.error-404-hint {
+  color: rgba(0, 255, 65, 0.35);
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+}
+
+.error-404-hint kbd {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  border-radius: 3px;
+  padding: 0 4px;
+  font-family: inherit;
+}
