@@ -1975,3 +1975,165 @@ function initTerminal() {
 }
 
 document.addEventListener('DOMContentLoaded', initTerminal);
+
+// =============================================================================
+// TRIPLE-CLICK MYTHOLOGICAL CREATURE EASTER EGG
+// =============================================================================
+(function () {
+    'use strict';
+
+    var CREATURES = [
+        '\uD83D\uDC09', // 🐉
+        '\uD83E\uDD85', // 🦅
+        '\uD83C\uDF0A', // 🌊
+        '\u26A1',       // ⚡
+        '\uD83D\uDC3A', // 🐺
+        '\uD83E\uDD81', // 🦁
+        '\uD83D\uDC0D', // 🐍
+        '\uD83E\uDD84', // 🦄
+        '\uD83C\uDF19', // 🌙
+        '\uD83D\uDD31', // 🔱
+        '\uD83D\uDC12', // 🐒
+        '\uD83D\uDC80', // 💀
+        '\uD83E\uDD8A', // 🦊
+        '\uD83C\uDF38'  // 🌸
+    ];
+
+    var LABELS = {
+        '\uD83D\uDC09': 'Dragon',
+        '\uD83E\uDD85': 'Ph\u00e9nix',
+        '\uD83C\uDF0A': 'L\u00e9viathan',
+        '\u26A1':       'Thor',
+        '\uD83D\uDC3A': 'Fenrir',
+        '\uD83E\uDD81': 'Lion de N\u00e9m\u00e9e',
+        '\uD83D\uDC0D': 'Serpent',
+        '\uD83E\uDD84': 'Licorne',
+        '\uD83C\uDF19': 'S\u00e9l\u00e9n\u00e9',
+        '\uD83D\uDD31': 'Pos\u00e9idon',
+        '\uD83D\uDC12': 'Sun Wukong',
+        '\uD83D\uDC80': 'Hel',
+        '\uD83E\uDD8A': 'Kitsune',
+        '\uD83C\uDF38': 'Amaterasu'
+    };
+
+    var PARTICLE_COLORS = ['#3b82f6', '#60a5fa', '#f97316', '#ffffff', '#93c5fd'];
+
+    function spawnExplosion(x, y) {
+        var count = Math.floor(Math.random() * 5) + 12; // 12–16
+        for (var i = 0; i < count; i++) {
+            (function () {
+                var p = document.createElement('div');
+                var size = Math.floor(Math.random() * 6) + 5; // 5–10px
+                var angle = Math.random() * 2 * Math.PI;
+                var dist  = Math.floor(Math.random() * 60) + 40; // 40–100px
+                var color = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+                var dx = Math.cos(angle) * dist;
+                var dy = Math.sin(angle) * dist;
+
+                p.style.cssText = [
+                    'position:fixed',
+                    'left:' + (x - size / 2) + 'px',
+                    'top:'  + (y - size / 2) + 'px',
+                    'width:'  + size + 'px',
+                    'height:' + size + 'px',
+                    'border-radius:50%',
+                    'background:' + color,
+                    'pointer-events:none',
+                    'z-index:9997',
+                    'transition:transform 0.6s ease-out,opacity 0.6s ease-out'
+                ].join(';');
+
+                document.body.appendChild(p);
+
+                // Trigger transition on next frame
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        p.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0)';
+                        p.style.opacity   = '0';
+                    });
+                });
+
+                setTimeout(function () { p.parentNode && p.parentNode.removeChild(p); }, 650);
+            }());
+        }
+    }
+
+    function spawnCreature(x, y) {
+        var emoji   = CREATURES[Math.floor(Math.random() * CREATURES.length)];
+        var label   = LABELS[emoji] || '';
+
+        var wrap = document.createElement('div');
+        wrap.style.cssText = [
+            'position:fixed',
+            'left:' + x + 'px',
+            'top:'  + y + 'px',
+            'transform:translate(-50%,-50%) translateY(0) scale(0.5)',
+            'font-size:3rem',
+            'line-height:1',
+            'text-align:center',
+            'pointer-events:none',
+            'z-index:9998',
+            'opacity:1',
+            'transition:transform 1.2s cubic-bezier(0.22,1,0.36,1),opacity 1.2s ease'
+        ].join(';');
+
+        var emojiEl = document.createElement('div');
+        emojiEl.textContent = emoji;
+
+        var labelEl = document.createElement('div');
+        labelEl.textContent = label;
+        labelEl.style.cssText = [
+            'font-size:0.75rem',
+            'color:#ffffff',
+            'font-family:\'Courier New\',monospace',
+            'margin-top:0.25rem',
+            'white-space:nowrap'
+        ].join(';');
+
+        wrap.appendChild(emojiEl);
+        wrap.appendChild(labelEl);
+        document.body.appendChild(wrap);
+
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                wrap.style.transform = 'translate(-50%,-50%) translateY(-150px) scale(1.5)';
+                wrap.style.opacity   = '0';
+            });
+        });
+
+        setTimeout(function () { wrap.parentNode && wrap.parentNode.removeChild(wrap); }, 1250);
+    }
+
+    function initCreatureEasterEgg() {
+        var section = document.getElementById('accueil');
+        if (!section) { return; }
+
+        var clicks    = [];
+        var THRESHOLD = 600; // ms
+
+        function handleInteraction(clientX, clientY) {
+            var now = Date.now();
+            clicks.push(now);
+            // keep only clicks within the last THRESHOLD ms
+            clicks = clicks.filter(function (t) { return now - t <= THRESHOLD; });
+
+            if (clicks.length >= 3) {
+                clicks = [];
+                spawnExplosion(clientX, clientY);
+                spawnCreature(clientX, clientY);
+            }
+        }
+
+        section.addEventListener('click', function (e) {
+            handleInteraction(e.clientX, e.clientY);
+        });
+
+        section.addEventListener('touchstart', function (e) {
+            if (e.touches && e.touches.length > 0) {
+                handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+    }
+
+    document.addEventListener('DOMContentLoaded', initCreatureEasterEgg);
+}());
