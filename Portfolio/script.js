@@ -447,9 +447,55 @@
             }, 4000);
         }
 
+        // ── Validation ───────────────────────────────────────────────────
+        function showError(fieldId, msg) {
+            var field = document.getElementById(fieldId);
+            if (!field) { return; }
+            var err = document.createElement('span');
+            err.className   = 'field-error';
+            err.textContent = msg;
+            field.parentNode.appendChild(err);
+            field.setAttribute('aria-invalid', 'true');
+        }
+
+        function clearErrors() {
+            form.querySelectorAll('.field-error').forEach(function (el) { el.remove(); });
+            form.querySelectorAll('[aria-invalid]').forEach(function (el) { el.removeAttribute('aria-invalid'); });
+        }
+
+        function validate() {
+            clearErrors();
+            var valid   = true;
+            var name    = document.getElementById('name').value.trim();
+            var email   = document.getElementById('email').value.trim();
+            var subject = document.getElementById('subject').value.trim();
+            var message = document.getElementById('message').value.trim();
+
+            if (name.length < 2) {
+                showError('name', 'Minimum 2 caract\u00e8res.');
+                valid = false;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+                showError('email', 'Adresse email invalide.');
+                valid = false;
+            }
+            if (subject.length < 3) {
+                showError('subject', 'Minimum 3 caract\u00e8res.');
+                valid = false;
+            }
+            if (message.length < 10) {
+                showError('message', 'Minimum 10 caract\u00e8res.');
+                valid = false;
+            } else if (message.length > 2000) {
+                showError('message', 'Maximum 2000 caract\u00e8res.');
+                valid = false;
+            }
+            return valid;
+        }
+
         form.addEventListener('submit', function (e) {
             e.preventDefault();
-            openModal('form');
+            if (validate()) { openModal('form'); }
         });
 
         if (overlay) {
