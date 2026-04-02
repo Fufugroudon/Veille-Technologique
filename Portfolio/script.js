@@ -384,21 +384,31 @@
     function initContactForm() {
         var form      = document.getElementById('contact-form');
         var feedback  = document.getElementById('form-feedback');
+        var overlay   = document.getElementById('terms-modal');
+        var acceptBtn = document.getElementById('terms-accept');
+        var refuseBtn = document.getElementById('terms-refuse');
 
-        if (!form || !feedback) {
-            return;
+        if (!form || !feedback) { return; }
+
+        function closeModal() {
+            if (!overlay) { return; }
+            overlay.classList.remove('terms-open');
+            overlay.setAttribute('aria-hidden', 'true');
         }
 
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
+        function openModal() {
+            if (!overlay) { return; }
+            overlay.classList.add('terms-open');
+            overlay.setAttribute('aria-hidden', 'false');
+            if (acceptBtn) { acceptBtn.focus(); }
+        }
 
-            var submitBtn      = form.querySelector('button[type="submit"]');
-            var originalLabel  = submitBtn.innerHTML;
+        function doSubmit() {
+            var submitBtn     = form.querySelector('button[type="submit"]');
+            var originalLabel = submitBtn.innerHTML;
 
-            var subject = encodeURIComponent(
-                document.getElementById('subject').value
-            );
-            var body = encodeURIComponent(
+            var subject = encodeURIComponent(document.getElementById('subject').value);
+            var body    = encodeURIComponent(
                 'De\u00a0: ' +
                 document.getElementById('name').value +
                 ' (' + document.getElementById('email').value + ')\n\n' +
@@ -406,11 +416,9 @@
             );
 
             window.location.href =
-                'mailto:leo.leseigneur@orange.fr' +
-                '?subject=' + subject +
-                '&body='    + body;
+                'mailto:leo.leseigneur@orange.fr?subject=' + subject + '&body=' + body;
 
-            submitBtn.disabled   = true;
+            submitBtn.disabled    = true;
             submitBtn.textContent = 'Message pr\u00eat \u2713';
 
             feedback.textContent = 'Votre client mail va s\u2019ouvrir avec le message pr\u00e9-rempli. Merci\u00a0!';
@@ -418,12 +426,41 @@
 
             setTimeout(function () {
                 form.reset();
-                submitBtn.disabled  = false;
-                submitBtn.innerHTML = originalLabel;
-                feedback.className  = '';
+                submitBtn.disabled   = false;
+                submitBtn.innerHTML  = originalLabel;
+                feedback.className   = '';
                 feedback.textContent = '';
             }, 4000);
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            openModal();
         });
+
+        if (acceptBtn) {
+            acceptBtn.addEventListener('click', function () {
+                closeModal();
+                doSubmit();
+            });
+        }
+
+        if (refuseBtn) { refuseBtn.addEventListener('click', closeModal); }
+
+        if (overlay) {
+            overlay.addEventListener('click', function (e) {
+                if (e.target === overlay) { closeModal(); }
+            });
+        }
+
+        // Footer "Conditions d'utilisation" link
+        var cgLink = document.getElementById('terms-link');
+        if (cgLink) {
+            cgLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                openModal();
+            });
+        }
     }
 
     // =========================================================================

@@ -2292,3 +2292,61 @@ body.light-mode #global-tooltip {
   padding: 0 4px;
   font-family: inherit;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   TERMS MODAL
+═══════════════════════════════════════════════════════════════ */
+.terms-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.terms-overlay.terms-open { display: flex; }
+
+.terms-card {
+  background: var(--secondary);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 520px;
+  width: calc(100% - 2rem);
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.25);
+}
+
+.terms-title {
+  color: var(--accent-light);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.terms-body {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.terms-body p + p    { margin-top: 0.75rem; }
+.terms-body strong   { color: var(--text); }
+
+.terms-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.footer-terms-link {
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--t-fast);
+}
+
+.footer-terms-link:hover { color: var(--accent-light); }
