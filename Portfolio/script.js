@@ -2283,6 +2283,52 @@ document.addEventListener('DOMContentLoaded', initTerminal);
 }());
 
 // =============================================================================
+// SCROLL-DOWN ARROW — hero section
+// =============================================================================
+(function () {
+    'use strict';
+
+    function initScrollDownBtn() {
+        var section = document.getElementById('accueil');
+        var target  = document.getElementById('profil');
+        if (!section || !target) { return; }
+
+        var btn = document.createElement('button');
+        btn.id = 'scroll-down-btn';
+        btn.setAttribute('type', 'button');
+        btn.setAttribute('aria-label', 'Défiler vers la section profil');
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+        section.appendChild(btn);
+
+        btn.addEventListener('click', function () {
+            var targetY = target.getBoundingClientRect().top + (document.scrollingElement || document.documentElement).scrollTop;
+            var startY  = (document.scrollingElement || document.documentElement).scrollTop;
+            var distance = targetY - startY;
+            var duration = 800;
+            var startTime = null;
+
+            function step(now) {
+                if (!startTime) { startTime = now; }
+                var elapsed  = now - startTime;
+                var progress = Math.min(elapsed / duration, 1);
+                var ease     = 1 - Math.pow(1 - progress, 4);
+                (document.scrollingElement || document.documentElement).scrollTop = startY + distance * ease;
+                if (progress < 1) { requestAnimationFrame(step); }
+            }
+            requestAnimationFrame(step);
+        });
+
+        // Hide after user scrolls past hero
+        window.addEventListener('scroll', function () {
+            btn.style.opacity = window.scrollY > 80 ? '0' : '1';
+            btn.style.pointerEvents = window.scrollY > 80 ? 'none' : 'auto';
+        }, { passive: true });
+    }
+
+    document.addEventListener('DOMContentLoaded', initScrollDownBtn);
+}());
+
+// =============================================================================
 // CREATURE LEGEND — triple-click hint
 // =============================================================================
 (function () {
