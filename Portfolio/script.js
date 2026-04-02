@@ -1034,7 +1034,9 @@ function initLiveClock() {
         var yr   = now.getFullYear();
 
         timeEl.textContent = h + ':' + m + ':' + s;
-        dateEl.textContent = day + ' ' + date + ' ' + mon + ' ' + yr;
+        var dayStr = day.charAt(0).toUpperCase() + day.slice(1);
+        var monStr = mon.charAt(0).toUpperCase() + mon.slice(1);
+        dateEl.textContent = dayStr + ' ' + date + ' ' + monStr + ' ' + yr;
     }
 
     tick();
