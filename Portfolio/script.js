@@ -617,13 +617,28 @@ function initTypingEffect() {
     var h1 = document.querySelector('#accueil .hero-title');
     if (!h1) { return; }
 
-    var SPEED = 80; // ms per character
-
-    // The two parts of the title and their styles
     var parts = [
         { text: 'Leseigneur ',    cls: null },
         { text: 'L\u00e9o',      cls: 'text-gradient' } // Léo
     ];
+
+    // Instant render when user prefers reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        h1.innerHTML = '';
+        parts.forEach(function (part) {
+            if (part.cls) {
+                var span = document.createElement('span');
+                span.className = part.cls;
+                span.textContent = part.text;
+                h1.appendChild(span);
+            } else {
+                h1.appendChild(document.createTextNode(part.text));
+            }
+        });
+        return;
+    }
+
+    var SPEED = 80; // ms per character
 
     // Clear the heading and place a blinking cursor
     h1.innerHTML = '';
@@ -792,6 +807,7 @@ document.addEventListener('DOMContentLoaded', initTagTooltips);
 function initParticles() {
     var section = document.getElementById('accueil');
     if (!section || !window.requestAnimationFrame) { return; }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
 
     var canvas = document.createElement('canvas');
     canvas.id = 'particles-canvas';
@@ -1005,6 +1021,7 @@ document.addEventListener('DOMContentLoaded', initReadingProgressBar);
 function initGlitchEffect() {
     var h1 = document.querySelector('#accueil .hero-title');
     if (!h1) { return; }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
 
     var glitching = false;
 
@@ -1101,6 +1118,7 @@ document.addEventListener('DOMContentLoaded', initCardTilt);
  * @returns {void}
  */
 function initScrambleText() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
     var CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
     var DURATION = 800;  // ms total scramble phase
     var STEP_MS  = 40;   // repaint interval
