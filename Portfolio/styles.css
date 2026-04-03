@@ -2778,3 +2778,20 @@ body.light-mode #global-tooltip {
   animation: pulse-green 1.5s infinite;
   flex-shrink: 0;
 }
+
+/* ── RECAPTCHA ──────────────────────────────────────────────────────────────── */
+.captcha-wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.captcha-wrapper .g-recaptcha {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  transition: border-color 0.3s;
+}
+
+.captcha-wrapper .g-recaptcha:hover {
+  border-color: var(--accent);
+}

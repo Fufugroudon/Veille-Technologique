@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -618,6 +619,9 @@
           <div class="form-group">
             <label for="message">Message</label>
             <textarea id="message" name="message" placeholder="Votre message..." maxlength="2000" required></textarea>
+          </div>
+          <div class="captcha-wrapper">
+            <div class="g-recaptcha" data-sitekey="6LfxjqQsAAAAAMTqDhbyU-GW7J3-cb6jE-k8wRjY" data-theme="dark"></div>
           </div>
           <button type="submit" class="btn btn-primary btn-full">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
