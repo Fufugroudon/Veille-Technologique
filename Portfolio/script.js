@@ -725,8 +725,12 @@ var TAG_DESCRIPTIONS = {
     'JavaScript': 'Langage de script c\u00f4t\u00e9 client',
     'PHP':        'Langage de script c\u00f4t\u00e9 serveur',
     'MySQL':      'Syst\u00e8me de gestion de base de donn\u00e9es',
-    'Git':        'Logiciel de gestion de versions',
-    'Docker':     'Plateforme de conteneurisation'
+    'Git':              'Logiciel de gestion de versions',
+    'Docker':           'Plateforme de conteneurisation',
+    'Active Directory': 'Service d\'annuaire Microsoft',
+    'Windows Server':   'Syst\u00e8me d\'exploitation serveur Microsoft',
+    'GPO':              'Group Policy Object \u2014 Strat\u00e9gies de groupes',
+    'DNS':              'Domain Name System \u2014 R\u00e9solution de noms'
 };
 
 /**
