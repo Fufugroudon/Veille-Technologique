@@ -1,0 +1,20 @@
+# Page d'accueil
+#DirectoryIndex portfolio.html
+
+# Désactiver le listing
+Options -Indexes
+
+# Réécriture d'URL
+RewriteEngine On
+
+# Enlever .html des URLs
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
+
+# Ajouter .html automatiquement
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
+
+#Error page for unknown URLs
+ErrorDocument 404 /404.html

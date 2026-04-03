@@ -12,6 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="toast.css">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -19,7 +21,7 @@
   <nav id="navbar">
     <div class="container nav-container">
       <a href="#accueil" class="nav-brand">
-        <span class="brand-badge">LL</span>
+        <span class="brand-badge" role="img" aria-label="Initiales de Léo Leseigneur">LL</span>
         <span class="brand-name">Leseigneur Léo</span>
       </a>
       <ul class="nav-links" id="nav-menu" role="list">
@@ -80,9 +82,9 @@
         </div>
       </div>
     </div>
-    <a href="#profil" class="scroll-indicator" aria-label="Défiler vers la section Profil">
-      <span class="scroll-wheel"></span>
-    </a>
+    <button type="button" class="scroll-indicator" aria-label="Descendre vers le profil">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
   </section>
 
   <!-- ═══════════════════════ PROFIL ═══════════════════════ -->
@@ -126,7 +128,7 @@
             <div class="avatar-ring" aria-hidden="true"></div>
             <div class="avatar-large">LL</div>
           </div>
-          <a href="/docs/Léo_CV.pdf" class="btn btn-primary cv-btn" download>
+          <a href="#" class="btn btn-primary cv-btn" onclick="showToast('Document indisponible, veuillez revenir ultérieurement ou nous contacter.', 'error', '#contact')">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Télécharger mon CV
           </a>
@@ -437,7 +439,7 @@
               <span class="tag">GPO</span>
               <span class="tag">DNS</span>
             </div>
-            <a href="/docs/AD-Documentation-Leo.docx" class="btn btn-outline project-download-btn" download>
+            <a href="#" class="btn btn-outline project-download-btn" onclick="showToast('Document indisponible, veuillez revenir ultérieurement ou nous contacter.', 'error', '#contact')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Télécharger la documentation
             </a>
@@ -617,7 +619,10 @@
           </div>
           <div class="form-group">
             <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Votre message..." required></textarea>
+            <textarea id="message" name="message" placeholder="Votre message..." maxlength="2000" required></textarea>
+          </div>
+          <div class="captcha-wrapper">
+            <div class="g-recaptcha" data-sitekey="6LfxjqQsAAAAAMTqDhbyU-GW7J3-cb6jE-k8wRjY" data-theme="dark"></div>
           </div>
           <button type="submit" class="btn btn-primary btn-full">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -638,14 +643,28 @@
       </div>
       <p class="footer-copy">&copy; 2025–2026 Leseigneur Léo — Tous droits réservés</p>
       <p class="footer-sub">Étudiant BTS SIO SISR</p>
+      <p class="footer-sub"><a href="#" id="terms-link" class="footer-terms-link">Conditions d&rsquo;utilisation</a></p>
     </div>
   </footer>
 
-  <!-- Bouton retour en haut -->
-  <button id="scroll-top" class="scroll-top-btn" aria-label="Retour en haut de page" title="Retour en haut">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
-  </button>
+  <!-- ═══════════════════════ TERMS MODAL ═══════════════════════ -->
+  <div id="terms-modal" class="terms-overlay" role="dialog" aria-modal="true" aria-labelledby="terms-title" aria-hidden="true">
+    <div class="terms-card">
+      <h2 id="terms-title" class="terms-title">Conditions d&rsquo;utilisation</h2>
+      <div class="terms-body">
+        <p>Les informations transmises via ce formulaire sont utilisées <strong>uniquement</strong> pour vous répondre. Elles ne sont ni partagées, ni vendues à des tiers.</p>
+        <p>Vos données sont conservées au maximum <strong>1 an</strong>, puis supprimées. Vous pouvez demander leur suppression à tout moment en me contactant directement.</p>
+        <p>Conformément au <abbr title="Règlement Général sur la Protection des Données">RGPD</abbr>, vous disposez d&rsquo;un droit d&rsquo;accès, de rectification et d&rsquo;effacement de vos données personnelles.</p>
+      </div>
+      <div class="terms-actions">
+        <button type="button" id="terms-accept" class="btn btn-primary">J&rsquo;accepte</button>
+        <button type="button" id="terms-refuse" class="btn btn-outline">Refuser</button>
+      </div>
+    </div>
+  </div>
 
+  <script src="toast.js" defer></script>
+  <script src="nav.js" defer></script>
   <script src="script.js" defer></script>
 
 </body>
