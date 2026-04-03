@@ -214,8 +214,8 @@ section:not(#accueil) {
 }
 
 @keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0);  }
-  50%       { transform: translateY(6px); }
+  0%, 100% { transform: translateX(-50%) translateY(0);  }
+  50%       { transform: translateX(-50%) translateY(8px); }
 }
 
 @keyframes shimmer-ring {
@@ -530,29 +530,30 @@ nav.scrolled {
 /* Hero scroll indicator */
 .scroll-indicator {
   position: absolute;
-  bottom: 2.5rem;
+  bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 52px;
-  border: 2px solid rgba(59, 130, 246, 0.3);
-  border-radius: 20px;
-  z-index: 1;
-  transition: border-color var(--t);
+  background: transparent;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity 0.4s ease, background 0.3s ease;
+  z-index: 5;
+  animation: scroll-bounce 2s ease-in-out infinite;
 }
 
-.scroll-indicator:hover { border-color: var(--accent); }
-
-.scroll-wheel {
-  display: block;
-  width: 4px;
-  height: 10px;
+.scroll-indicator:hover,
+.scroll-indicator:focus-visible {
   background: var(--accent);
-  border-radius: 4px;
-  animation: scroll-bounce 1.8s ease-in-out infinite;
+  color: white;
+  outline: none;
+  animation-play-state: paused;
 }
 
 /* Hero entrance animations (CSS, plays immediately) */
@@ -2540,39 +2541,6 @@ body.light-mode #global-tooltip {
   font-style: italic;
 }
 
-/* ── SCROLL-DOWN ARROW ─────────────────────────────────────────────────────── */
-#scroll-down-btn {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(37, 99, 235, 0.15);
-  border: 1.5px solid rgba(59, 130, 246, 0.4);
-  border-radius: 50%;
-  color: var(--accent-light);
-  cursor: pointer;
-  transition: opacity 0.4s ease, background 0.3s ease, transform 0.3s ease;
-  z-index: 5;
-  animation: scroll-bounce 2s ease-in-out infinite;
-}
-
-#scroll-down-btn:hover,
-#scroll-down-btn:focus-visible {
-  background: rgba(37, 99, 235, 0.3);
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  animation-play-state: paused;
-}
-
-@keyframes scroll-bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0);    }
-  50%       { transform: translateX(-50%) translateY(8px); }
-}
 
 /* ── FOCUS VISIBLE ─────────────────────────────────────────────────────────── */
 :focus-visible {
@@ -2606,7 +2574,7 @@ body.light-mode #global-tooltip {
     transition: none !important;
   }
 
-  #scroll-down-btn {
+  .scroll-indicator {
     animation: none !important;
   }
 
@@ -2631,7 +2599,7 @@ body.light-mode #global-tooltip {
 
   #back-to-top,
   #creature-legend-btn,
-  #scroll-down-btn {
+  .scroll-indicator {
     min-width: 48px;
     min-height: 48px;
   }
