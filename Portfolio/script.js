@@ -2619,3 +2619,86 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.addEventListener('DOMContentLoaded', initCopyEmail);
 }());
+
+// =============================================================================
+// SKILLS GRID ANIMATED BACKGROUND
+// =============================================================================
+(function () {
+    'use strict';
+
+    function initSkillsGridCanvas() {
+        var section = document.getElementById('competences');
+        if (!section) { return; }
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+
+        var canvas = document.createElement('canvas');
+        canvas.id = 'skills-grid-canvas';
+        section.insertBefore(canvas, section.firstChild);
+
+        var ctx     = canvas.getContext('2d');
+        var GAP     = 40;
+        var DOT_R   = 2;
+        var pulses  = [];
+
+        function resize() {
+            canvas.width  = section.offsetWidth;
+            canvas.height = section.offsetHeight;
+        }
+
+        function randomPulse() {
+            var cols = Math.floor(canvas.width  / GAP);
+            var rows = Math.floor(canvas.height / GAP);
+            return {
+                cx:      (Math.floor(Math.random() * cols) + 0.5) * GAP,
+                cy:      (Math.floor(Math.random() * rows) + 0.5) * GAP,
+                r:       DOT_R,
+                growing: true
+            };
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Static grid dots
+            ctx.fillStyle = 'rgba(59,130,246,0.08)';
+            for (var x = GAP / 2; x < canvas.width; x += GAP) {
+                for (var y = GAP / 2; y < canvas.height; y += GAP) {
+                    ctx.beginPath();
+                    ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // Pulsing dots
+            pulses.forEach(function (p, i) {
+                ctx.beginPath();
+                ctx.arc(p.cx, p.cy, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(59,130,246,0.3)';
+                ctx.fill();
+
+                if (p.growing) {
+                    p.r += 0.12;
+                    if (p.r >= 6) { p.growing = false; }
+                } else {
+                    p.r -= 0.12;
+                    if (p.r <= DOT_R) { pulses.splice(i, 1); }
+                }
+            });
+
+            requestAnimationFrame(draw);
+        }
+
+        setInterval(function () {
+            if (pulses.length < 3) {
+                pulses.push(randomPulse());
+                pulses.push(randomPulse());
+            }
+        }, 3000);
+
+        resize();
+        window.addEventListener('resize', resize, { passive: true });
+        requestAnimationFrame(draw);
+    }
+
+    document.addEventListener('DOMContentLoaded', initSkillsGridCanvas);
+}());
