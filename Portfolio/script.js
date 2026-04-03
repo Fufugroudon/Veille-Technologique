@@ -420,6 +420,7 @@
         function doSubmit() {
             var submitBtn     = form.querySelector('button[type="submit"]');
             var originalLabel = submitBtn.innerHTML;
+            var formGroups    = form.querySelectorAll('.form-group');
 
             var subject = encodeURIComponent(document.getElementById('subject').value);
             var body    = encodeURIComponent(
@@ -432,19 +433,21 @@
             window.location.href =
                 'mailto:leo.leseigneur@orange.fr?subject=' + subject + '&body=' + body;
 
-            submitBtn.disabled    = true;
-            submitBtn.textContent = 'Message pr\u00eat \u2713';
+            formGroups.forEach(function (g) { g.style.display = 'none'; });
+            submitBtn.style.display = 'none';
 
-            feedback.textContent = 'Votre client mail va s\u2019ouvrir avec le message pr\u00e9-rempli. Merci\u00a0!';
-            feedback.className   = 'form-feedback-success';
+            feedback.innerHTML  = '\u2705 Message envoy\u00e9\u00a0! Je vous r\u00e9pondrai dans les plus brefs d\u00e9lais.';
+            feedback.className  = 'form-feedback-success form-feedback-prominent';
 
             setTimeout(function () {
                 form.reset();
-                submitBtn.disabled   = false;
-                submitBtn.innerHTML  = originalLabel;
-                feedback.className   = '';
-                feedback.textContent = '';
-            }, 4000);
+                formGroups.forEach(function (g) { g.style.display = ''; });
+                submitBtn.style.display  = '';
+                submitBtn.disabled       = false;
+                submitBtn.innerHTML      = originalLabel;
+                feedback.className       = '';
+                feedback.textContent     = '';
+            }, 5000);
         }
 
         // ── Validation ───────────────────────────────────────────────────
@@ -456,11 +459,15 @@
             err.textContent = msg;
             field.parentNode.appendChild(err);
             field.setAttribute('aria-invalid', 'true');
+            field.style.borderColor = '#ef4444';
+            field.classList.add('field-shake');
+            setTimeout(function () { field.classList.remove('field-shake'); }, 600);
         }
 
         function clearErrors() {
             form.querySelectorAll('.field-error').forEach(function (el) { el.remove(); });
             form.querySelectorAll('[aria-invalid]').forEach(function (el) { el.removeAttribute('aria-invalid'); });
+            form.querySelectorAll('input, textarea').forEach(function (el) { el.style.borderColor = ''; });
         }
 
         function validate() {
