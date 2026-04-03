@@ -2461,10 +2461,15 @@ document.addEventListener('DOMContentLoaded', function () {
             requestAnimationFrame(step);
         });
 
-        window.addEventListener('scroll', function () {
-            btn.style.opacity      = window.scrollY > 80 ? '0' : '1';
-            btn.style.pointerEvents = window.scrollY > 80 ? 'none' : 'auto';
-        }, { passive: true });
+        var hero = document.getElementById('accueil');
+        if (hero) {
+            var observer = new IntersectionObserver(function (entries) {
+                var visible = entries[0].isIntersecting;
+                btn.style.opacity       = visible ? '1' : '0';
+                btn.style.pointerEvents = visible ? 'auto' : 'none';
+            }, { threshold: 0.1 });
+            observer.observe(hero);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', initScrollIndicator);

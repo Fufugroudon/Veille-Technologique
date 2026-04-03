@@ -543,7 +543,7 @@ nav.scrolled {
   height: 48px;
   color: var(--accent);
   cursor: pointer;
-  transition: opacity 0.4s ease, background 0.3s ease;
+  transition: opacity 0.4s ease, background 0.3s ease, color 0.3s ease;
   z-index: 5;
   animation: scroll-bounce 2s ease-in-out infinite;
 }
