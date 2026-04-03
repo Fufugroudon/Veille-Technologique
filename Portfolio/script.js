@@ -734,9 +734,10 @@ var TAG_DESCRIPTIONS = {
 };
 
 /**
- * Attach a tooltip <span> to every .tag whose text matches TAG_DESCRIPTIONS.
- * Adds data-tooltip attribute and a .has-tooltip class; tooltip visibility
- * is driven entirely by CSS — no JS hover listeners needed.
+ * Create a single global #global-tooltip element on <body> and attach
+ * mouseenter/mouseleave/touchstart listeners to every .tag whose text
+ * matches TAG_DESCRIPTIONS. The tooltip is positioned via fixed coordinates
+ * so it is never clipped by card overflow.
  *
  * @returns {void}
  */
