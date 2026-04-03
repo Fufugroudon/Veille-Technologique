@@ -1461,7 +1461,7 @@ function initTerminal() {
         contact:   'Email et liens de contact',
         fortune:   'Citation al\u00e9atoire (mythologie, tech, anime)',
         blague:    'Blague s\u00e8che du jour',
-        ping:      'Mesure la latence vers lesnorrys.com',
+        ping:      'Mesure la latence vers lesnorrys.fr',
         countdown: 'Compte \u00e0 rebours avant la fin du BTS',
         history:   'Historique des commandes de la session',
         refresh:   'Recharge la page',
@@ -1919,19 +1919,19 @@ function initTerminal() {
 
     // ── ping ─────────────────────────────────────────────────────────────
     function cmdPing() {
-        print('  PING lesnorrys.com\u2026', 'term-line-accent');
+        print('  PING lesnorrys.fr\u2026', 'term-line-accent');
         var t0 = performance.now();
         var controller = new AbortController();
         var timer = setTimeout(function () { controller.abort(); }, 5000);
-        fetch('https://lesnorrys.com', { mode: 'no-cors', signal: controller.signal })
+        fetch('https://lesnorrys.fr', { mode: 'no-cors', signal: controller.signal })
             .then(function () {
                 clearTimeout(timer);
                 var ms = Math.round(performance.now() - t0);
-                print('  PING lesnorrys.com \u2014 r\u00e9ponse en ' + ms + 'ms [OK]', 'term-line-accent');
+                print('  PING lesnorrys.fr \u2014 r\u00e9ponse en ' + ms + 'ms [OK]', 'term-line-accent');
             })
             .catch(function () {
                 clearTimeout(timer);
-                print('  PING lesnorrys.com \u2014 [TIMEOUT]', 'term-line-error');
+                print('  PING lesnorrys.fr \u2014 [TIMEOUT]', 'term-line-error');
             });
     }
 
