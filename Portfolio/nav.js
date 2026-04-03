@@ -36,7 +36,7 @@
             if (!response) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                alert('Veuillez valider le CAPTCHA.');
+                showToast('Veuillez valider le CAPTCHA.', 'warning');
             }
         });
     });
