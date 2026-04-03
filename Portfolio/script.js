@@ -629,22 +629,6 @@ function initTypingEffect() {
         { text: 'L\u00e9o',      cls: 'text-gradient' } // Léo
     ];
 
-    // Instant render when user prefers reduced motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        h1.innerHTML = '';
-        parts.forEach(function (part) {
-            if (part.cls) {
-                var span = document.createElement('span');
-                span.className = part.cls;
-                span.textContent = part.text;
-                h1.appendChild(span);
-            } else {
-                h1.appendChild(document.createTextNode(part.text));
-            }
-        });
-        return;
-    }
-
     var SPEED = 80; // ms per character
 
     // Clear the heading and place a blinking cursor
@@ -819,7 +803,6 @@ document.addEventListener('DOMContentLoaded', initTagTooltips);
 function initParticles() {
     var section = document.getElementById('accueil');
     if (!section || !window.requestAnimationFrame) { return; }
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
 
     var canvas = document.createElement('canvas');
     canvas.id = 'particles-canvas';
@@ -1033,7 +1016,6 @@ document.addEventListener('DOMContentLoaded', initReadingProgressBar);
 function initGlitchEffect() {
     var h1 = document.querySelector('#accueil .hero-title');
     if (!h1) { return; }
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
 
     var glitching = false;
 
@@ -1130,7 +1112,6 @@ document.addEventListener('DOMContentLoaded', initCardTilt);
  * @returns {void}
  */
 function initScrambleText() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
     var CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
     var DURATION = 800;  // ms total scramble phase
     var STEP_MS  = 40;   // repaint interval
@@ -2220,7 +2201,8 @@ document.addEventListener('DOMContentLoaded', function () {
             'text-align:center',
             'pointer-events:none',
             'z-index:9998',
-            'opacity:1'
+            'opacity:1',
+            'transition:transform 1.2s cubic-bezier(0.22,1,0.36,1),opacity 1.2s ease'
         ].join(';');
 
         var emojiEl = document.createElement('div');
@@ -2240,22 +2222,14 @@ document.addEventListener('DOMContentLoaded', function () {
         wrap.appendChild(labelEl);
         document.body.appendChild(wrap);
 
-        // Phase 1: float up and grow — stay fully visible
         requestAnimationFrame(function () {
             requestAnimationFrame(function () {
-                wrap.style.transition = 'transform 0.7s cubic-bezier(0.22,1,0.36,1)';
-                wrap.style.transform  = 'translate(-50%,-50%) translateY(-70px) scale(1.2)';
+                wrap.style.transform = 'translate(-50%,-50%) translateY(-150px) scale(1.5)';
+                wrap.style.opacity   = '0';
             });
         });
 
-        // Phase 2: continue floating and fade out
-        setTimeout(function () {
-            wrap.style.transition = 'transform 1.2s ease-out,opacity 1.2s ease-in';
-            wrap.style.transform  = 'translate(-50%,-50%) translateY(-180px) scale(1.5)';
-            wrap.style.opacity    = '0';
-        }, 750);
-
-        setTimeout(function () { wrap.parentNode && wrap.parentNode.removeChild(wrap); }, 2050);
+        setTimeout(function () { wrap.parentNode && wrap.parentNode.removeChild(wrap); }, 1250);
     }
 
     function initCreatureEasterEgg() {
