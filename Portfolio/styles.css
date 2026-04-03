@@ -2665,3 +2665,42 @@ body.light-mode #global-tooltip {
 @media (max-width: 768px) {
   #section-dots { display: none; }
 }
+
+/* ── COPY EMAIL BUTTON ─────────────────────────────────────────────────────── */
+.copy-email-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.25rem;
+  border-radius: var(--radius-sm);
+  transition: transform 0.15s ease;
+  vertical-align: middle;
+}
+
+.copy-email-btn:hover {
+  transform: scale(1.2);
+}
+
+/* ── COPY TOAST ────────────────────────────────────────────────────────────── */
+.copy-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(1rem);
+  background: var(--accent);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.copy-toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

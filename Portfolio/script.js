@@ -2451,3 +2451,52 @@ document.addEventListener('DOMContentLoaded', initTerminal);
 
     document.addEventListener('DOMContentLoaded', initSectionDots);
 }());
+
+// =============================================================================
+// COPY EMAIL BUTTON
+// =============================================================================
+(function () {
+    'use strict';
+
+    function initCopyEmail() {
+        var emailLink = document.querySelector('#contact a[href^="mailto:"]');
+        if (!emailLink) { return; }
+
+        var email = emailLink.textContent.trim();
+
+        var copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'copy-email-btn';
+        copyBtn.setAttribute('aria-label', 'Copier l\u2019adresse email');
+        copyBtn.textContent = '\uD83D\uDCCB';
+
+        emailLink.parentNode.insertBefore(copyBtn, emailLink.nextSibling);
+
+        copyBtn.addEventListener('click', function () {
+            if (!navigator.clipboard) { return; }
+            navigator.clipboard.writeText(email).then(function () {
+                copyBtn.textContent = '\u2705';
+                showToast('Email copi\u00e9\u00a0!');
+                setTimeout(function () { copyBtn.textContent = '\uD83D\uDCCB'; }, 2000);
+            });
+        });
+    }
+
+    function showToast(msg) {
+        var toast = document.createElement('div');
+        toast.className = 'copy-toast';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+
+        requestAnimationFrame(function () {
+            toast.classList.add('copy-toast-show');
+        });
+
+        setTimeout(function () {
+            toast.classList.remove('copy-toast-show');
+            setTimeout(function () { toast.remove(); }, 400);
+        }, 1600);
+    }
+
+    document.addEventListener('DOMContentLoaded', initCopyEmail);
+}());
