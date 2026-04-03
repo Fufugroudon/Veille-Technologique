@@ -2220,8 +2220,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'text-align:center',
             'pointer-events:none',
             'z-index:9998',
-            'opacity:1',
-            'transition:transform 1.2s cubic-bezier(0.22,1,0.36,1),opacity 1.2s ease'
+            'opacity:1'
         ].join(';');
 
         var emojiEl = document.createElement('div');
@@ -2241,14 +2240,22 @@ document.addEventListener('DOMContentLoaded', function () {
         wrap.appendChild(labelEl);
         document.body.appendChild(wrap);
 
+        // Phase 1: float up and grow — stay fully visible
         requestAnimationFrame(function () {
             requestAnimationFrame(function () {
-                wrap.style.transform = 'translate(-50%,-50%) translateY(-150px) scale(1.5)';
-                wrap.style.opacity   = '0';
+                wrap.style.transition = 'transform 0.7s cubic-bezier(0.22,1,0.36,1)';
+                wrap.style.transform  = 'translate(-50%,-50%) translateY(-70px) scale(1.2)';
             });
         });
 
-        setTimeout(function () { wrap.parentNode && wrap.parentNode.removeChild(wrap); }, 1250);
+        // Phase 2: continue floating and fade out
+        setTimeout(function () {
+            wrap.style.transition = 'transform 1.2s ease-out,opacity 1.2s ease-in';
+            wrap.style.transform  = 'translate(-50%,-50%) translateY(-180px) scale(1.5)';
+            wrap.style.opacity    = '0';
+        }, 750);
+
+        setTimeout(function () { wrap.parentNode && wrap.parentNode.removeChild(wrap); }, 2050);
     }
 
     function initCreatureEasterEgg() {
@@ -2256,7 +2263,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!section) { return; }
 
         var clicks    = [];
-        var THRESHOLD = 600; // ms
+        var THRESHOLD = 900; // ms
 
         function handleInteraction(clientX, clientY) {
             var now = Date.now();
