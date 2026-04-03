@@ -1423,6 +1423,7 @@ function initTerminal() {
         weather:   'M\u00e9t\u00e9o en direct (g\u00e9olocalisation)',
         Timezone:  'Changer le fuseau horaire de l\'horloge',
         cv:        'T\u00e9l\u00e9charge le CV',
+        matrix:    'Mini pluie de caract\u00e8res dans le terminal',
         clear:     'Vide le terminal',
         exit:      'Ferme le terminal'
     };
@@ -1939,6 +1940,28 @@ function initTerminal() {
         print('  Th\u00e8me\u00a0: ' + (isLight ? 'clair \u2600\ufe0f' : 'sombre \ud83c\udf19'), 'term-line-accent');
     }
 
+    // ── matrix (mini terminal rain) ──────────────────────────────────────
+    function cmdMatrix() {
+        var CHARS    = ['\u30A2','\u30A4','\u30A6','\u30A8','\u30AA','\u30AB','\u30AD','\u30AF','0','1'];
+        var rowCount = 12;
+        var row      = 0;
+        printBlank();
+        function nextRow() {
+            if (row >= rowCount) {
+                setTimeout(function () { print('  Simulation termin\u00e9e.', 'term-line-accent'); }, 80);
+                return;
+            }
+            var line = '  ';
+            for (var i = 0; i < 28; i++) {
+                line += CHARS[Math.floor(Math.random() * CHARS.length)] + ' ';
+            }
+            printHTML('<span style="color:#22c55e;font-family:monospace">' + line + '</span>');
+            row++;
+            setTimeout(nextRow, 80);
+        }
+        nextRow();
+    }
+
     // ── cv ───────────────────────────────────────────────────────────────
     function cmdCv() {
         print('  \uD83D\uDCC4 T\u00e9l\u00e9chargement du CV en cours\u2026', 'term-line-accent');
@@ -1974,6 +1997,7 @@ function initTerminal() {
             case 'weather':   cmdWeather();          break;
             case 'timezone':  cmdTimezone(cmdArg);   break;
             case 'cv':        cmdCv();               break;
+            case 'matrix':    cmdMatrix();           break;
             case 'clear':
                 while (output.firstChild) { output.removeChild(output.firstChild); }
                 break;
