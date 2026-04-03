@@ -2562,41 +2562,6 @@ body.light-mode #global-tooltip {
   outline-offset: 3px;
 }
 
-/* ── PREFERS-REDUCED-MOTION ────────────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
-  .stat-box,
-  .skill-progress,
-  .project-card,
-  .timeline-item,
-  .comparison-card {
-    transition: none !important;
-    transform: none !important;
-  }
-
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-
-  .scroll-indicator {
-    animation: none !important;
-  }
-
-  .hero-title::before,
-  .hero-title::after {
-    animation: none !important;
-  }
-}
 
 /* ── MOBILE TAP TARGETS ────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
