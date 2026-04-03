@@ -2229,7 +2229,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        setTimeout(function () { wrap.parentNode && wrap.parentNode.removeChild(wrap); }, 1250);
+        setTimeout(function () { wrap.parentNode && wrap.parentNode.removeChild(wrap); }, 2000);
     }
 
     function initCreatureEasterEgg() {
