@@ -1393,6 +1393,54 @@ function initMatrixEasterEgg() {
 document.addEventListener('DOMContentLoaded', initMatrixEasterEgg);
 
 // =========================================================================
+// i18n — language switching
+// =========================================================================
+
+var i18n = {
+    fr: {
+        nav: ['Accueil', 'Profil', 'Parcours', 'Comp\u00e9tences', 'Projets', 'Veille', 'Contact'],
+        heroSubtitle: '\u00c9tudiant BTS SIO \u00b7 Option SISR \u00b7 Infrastructure & Cybers\u00e9curit\u00e9',
+        heroDesc:     'Passionn\u00e9 par l\u2019infrastructure IT, les r\u00e9seaux et la cybers\u00e9curit\u00e9.\n            En alternance et futur aspirant de l\u2019Arm\u00e9e de l\u2019air fran\u00e7aise.',
+        statLabels:   ['Projets r\u00e9alis\u00e9s', 'Technologies', 'Ans d\u2019\u00e9tudes', 'Motivation'],
+        footerCopy:   '\u00a9 2025\u20132026 Leseigneur L\u00e9o \u2014 Tous droits r\u00e9serv\u00e9s',
+        backToTop:    'Retour en haut de page'
+    },
+    en: {
+        nav: ['Home', 'Profile', 'Background', 'Skills', 'Projects', 'Research', 'Contact'],
+        heroSubtitle: 'BTS SIO Student \u00b7 SISR Track \u00b7 Infrastructure & Cybersecurity',
+        heroDesc:     'Passionate about IT infrastructure, networking and cybersecurity.\n            Work-study student and aspiring French Air Force officer.',
+        statLabels:   ['Projects completed', 'Technologies', 'Years of study', 'Motivation'],
+        footerCopy:   '\u00a9 2025\u20132026 Leseigneur L\u00e9o \u2014 All rights reserved',
+        backToTop:    'Back to top'
+    }
+};
+
+function applyLang(lang) {
+    var t = i18n[lang];
+    if (!t) { return; }
+
+    document.querySelectorAll('.nav-links .nav-link').forEach(function (a, i) {
+        if (t.nav[i] !== undefined) { a.textContent = t.nav[i]; }
+    });
+
+    var sub = document.querySelector('.hero-subtitle');
+    if (sub) { sub.textContent = t.heroSubtitle; }
+
+    var desc = document.querySelector('.hero-description');
+    if (desc) { desc.textContent = t.heroDesc; }
+
+    document.querySelectorAll('.stat-label').forEach(function (el, i) {
+        if (t.statLabels[i] !== undefined) { el.textContent = t.statLabels[i]; }
+    });
+
+    var copy = document.querySelector('.footer-copy');
+    if (copy) { copy.textContent = t.footerCopy; }
+
+    var btt = document.getElementById('back-to-top');
+    if (btt) { btt.setAttribute('aria-label', t.backToTop); }
+}
+
+// =========================================================================
 // FEATURE: INTERACTIVE TERMINAL
 // =========================================================================
 
@@ -1424,6 +1472,7 @@ function initTerminal() {
         Timezone:  'Changer le fuseau horaire de l\'horloge',
         cv:        'T\u00e9l\u00e9charge le CV',
         matrix:    'Mini pluie de caract\u00e8res dans le terminal',
+        lang:      'Changer la langue (fr|en)',
         clear:     'Vide le terminal',
         exit:      'Ferme le terminal'
     };
@@ -1940,6 +1989,25 @@ function initTerminal() {
         print('  Th\u00e8me\u00a0: ' + (isLight ? 'clair \u2600\ufe0f' : 'sombre \ud83c\udf19'), 'term-line-accent');
     }
 
+    // ── lang ─────────────────────────────────────────────────────────────
+    function cmdLang(arg) {
+        var current = localStorage.getItem('preferred_lang') || 'fr';
+        if (!arg) {
+            printBlank();
+            print('  Usage\u00a0: lang <fr|en>', 'term-line-accent');
+            print('  Langue actuelle\u00a0: ' + current);
+            printBlank();
+            return;
+        }
+        if (arg !== 'fr' && arg !== 'en') {
+            print('  Langue inconnue. Utilisez "lang fr" ou "lang en".', 'term-line-error');
+            return;
+        }
+        localStorage.setItem('preferred_lang', arg);
+        applyLang(arg);
+        print('  \u2713 Langue d\u00e9finie sur\u00a0: ' + arg, 'term-line-accent');
+    }
+
     // ── matrix (mini terminal rain) ──────────────────────────────────────
     function cmdMatrix() {
         var CHARS    = ['\u30A2','\u30A4','\u30A6','\u30A8','\u30AA','\u30AB','\u30AD','\u30AF','0','1'];
@@ -1998,6 +2066,7 @@ function initTerminal() {
             case 'timezone':  cmdTimezone(cmdArg);   break;
             case 'cv':        cmdCv();               break;
             case 'matrix':    cmdMatrix();           break;
+            case 'lang':      cmdLang(cmdArg);       break;
             case 'clear':
                 while (output.firstChild) { output.removeChild(output.firstChild); }
                 break;
@@ -2046,6 +2115,12 @@ function initTerminal() {
 }
 
 document.addEventListener('DOMContentLoaded', initTerminal);
+
+// Apply stored language preference on load
+document.addEventListener('DOMContentLoaded', function () {
+    var lang = localStorage.getItem('preferred_lang');
+    if (lang && i18n[lang]) { applyLang(lang); }
+});
 
 // =============================================================================
 // TRIPLE-CLICK MYTHOLOGICAL CREATURE EASTER EGG
