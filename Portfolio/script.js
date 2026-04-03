@@ -1422,6 +1422,7 @@ function initTerminal() {
         hack:      'Simulation de hacking (pour rire)',
         weather:   'M\u00e9t\u00e9o en direct (g\u00e9olocalisation)',
         Timezone:  'Changer le fuseau horaire de l\'horloge',
+        cv:        'T\u00e9l\u00e9charge le CV',
         clear:     'Vide le terminal',
         exit:      'Ferme le terminal'
     };
@@ -1938,6 +1939,17 @@ function initTerminal() {
         print('  Th\u00e8me\u00a0: ' + (isLight ? 'clair \u2600\ufe0f' : 'sombre \ud83c\udf19'), 'term-line-accent');
     }
 
+    // ── cv ───────────────────────────────────────────────────────────────
+    function cmdCv() {
+        print('  \uD83D\uDCC4 T\u00e9l\u00e9chargement du CV en cours\u2026', 'term-line-accent');
+        var a = document.createElement('a');
+        a.href = '/L\u00e9o_CV.pdf';
+        a.download = 'L\u00e9o_CV.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
     // ── Command dispatcher ───────────────────────────────────────────────
     function dispatch(raw) {
         var parts  = raw.trim().split(/\s+/);
@@ -1961,6 +1973,7 @@ function initTerminal() {
             case 'hack':      cmdHack();             break;
             case 'weather':   cmdWeather();          break;
             case 'timezone':  cmdTimezone(cmdArg);   break;
+            case 'cv':        cmdCv();               break;
             case 'clear':
                 while (output.firstChild) { output.removeChild(output.firstChild); }
                 break;
