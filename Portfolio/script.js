@@ -1498,6 +1498,113 @@ function initTerminal() {
             });
     }
 
+    // ── countdown ────────────────────────────────────────────────────────
+    function cmdCountdown() {
+        var end  = new Date('2027-05-31T00:00:00');
+        var diff = end - Date.now();
+        printBlank();
+        if (diff <= 0) {
+            print('  BTS termin\u00e9\u00a0! \ud83c\udf93', 'term-line-accent');
+            printBlank();
+            return;
+        }
+        var days    = Math.floor(diff / 86400000);
+        var hours   = Math.floor((diff % 86400000) / 3600000);
+        var minutes = Math.floor((diff % 3600000) / 60000);
+        var seconds = Math.floor((diff % 60000) / 1000);
+        buildAsciiBox([
+            'Fin du BTS SIO SISR \u2014 31 mai 2027',
+            '',
+            days + ' jours, ' + hours + ' heures, ' + minutes + ' minutes, ' + seconds + ' secondes'
+        ]).forEach(function (l) { print('  ' + l); });
+        printBlank();
+    }
+
+    // ── history ──────────────────────────────────────────────────────────
+    function cmdHistory() {
+        if (history.length === 0) {
+            print('  Aucune commande dans l\u2019historique.', 'term-line-accent');
+            return;
+        }
+        printBlank();
+        history.slice().reverse().forEach(function (cmd, i) {
+            print('  ' + String(i + 1).padStart(3) + '  ' + cmd);
+        });
+        printBlank();
+    }
+
+    // ── refresh ──────────────────────────────────────────────────────────
+    function cmdRefresh() {
+        print('  Rechargement\u2026', 'term-line-accent');
+        setTimeout(function () { location.reload(); }, 600);
+    }
+
+    // ── theme ────────────────────────────────────────────────────────────
+    function cmdTheme() {
+        var toggleBtn = document.getElementById('theme-toggle');
+        if (toggleBtn) {
+            toggleBtn.click();
+        } else {
+            var light = document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', light ? 'light' : 'dark');
+        }
+        var isLight = document.body.classList.contains('light-mode');
+        print('  Th\u00e8me\u00a0: ' + (isLight ? 'clair \u2600\ufe0f' : 'sombre \ud83c\udf19'), 'term-line-accent');
+    }
+
+    // ── lang ─────────────────────────────────────────────────────────────
+    function cmdLang(arg) {
+        var current = localStorage.getItem('preferred_lang') || 'fr';
+        if (!arg) {
+            printBlank();
+            print('  Usage\u00a0: lang <fr|en>', 'term-line-accent');
+            print('  Langue actuelle\u00a0: ' + current);
+            printBlank();
+            return;
+        }
+        if (arg !== 'fr' && arg !== 'en') {
+            print('  Langue inconnue. Utilisez "lang fr" ou "lang en".', 'term-line-error');
+            return;
+        }
+        localStorage.setItem('preferred_lang', arg);
+        applyLang(arg);
+        print('  \u2713 Langue d\u00e9finie sur\u00a0: ' + arg, 'term-line-accent');
+    }
+
+    // ── matrix (mini terminal rain) ──────────────────────────────────────
+    function cmdMatrix() {
+        var CHARS    = ['\u30A2','\u30A4','\u30A6','\u30A8','\u30AA','\u30AB','\u30AD','\u30AF','0','1'];
+        var rowCount = 12;
+        var row      = 0;
+        printBlank();
+        function nextRow() {
+            if (row >= rowCount) {
+                setTimeout(function () { print('  Simulation termin\u00e9e.', 'term-line-accent'); }, 80);
+                return;
+            }
+            var line = '  ';
+            for (var i = 0; i < 28; i++) {
+                line += CHARS[Math.floor(Math.random() * CHARS.length)] + ' ';
+            }
+            printHTML('<span style="color:#22c55e;font-family:monospace">' + line + '</span>');
+            row++;
+            setTimeout(nextRow, 80);
+        }
+        nextRow();
+    }
+
+    // ── cv ───────────────────────────────────────────────────────────────
+    function cmdCv() {
+        print('  \uD83D\uDCC4 T\u00e9l\u00e9chargement du CV en cours\u2026', 'term-line-accent');
+        var a = document.createElement('a');
+        a.href = '/docs/L\u00e9o_CV.pdf';
+        a.download = 'L\u00e9o_CV.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+
     // ── Command dispatcher ───────────────────────────────────────────────
     function dispatch(raw) {
         var cmd = raw.trim().toLowerCase();
