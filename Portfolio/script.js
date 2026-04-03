@@ -2564,7 +2564,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!entry.isIntersecting) { return; }
                 dots.forEach(function (d) {
                     var active = d.el === entry.target;
-                    d.dot.classList.toggle('section-dot-active', active);
+                    d.dot.classList.toggle('active', active);
                     d.dot.setAttribute('aria-current', active ? 'true' : 'false');
                 });
             });
