@@ -2702,3 +2702,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.addEventListener('DOMContentLoaded', initSkillsGridCanvas);
 }());
+
+// =============================================================================
+// AVAILABILITY BADGE — hero section
+// =============================================================================
+(function () {
+    'use strict';
+
+    function initAvailabilityBadge() {
+        var subtitle = document.querySelector('#accueil .hero-subtitle');
+        if (!subtitle) { return; }
+
+        var badge = document.createElement('div');
+        badge.id = 'availability-badge';
+
+        var dot = document.createElement('span');
+        dot.className = 'pulse-dot';
+
+        badge.appendChild(dot);
+        badge.appendChild(document.createTextNode('Disponible en alternance'));
+
+        subtitle.parentNode.insertBefore(badge, subtitle.nextSibling);
+    }
+
+    document.addEventListener('DOMContentLoaded', initAvailabilityBadge);
+}());
