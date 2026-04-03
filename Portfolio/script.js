@@ -2371,3 +2371,83 @@ document.addEventListener('DOMContentLoaded', initTerminal);
         panel.insertBefore(hint, list);
     });
 }());
+
+// =============================================================================
+// SECTION PROGRESS DOTS
+// =============================================================================
+(function () {
+    'use strict';
+
+    var SECTIONS = [
+        { id: 'accueil',     label: 'Accueil' },
+        { id: 'profil',      label: 'Profil' },
+        { id: 'parcours',    label: 'Parcours' },
+        { id: 'competences', label: 'Compétences' },
+        { id: 'projets',     label: 'Projets' },
+        { id: 'veille',      label: 'Veille' },
+        { id: 'contact',     label: 'Contact' }
+    ];
+
+    function initSectionDots() {
+        var nav = document.createElement('nav');
+        nav.id = 'section-dots';
+        nav.setAttribute('aria-label', 'Navigation par sections');
+
+        var dots = [];
+
+        SECTIONS.forEach(function (s, i) {
+            var el = document.querySelector('#' + s.id);
+            if (!el) { return; }
+
+            var dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'section-dot';
+            dot.setAttribute('aria-label', 'Aller à ' + s.label);
+            dot.setAttribute('data-section', s.id);
+
+            var tooltip = document.createElement('span');
+            tooltip.className = 'section-dot-label';
+            tooltip.textContent = s.label;
+            dot.appendChild(tooltip);
+
+            dot.addEventListener('click', function () {
+                var scroller  = document.scrollingElement || document.documentElement;
+                var startY    = scroller.scrollTop;
+                var targetY   = el.getBoundingClientRect().top + startY;
+                var distance  = targetY - startY;
+                var duration  = 800;
+                var startTime = null;
+
+                function step(now) {
+                    if (!startTime) { startTime = now; }
+                    var elapsed  = now - startTime;
+                    var progress = Math.min(elapsed / duration, 1);
+                    var ease     = 1 - Math.pow(1 - progress, 4);
+                    scroller.scrollTop = startY + distance * ease;
+                    if (progress < 1) { requestAnimationFrame(step); }
+                }
+                requestAnimationFrame(step);
+            });
+
+            nav.appendChild(dot);
+            dots.push({ dot: dot, el: el });
+        });
+
+        document.body.appendChild(nav);
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) { return; }
+                dots.forEach(function (d) {
+                    var active = d.el === entry.target;
+                    d.dot.classList.toggle('section-dot-active', active);
+                    d.dot.setAttribute('aria-current', active ? 'true' : 'false');
+                });
+            });
+        }, { threshold: 0.4 });
+
+        dots.forEach(function (d) { observer.observe(d.el); });
+    }
+
+    document.addEventListener('DOMContentLoaded', initSectionDots);
+}());
