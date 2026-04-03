@@ -2034,7 +2034,7 @@ function initTerminal() {
     function cmdCv() {
         print('  \uD83D\uDCC4 T\u00e9l\u00e9chargement du CV en cours\u2026', 'term-line-accent');
         var a = document.createElement('a');
-        a.href = '/L\u00e9o_CV.pdf';
+        a.href = '/docs/L\u00e9o_CV.pdf';
         a.download = 'L\u00e9o_CV.pdf';
         document.body.appendChild(a);
         a.click();
