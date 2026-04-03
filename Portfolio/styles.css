@@ -994,6 +994,15 @@ nav.scrolled {
   border-color: rgba(59, 130, 246, 0.3);
 }
 
+.project-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  padding: 0.45rem 1rem;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    VEILLE TECHNOLOGIQUE
 ═══════════════════════════════════════════════════════════════ */
