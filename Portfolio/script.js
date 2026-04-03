@@ -2069,6 +2069,7 @@ function initTerminal() {
             case 'lang':      cmdLang(cmdArg);       break;
             case 'clear':
                 while (output.firstChild) { output.removeChild(output.firstChild); }
+                printWelcome();
                 break;
             case 'exit':
                 closeTerm();
