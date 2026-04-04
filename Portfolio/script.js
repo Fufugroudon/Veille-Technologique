@@ -64,6 +64,16 @@
                 btn.setAttribute('aria-expanded', 'false');
             });
         });
+
+        // Close when clicking outside the nav
+        document.addEventListener('click', function (e) {
+            if (navMenu.classList.contains('is-open') &&
+                !navMenu.contains(e.target) &&
+                !btn.contains(e.target)) {
+                navMenu.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
     }
 
     // =========================================================================
