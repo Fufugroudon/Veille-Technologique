@@ -1526,7 +1526,8 @@ footer {
   .nav-link:last-child { border-bottom: none; }
 
   .nav-cta {
-    margin: 0.5rem 1rem;
+    margin: 0.5rem auto;
+    width: calc(100% - 2rem);
     border-radius: var(--radius-sm) !important;
     text-align: center;
     border-bottom: none !important;
