@@ -1515,6 +1515,10 @@ footer {
     padding: 0.5rem 0;
   }
 
+  .nav-links > li {
+    width: 100%;
+  }
+
   .nav-link {
     padding: 0.85rem 1.5rem;
     border-radius: 0;
