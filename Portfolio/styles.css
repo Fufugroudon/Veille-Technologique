@@ -1489,10 +1489,10 @@ footer {
 
   .brand-name { display: none; }
 
-  nav .container { padding: 0 1.25rem; position: relative; }
+  nav .container { padding: 0 1.25rem; }
 
   .nav-links {
-    position: fixed;
+    position: absolute;
     top: var(--nav-height);
     left: 0;
     right: 0;
@@ -1500,9 +1500,9 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: 0;
-    background: rgba(6, 13, 26, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #060d1a;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-bottom: 1px solid var(--border);
     padding: 0;
     max-height: 0;
