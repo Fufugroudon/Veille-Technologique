@@ -1489,6 +1489,13 @@ footer {
 
   .brand-name { display: none; }
 
+  nav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(6, 13, 26, 0.97);
+    overflow: visible;
+  }
+
   nav .container { padding: 0 1.25rem; }
 
   .nav-links {
