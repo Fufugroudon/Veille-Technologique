@@ -1496,7 +1496,7 @@ footer {
     overflow: visible;
   }
 
-  nav .container { padding: 0 1.25rem; }
+  nav .container { padding: 0 1.25rem; overflow: visible; }
 
   .nav-links {
     position: absolute;
@@ -1535,7 +1535,7 @@ footer {
   }
 
   .nav-links li:last-child {
-    padding-bottom: 0.75rem;
+    padding-bottom: 16px;
   }
 
   .nav-link {
