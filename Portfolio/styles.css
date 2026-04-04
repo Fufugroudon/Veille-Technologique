@@ -1492,10 +1492,11 @@ footer {
   nav .container { padding: 0 1.25rem; position: relative; }
 
   .nav-links {
-    position: absolute;
+    position: fixed;
     top: var(--nav-height);
     left: 0;
     right: 0;
+    width: 100%;
     flex-direction: column;
     align-items: center;
     gap: 0;
