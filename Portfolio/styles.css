@@ -1497,7 +1497,7 @@ footer {
     left: 0;
     right: 0;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     gap: 0;
     background: rgba(6, 13, 26, 0.98);
     backdrop-filter: blur(20px);
@@ -1519,6 +1519,8 @@ footer {
     border-radius: 0;
     border-bottom: 1px solid rgba(59, 130, 246, 0.06);
     font-size: 0.95rem;
+    text-align: center;
+    width: 100%;
   }
 
   .nav-link:last-child { border-bottom: none; }
