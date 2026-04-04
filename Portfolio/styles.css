@@ -1513,7 +1513,7 @@ footer {
     max-height: none !important;
     overflow: visible !important;
     padding-top: 0.5rem;
-    padding-bottom: 1.5rem !important;
+    padding-bottom: 16px !important;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -1534,10 +1534,6 @@ footer {
     width: 100%;
   }
 
-  .nav-links li:last-child {
-    padding-bottom: 16px;
-  }
-
   .nav-link {
     padding: 0.85rem 1.5rem;
     border-radius: 0;
@@ -1550,11 +1546,10 @@ footer {
   .nav-link:last-child { border-bottom: none; }
 
   .nav-cta {
-    margin: 0;
-    width: 100%;
-    border-radius: 0;
+    margin: 0.5rem 0;
+    border-radius: var(--radius-sm) !important;
     text-align: center;
-    border-bottom: none !important;
+    border: none;
   }
 
   /* Sections */
