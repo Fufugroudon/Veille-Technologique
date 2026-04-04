@@ -1502,7 +1502,8 @@ footer {
     gap: 0;
     background: #060d1a;
     border-bottom: 1px solid var(--border);
-    padding: 0.5rem 0 1.25rem;
+    padding-top: 0.5rem;
+    padding-bottom: 1.5rem;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
