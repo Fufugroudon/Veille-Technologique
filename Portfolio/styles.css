@@ -469,6 +469,15 @@ nav.scrolled {
   letter-spacing: 0.2px;
 }
 
+.hero-subtitle a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.hero-subtitle a:hover {
+  text-decoration: underline;
+}
+
 .hero-description {
   font-size: 1.05rem;
   color: var(--text-faint);
