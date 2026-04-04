@@ -1502,9 +1502,11 @@ footer {
     gap: 0;
     background: #060d1a;
     border-bottom: 1px solid var(--border);
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
     padding-top: 0.5rem;
-    padding-bottom: 1rem;
-    overflow: visible;
+    padding-bottom: 1.5rem !important;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
