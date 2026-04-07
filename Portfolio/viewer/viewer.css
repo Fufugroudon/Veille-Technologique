@@ -9,7 +9,7 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background: rgba(6, 13, 26, 0.96);
+  background: color-mix(in srgb, var(--dark) 96%, transparent);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -41,7 +41,7 @@
   top: 0.75rem;
   right: 0.75rem;
   z-index: 1;
-  background: rgba(6, 13, 26, 0.7);
+  background: color-mix(in srgb, var(--dark) 70%, transparent);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text);
@@ -58,7 +58,7 @@
 
 .doc-viewer-close:hover {
   background: var(--accent);
-  color: #fff;
+  color: var(--text);
 }
 
 .doc-viewer-frame {
