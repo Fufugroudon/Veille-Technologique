@@ -39,7 +39,7 @@
 .doc-viewer-close {
   position: absolute;
   top: 0.75rem;
-  right: 0.75rem;
+  right: 3rem;
   z-index: 1;
   background: color-mix(in srgb, var(--dark) 70%, transparent);
   border: 1px solid var(--border);
@@ -65,4 +65,48 @@
   width: 100%;
   flex: 1;
   border: none;
+}
+
+#doc-picker-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  background: color-mix(in srgb, var(--dark) 80%, transparent);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#doc-picker-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.doc-picker-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 280px;
+}
+
+.doc-picker-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+}
+
+.doc-picker-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
 }
