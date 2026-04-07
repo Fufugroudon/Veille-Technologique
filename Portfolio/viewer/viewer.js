@@ -1,8 +1,9 @@
 (function () {
     'use strict';
 
-    var overlay = null;
-    var frame   = null;
+    var overlay     = null;
+    var frame       = null;
+    var lastFocused = null;
 
     var PREVIEWABLE = ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
 
@@ -19,14 +20,22 @@
     function openViewer(url) {
         var src = url + (getExtension(url) === 'pdf' ? '#toolbar=0' : '');
         frame.src = src;
-        overlay.classList.add('is-open');
-        document.addEventListener('keydown', onEscape);
+        if (!overlay.classList.contains('is-open')) {
+            lastFocused = document.activeElement;
+            overlay.classList.add('is-open');
+            document.addEventListener('keydown', onEscape);
+            overlay.querySelector('.doc-viewer-close').focus();
+        }
     }
 
     function closeViewer() {
         overlay.classList.remove('is-open');
         frame.src = '';
         document.removeEventListener('keydown', onEscape);
+        if (lastFocused) {
+            lastFocused.focus();
+            lastFocused = null;
+        }
     }
 
     function checkAndOpen(url) {
@@ -68,7 +77,6 @@
         frame = document.createElement('iframe');
         frame.className = 'doc-viewer-frame';
         frame.setAttribute('title', 'Aperçu du document');
-        frame.setAttribute('allowfullscreen', '');
 
         panel.appendChild(closeBtn);
         panel.appendChild(frame);
@@ -86,7 +94,35 @@
         btn.type = 'button';
         btn.className = 'btn btn-outline viewer-btn';
         btn.setAttribute('aria-label', 'Aperçu du document');
-        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>Aperçu</span>';
+
+        var ns  = 'http://www.w3.org/2000/svg';
+        var svg = document.createElementNS(ns, 'svg');
+        svg.setAttribute('width', '16');
+        svg.setAttribute('height', '16');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('stroke-width', '2.5');
+        svg.setAttribute('stroke-linecap', 'round');
+        svg.setAttribute('stroke-linejoin', 'round');
+        svg.setAttribute('aria-hidden', 'true');
+
+        var path = document.createElementNS(ns, 'path');
+        path.setAttribute('d', 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z');
+
+        var circle = document.createElementNS(ns, 'circle');
+        circle.setAttribute('cx', '12');
+        circle.setAttribute('cy', '12');
+        circle.setAttribute('r', '3');
+
+        svg.appendChild(path);
+        svg.appendChild(circle);
+
+        var label = document.createElement('span');
+        label.textContent = 'Aperçu';
+
+        btn.appendChild(svg);
+        btn.appendChild(label);
 
         btn.addEventListener('click', function () {
             checkAndOpen(url);
