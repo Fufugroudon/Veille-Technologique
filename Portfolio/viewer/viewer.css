@@ -45,7 +45,7 @@
 }
 
 .doc-viewer-panel {
-  width: 90vw;
+  width: 92vw;
   height: 90vh;
   background: var(--bg-card);
   border-radius: var(--radius-lg);
