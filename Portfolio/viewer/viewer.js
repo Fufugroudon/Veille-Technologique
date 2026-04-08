@@ -24,6 +24,7 @@
         if (!viewerOverlay.classList.contains('is-open')) {
             viewerFocused = document.activeElement;
             viewerOverlay.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
             document.addEventListener('keydown', onEscapeViewer);
             viewerOverlay.querySelector('.doc-viewer-close').focus();
         }
@@ -31,6 +32,7 @@
 
     function closeViewer() {
         viewerOverlay.classList.remove('is-open');
+        document.body.style.overflow = '';
         viewerFrame.src = '';
         document.removeEventListener('keydown', onEscapeViewer);
         if (viewerFocused) {
