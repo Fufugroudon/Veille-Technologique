@@ -77,7 +77,7 @@
                 fetch(docxUrl, { method: 'HEAD' })
                     .then(function (docxRes) {
                         if (docxRes.ok) {
-                            window.showToast('Aperçu disponible uniquement en PDF. Utilisez le bouton de téléchargement.', 'warning');
+                            window.showToast('Visualisation disponible uniquement en PDF. Utilisez le bouton de téléchargement.', 'warning');
                         } else {
                             window.showToast('Document indisponible. Veuillez me contacter.', 'error', '#contact');
                         }
@@ -118,12 +118,12 @@
         viewerOverlay.id = 'doc-viewer-overlay';
         viewerOverlay.setAttribute('role', 'dialog');
         viewerOverlay.setAttribute('aria-modal', 'true');
-        viewerOverlay.setAttribute('aria-label', 'Aperçu du document');
+        viewerOverlay.setAttribute('aria-label', 'Visualiser le document');
 
         var closeBtn = document.createElement('button');
         closeBtn.type = 'button';
         closeBtn.className = 'doc-viewer-close';
-        closeBtn.setAttribute('aria-label', 'Fermer l\'aperçu');
+        closeBtn.setAttribute('aria-label', 'Fermer le visualiseur');
         closeBtn.textContent = '\u00d7';
 
         var panel = document.createElement('div');
@@ -131,7 +131,7 @@
 
         viewerFrame = document.createElement('iframe');
         viewerFrame.className = 'doc-viewer-frame';
-        viewerFrame.setAttribute('title', 'Aperçu du document');
+        viewerFrame.setAttribute('title', 'Visualiser le document');
 
         panel.appendChild(viewerFrame);
         viewerOverlay.appendChild(closeBtn);
@@ -197,7 +197,7 @@
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn btn-outline doc-eye-btn';
-        btn.setAttribute('aria-label', 'Aperçu du document');
+        btn.setAttribute('aria-label', 'Visualiser le document');
 
         var ns  = 'http://www.w3.org/2000/svg';
         var svg = document.createElementNS(ns, 'svg');
@@ -223,7 +223,7 @@
         svg.appendChild(eyeCircle);
 
         var label = document.createElement('span');
-        label.textContent = 'Aperçu';
+        label.textContent = 'Visualiser';
 
         btn.appendChild(svg);
         btn.appendChild(label);
