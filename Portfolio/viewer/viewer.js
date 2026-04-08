@@ -17,7 +17,9 @@
     }
 
     function openViewer(fileUrl) {
-        var src = 'viewer/pdfjs/web/viewer.html?file=' + encodeURIComponent(fileUrl);
+        var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
+        var src = viewerBase + '?file=' + encodeURIComponent(fileUrl);
+        console.log('[viewer] opening PDF.js with file:', fileUrl);
         viewerFrame.src = src;
         if (!viewerOverlay.classList.contains('is-open')) {
             viewerFocused = document.activeElement;
@@ -62,16 +64,18 @@
     }
 
     function handleEye(base) {
-        fetch(base + '.pdf', { method: 'HEAD' })
+        var pdfUrl  = new URL(base + '.pdf',  window.location.origin).href;
+        var docxUrl = new URL(base + '.docx', window.location.origin).href;
+        fetch(pdfUrl, { method: 'HEAD' })
             .then(function (pdfRes) {
                 if (pdfRes.ok) {
-                    openViewer(window.location.origin + base + '.pdf');
+                    openViewer(pdfUrl);
                     return;
                 }
-                fetch(base + '.docx', { method: 'HEAD' })
+                fetch(docxUrl, { method: 'HEAD' })
                     .then(function (docxRes) {
                         if (docxRes.ok) {
-                            openViewer(window.location.origin + base + '.docx');
+                            window.showToast('Aperçu disponible uniquement en PDF. Utilisez le bouton de téléchargement.', 'warning');
                         } else {
                             window.showToast('Document indisponible. Veuillez me contacter.', 'error', '#contact');
                         }
@@ -86,8 +90,10 @@
     }
 
     function handleDownload(base) {
-        var pdfCheck  = fetch(base + '.pdf',  { method: 'HEAD' }).then(function (r) { return r.ok; }).catch(function () { return false; });
-        var docxCheck = fetch(base + '.docx', { method: 'HEAD' }).then(function (r) { return r.ok; }).catch(function () { return false; });
+        var pdfUrl  = new URL(base + '.pdf',  window.location.origin).href;
+        var docxUrl = new URL(base + '.docx', window.location.origin).href;
+        var pdfCheck  = fetch(pdfUrl,  { method: 'HEAD' }).then(function (r) { return r.ok; }).catch(function () { return false; });
+        var docxCheck = fetch(docxUrl, { method: 'HEAD' }).then(function (r) { return r.ok; }).catch(function () { return false; });
 
         Promise.all([pdfCheck, docxCheck]).then(function (results) {
             var hasPdf  = results[0];
@@ -96,9 +102,9 @@
             if (hasPdf && hasDocx) {
                 openPicker(base);
             } else if (hasPdf) {
-                downloadFile(base + '.pdf');
+                downloadFile(pdfUrl);
             } else if (hasDocx) {
-                downloadFile(base + '.docx');
+                downloadFile(docxUrl);
             } else {
                 window.showToast('Document indisponible. Veuillez me contacter.', 'error', '#contact');
             }
@@ -112,21 +118,21 @@
         viewerOverlay.setAttribute('aria-modal', 'true');
         viewerOverlay.setAttribute('aria-label', 'Aperçu du document');
 
-        var panel = document.createElement('div');
-        panel.className = 'doc-viewer-panel';
-
         var closeBtn = document.createElement('button');
         closeBtn.type = 'button';
         closeBtn.className = 'doc-viewer-close';
         closeBtn.setAttribute('aria-label', 'Fermer l\'aperçu');
         closeBtn.textContent = '\u00d7';
 
+        var panel = document.createElement('div');
+        panel.className = 'doc-viewer-panel';
+
         viewerFrame = document.createElement('iframe');
         viewerFrame.className = 'doc-viewer-frame';
         viewerFrame.setAttribute('title', 'Aperçu du document');
 
-        panel.appendChild(closeBtn);
         panel.appendChild(viewerFrame);
+        viewerOverlay.appendChild(closeBtn);
         viewerOverlay.appendChild(panel);
         document.body.appendChild(viewerOverlay);
 
@@ -164,12 +170,12 @@
         docxBtn.textContent = 'DOCX';
 
         pdfBtn.addEventListener('click', function () {
-            downloadFile(pickerBase + '.pdf');
+            downloadFile(new URL(pickerBase + '.pdf',  window.location.origin).href);
             closePicker();
         });
 
         docxBtn.addEventListener('click', function () {
-            downloadFile(pickerBase + '.docx');
+            downloadFile(new URL(pickerBase + '.docx', window.location.origin).href);
             closePicker();
         });
 
