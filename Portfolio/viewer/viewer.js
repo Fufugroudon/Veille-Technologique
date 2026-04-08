@@ -291,8 +291,8 @@
             group.className = 'doc-btn-group';
 
             anchor.parentNode.insertBefore(group, anchor);
-            group.appendChild(makeEyeBtn(base));
             group.appendChild(makeDownloadBtn(base));
+            group.appendChild(makeEyeBtn(base));
             anchor.parentNode.removeChild(anchor);
         }
     }
