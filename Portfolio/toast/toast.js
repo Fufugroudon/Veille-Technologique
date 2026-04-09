@@ -106,6 +106,15 @@
         toast.appendChild(progress);
         container.appendChild(toast);
 
+        // ── Enforce maximum 10 visible toasts ────────────────────────────────
+        if (container.children.length > 10) {
+            var oldest = container.children[0];
+            oldest.classList.add('dismissing');
+            setTimeout(function () {
+                if (oldest.parentNode) { oldest.parentNode.removeChild(oldest); }
+            }, 300);
+        }
+
         // ── Auto-dismiss ─────────────────────────────────────────────────────
         var timer = setTimeout(function () {
             dismiss(toast, timer);

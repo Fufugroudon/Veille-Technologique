@@ -7,6 +7,13 @@
 
     var pickerOverlay = null;
     var pickerBase    = null;
+    var pickerFiles   = null;
+
+    var pickerPdfBtn  = null;
+    var pickerDocxBtn = null;
+    var pickerTable   = null;
+    var pickerZipBtn  = null;
+    var pickerDetails = null;
 
     function onEscapeViewer(e) {
         if (e.key === 'Escape') { closeViewer(); }
@@ -18,7 +25,7 @@
 
     function openViewer(fileUrl) {
         var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
-        var src = viewerBase + '?file=' + encodeURIComponent(fileUrl);
+        var src = viewerBase + '?file=' + encodeURIComponent(fileUrl) + '&page=1';
         console.log('[viewer] opening PDF.js with file:', fileUrl);
         viewerFrame.src = src;
         if (!viewerOverlay.classList.contains('is-open')) {
@@ -41,19 +48,50 @@
         }
     }
 
-    function openPicker(base) {
-        pickerBase = base;
+    function formatSize(bytes) {
+        if (!bytes || bytes <= 0) { return '\u2014'; }
+        if (bytes < 1048576) { return (bytes / 1024).toFixed(1) + '\u00a0KB'; }
+        return (bytes / 1048576).toFixed(2) + '\u00a0MB';
+    }
+
+    function openPicker(base, files) {
+        pickerBase  = base;
+        pickerFiles = files;
+
+        var hasPdf  = files.filter(function (f) { return f.ext === 'pdf';  }).length > 0;
+        var hasDocx = files.filter(function (f) { return f.ext === 'docx'; }).length > 0;
+
+        pickerPdfBtn.style.display  = hasPdf  ? '' : 'none';
+        pickerDocxBtn.style.display = hasDocx ? '' : 'none';
+
+        while (pickerTable.firstChild) {
+            pickerTable.removeChild(pickerTable.firstChild);
+        }
+        files.forEach(function (f) {
+            var tr    = document.createElement('tr');
+            var cells = [f.name, f.ext.toUpperCase(), f.mime || '\u2014', formatSize(f.sizeBytes)];
+            cells.forEach(function (text) {
+                var td = document.createElement('td');
+                td.textContent = text;
+                tr.appendChild(td);
+            });
+            pickerTable.appendChild(tr);
+        });
+
+        pickerDetails.removeAttribute('open');
+
         if (!pickerOverlay.classList.contains('is-open')) {
             pickerOverlay.classList.add('is-open');
             document.addEventListener('keydown', onEscapePicker);
-            pickerOverlay.querySelector('.doc-picker-pdf').focus();
+            (hasPdf ? pickerPdfBtn : pickerDocxBtn).focus();
         }
     }
 
     function closePicker() {
         pickerOverlay.classList.remove('is-open');
         document.removeEventListener('keydown', onEscapePicker);
-        pickerBase = null;
+        pickerBase  = null;
+        pickerFiles = null;
     }
 
     function downloadFile(url) {
@@ -77,7 +115,7 @@
                 fetch(docxUrl, { method: 'HEAD' })
                     .then(function (docxRes) {
                         if (docxRes.ok) {
-                            window.showToast('Visualisation disponible uniquement en PDF. Utilisez le bouton de téléchargement.', 'warning');
+                            window.showToast('Visualisation disponible uniquement en PDF. Utilisez le bouton de t\u00e9l\u00e9chargement.', 'warning');
                         } else {
                             window.showToast('Document indisponible. Veuillez me contacter.', 'error', '#contact');
                         }
@@ -91,24 +129,34 @@
             });
     }
 
+    function probeFile(url, ext) {
+        return fetch(url, { method: 'HEAD' })
+            .then(function (r) {
+                if (!r.ok) { return null; }
+                return {
+                    ext:       ext,
+                    url:       url,
+                    name:      url.split('/').pop(),
+                    sizeBytes: parseInt(r.headers.get('Content-Length'), 10) || 0,
+                    mime:      (r.headers.get('Content-Type') || '').split(';')[0].trim()
+                };
+            })
+            .catch(function () { return null; });
+    }
+
     function handleDownload(base) {
         var pdfUrl  = new URL(base + '.pdf',  window.location.origin).href;
         var docxUrl = new URL(base + '.docx', window.location.origin).href;
-        var pdfCheck  = fetch(pdfUrl,  { method: 'HEAD' }).then(function (r) { return r.ok; }).catch(function () { return false; });
-        var docxCheck = fetch(docxUrl, { method: 'HEAD' }).then(function (r) { return r.ok; }).catch(function () { return false; });
 
-        Promise.all([pdfCheck, docxCheck]).then(function (results) {
-            var hasPdf  = results[0];
-            var hasDocx = results[1];
+        Promise.all([probeFile(pdfUrl, 'pdf'), probeFile(docxUrl, 'docx')]).then(function (results) {
+            var files = results.filter(function (f) { return f !== null; });
 
-            if (hasPdf && hasDocx) {
-                openPicker(base);
-            } else if (hasPdf) {
-                downloadFile(pdfUrl);
-            } else if (hasDocx) {
-                downloadFile(docxUrl);
-            } else {
+            if (files.length === 0) {
                 window.showToast('Document indisponible. Veuillez me contacter.', 'error', '#contact');
+            } else if (files.length === 1) {
+                downloadFile(files[0].url);
+            } else {
+                openPicker(base, files);
             }
         });
     }
@@ -149,42 +197,121 @@
         pickerOverlay.id = 'doc-picker-overlay';
         pickerOverlay.setAttribute('role', 'dialog');
         pickerOverlay.setAttribute('aria-modal', 'true');
-        pickerOverlay.setAttribute('aria-label', 'Choisissez un format');
+        pickerOverlay.setAttribute('aria-label', 'S\u00e9lectionner le format');
 
         var card = document.createElement('div');
         card.className = 'doc-picker-card';
 
+        var header = document.createElement('div');
+        header.className = 'doc-picker-header';
+
         var title = document.createElement('p');
         title.className = 'doc-picker-title';
-        title.textContent = 'Choisissez un format';
+        title.textContent = 'S\u00e9lectionner le format du document \u00e0 t\u00e9l\u00e9charger\u00a0:';
+
+        var closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'doc-picker-close';
+        closeBtn.setAttribute('aria-label', 'Fermer');
+        closeBtn.textContent = '\u00d7';
+        closeBtn.addEventListener('click', closePicker);
+
+        header.appendChild(title);
+        header.appendChild(closeBtn);
 
         var actions = document.createElement('div');
         actions.className = 'doc-picker-actions';
 
-        var pdfBtn = document.createElement('button');
-        pdfBtn.type = 'button';
-        pdfBtn.className = 'btn btn-primary doc-picker-pdf';
-        pdfBtn.textContent = 'PDF';
+        pickerPdfBtn = document.createElement('button');
+        pickerPdfBtn.type = 'button';
+        pickerPdfBtn.className = 'btn btn-outline doc-picker-pdf';
+        pickerPdfBtn.textContent = 'PDF';
+        pickerPdfBtn.title = 'T\u00e9l\u00e9charger ce document en format PDF (.pdf).';
 
-        var docxBtn = document.createElement('button');
-        docxBtn.type = 'button';
-        docxBtn.className = 'btn btn-outline doc-picker-docx';
-        docxBtn.textContent = 'DOCX';
+        pickerDocxBtn = document.createElement('button');
+        pickerDocxBtn.type = 'button';
+        pickerDocxBtn.className = 'btn btn-outline doc-picker-docx';
+        pickerDocxBtn.textContent = 'DOCX';
+        pickerDocxBtn.title = 'T\u00e9l\u00e9charger ce document en format WORD (.docx).';
 
-        pdfBtn.addEventListener('click', function () {
-            downloadFile(new URL(pickerBase + '.pdf',  window.location.origin).href);
+        pickerPdfBtn.addEventListener('click', function () {
+            var f = pickerFiles && pickerFiles.filter(function (f) { return f.ext === 'pdf'; })[0];
+            if (f) { downloadFile(f.url); }
             closePicker();
         });
 
-        docxBtn.addEventListener('click', function () {
-            downloadFile(new URL(pickerBase + '.docx', window.location.origin).href);
+        pickerDocxBtn.addEventListener('click', function () {
+            var f = pickerFiles && pickerFiles.filter(function (f) { return f.ext === 'docx'; })[0];
+            if (f) { downloadFile(f.url); }
             closePicker();
         });
 
-        actions.appendChild(pdfBtn);
-        actions.appendChild(docxBtn);
-        card.appendChild(title);
+        actions.appendChild(pickerPdfBtn);
+        actions.appendChild(pickerDocxBtn);
+
+        pickerDetails = document.createElement('details');
+        pickerDetails.className = 'doc-picker-details';
+
+        var summary = document.createElement('summary');
+        summary.className = 'doc-picker-summary';
+        summary.textContent = 'D\u00e9tails des fichiers';
+
+        var tableWrap = document.createElement('div');
+        tableWrap.className = 'doc-picker-table-wrap';
+
+        var table = document.createElement('table');
+        table.className = 'doc-picker-table';
+
+        var thead = document.createElement('thead');
+        var headRow = document.createElement('tr');
+        ['Nom du fichier', 'Format', 'Type', 'Taille'].forEach(function (h) {
+            var th = document.createElement('th');
+            th.textContent = h;
+            headRow.appendChild(th);
+        });
+        thead.appendChild(headRow);
+
+        pickerTable = document.createElement('tbody');
+
+        table.appendChild(thead);
+        table.appendChild(pickerTable);
+        tableWrap.appendChild(table);
+
+        pickerZipBtn = document.createElement('button');
+        pickerZipBtn.type = 'button';
+        pickerZipBtn.className = 'btn btn-outline doc-picker-zip';
+        pickerZipBtn.textContent = 'Tout t\u00e9l\u00e9charger';
+
+        pickerZipBtn.addEventListener('click', function () {
+            if (!pickerFiles || !pickerBase || typeof JSZip === 'undefined') { return; }
+            var docName = pickerBase.split('/').pop();
+            var zip = new JSZip();
+            var fetches = pickerFiles.map(function (f) {
+                return fetch(f.url)
+                    .then(function (r) { return r.blob(); })
+                    .then(function (blob) { zip.file(f.name, blob); });
+            });
+            Promise.all(fetches)
+                .then(function () { return zip.generateAsync({ type: 'blob' }); })
+                .then(function (content) {
+                    var a = document.createElement('a');
+                    a.href = URL.createObjectURL(content);
+                    a.download = docName + ' - Folder.zip';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+                });
+            closePicker();
+        });
+
+        pickerDetails.appendChild(summary);
+        pickerDetails.appendChild(tableWrap);
+        pickerDetails.appendChild(pickerZipBtn);
+
+        card.appendChild(header);
         card.appendChild(actions);
+        card.appendChild(pickerDetails);
         pickerOverlay.appendChild(card);
         document.body.appendChild(pickerOverlay);
 
@@ -239,7 +366,7 @@
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn btn-outline doc-download-btn';
-        btn.setAttribute('aria-label', 'Télécharger le document');
+        btn.setAttribute('aria-label', 'T\u00e9l\u00e9charger le document');
 
         var ns  = 'http://www.w3.org/2000/svg';
         var svg = document.createElementNS(ns, 'svg');
@@ -270,7 +397,7 @@
         svg.appendChild(dlLine);
 
         var label = document.createElement('span');
-        label.textContent = 'Télécharger';
+        label.textContent = 'T\u00e9l\u00e9charger';
 
         btn.appendChild(svg);
         btn.appendChild(label);

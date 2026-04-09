@@ -44,6 +44,11 @@
   transition: background var(--t-fast), color var(--t-fast);
 }
 
+.doc-viewer-close:hover {
+  background: var(--accent);
+  color: var(--text);
+}
+
 .doc-viewer-panel {
   width: 92vw;
   height: 90vh;
@@ -53,11 +58,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
-
-.doc-viewer-close:hover {
-  background: var(--accent);
-  color: var(--text);
 }
 
 .doc-viewer-frame {
@@ -93,19 +93,94 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   min-width: 280px;
+  max-width: 480px;
+  width: 90vw;
+}
+
+.doc-picker-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .doc-picker-title {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text);
-  text-align: center;
+  margin: 0;
+}
+
+.doc-picker-close {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 0;
+  flex-shrink: 0;
+  transition: opacity var(--t-fast);
+}
+
+.doc-picker-close:hover {
+  opacity: 1;
 }
 
 .doc-picker-actions {
   display: flex;
   gap: 0.75rem;
   justify-content: center;
+}
+
+.doc-picker-pdf:hover,
+.doc-picker-docx:hover {
+  background: var(--accent);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.doc-picker-details {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.doc-picker-summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-muted, #94a3b8);
+  user-select: none;
+}
+
+.doc-picker-table-wrap {
+  margin-top: 0.75rem;
+  overflow-x: auto;
+}
+
+.doc-picker-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.doc-picker-table th,
+.doc-picker-table td {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.doc-picker-table th {
+  background: color-mix(in srgb, var(--dark) 50%, transparent);
+  font-weight: 600;
+}
+
+.doc-picker-zip {
+  margin-top: 0.75rem;
+  width: 100%;
 }
