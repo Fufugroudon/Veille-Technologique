@@ -69,7 +69,8 @@
         }
         files.forEach(function (f) {
             var tr    = document.createElement('tr');
-            var cells = [f.name, f.ext.toUpperCase(), f.mime || '\u2014', formatSize(f.sizeBytes)];
+            var mime  = f.ext === 'pdf' ? 'PDF' : f.ext === 'docx' ? 'DOCX' : f.mime || '\u2014';
+            var cells = [f.name, f.ext.toUpperCase(), mime, formatSize(f.sizeBytes)];
             cells.forEach(function (text) {
                 var td = document.createElement('td');
                 td.textContent = text;
@@ -280,7 +281,40 @@
         pickerZipBtn = document.createElement('button');
         pickerZipBtn.type = 'button';
         pickerZipBtn.className = 'btn btn-outline doc-picker-zip';
-        pickerZipBtn.textContent = 'Tout t\u00e9l\u00e9charger';
+
+        var zipLabel = document.createElement('span');
+        zipLabel.textContent = 'Tout t\u00e9l\u00e9charger';
+
+        var zipNs  = 'http://www.w3.org/2000/svg';
+        var zipSvg = document.createElementNS(zipNs, 'svg');
+        zipSvg.setAttribute('width', '14');
+        zipSvg.setAttribute('height', '14');
+        zipSvg.setAttribute('viewBox', '0 0 24 24');
+        zipSvg.setAttribute('fill', 'none');
+        zipSvg.setAttribute('stroke', 'currentColor');
+        zipSvg.setAttribute('stroke-width', '2.5');
+        zipSvg.setAttribute('stroke-linecap', 'round');
+        zipSvg.setAttribute('stroke-linejoin', 'round');
+        zipSvg.setAttribute('aria-hidden', 'true');
+
+        var zipPath = document.createElementNS(zipNs, 'path');
+        zipPath.setAttribute('d', 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4');
+
+        var zipPolyline = document.createElementNS(zipNs, 'polyline');
+        zipPolyline.setAttribute('points', '7 10 12 15 17 10');
+
+        var zipLine = document.createElementNS(zipNs, 'line');
+        zipLine.setAttribute('x1', '12');
+        zipLine.setAttribute('y1', '15');
+        zipLine.setAttribute('x2', '12');
+        zipLine.setAttribute('y2', '3');
+
+        zipSvg.appendChild(zipPath);
+        zipSvg.appendChild(zipPolyline);
+        zipSvg.appendChild(zipLine);
+
+        pickerZipBtn.appendChild(zipLabel);
+        pickerZipBtn.appendChild(zipSvg);
 
         pickerZipBtn.addEventListener('click', function () {
             if (!pickerFiles || !pickerBase || typeof JSZip === 'undefined') { return; }
