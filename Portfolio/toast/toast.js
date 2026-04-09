@@ -13,7 +13,8 @@
     //
     // All visual styling is in toast.css — zero inline styles here.
 
-    var container = null;
+    var container   = null;
+    var toastQueue  = [];
 
     var ICONS = {
         error:   '\u2715',  // ✕
@@ -30,6 +31,8 @@
      */
     function dismiss(toast, timer) {
         clearTimeout(timer);
+        var idx = toastQueue.indexOf(toast);
+        if (idx !== -1) { toastQueue.splice(idx, 1); }
         toast.classList.add('dismissing');
         setTimeout(function () {
             if (toast.parentNode) {
@@ -104,16 +107,15 @@
         toast.appendChild(body);
         toast.appendChild(closeBtn);
         toast.appendChild(progress);
-        container.appendChild(toast);
 
-        // ── Enforce maximum 10 visible toasts ────────────────────────────────
-        if (container.children.length > 10) {
-            var oldest = container.children[0];
-            oldest.classList.add('dismissing');
-            setTimeout(function () {
-                if (oldest.parentNode) { oldest.parentNode.removeChild(oldest); }
-            }, 300);
+        // ── Enforce maximum 10 visible toasts (synchronous, before DOM insert) ──
+        toastQueue.push(toast);
+        if (toastQueue.length > 10) {
+            var oldest = toastQueue.shift();
+            if (oldest.parentNode) { oldest.parentNode.removeChild(oldest); }
         }
+
+        container.appendChild(toast);
 
         // ── Auto-dismiss ─────────────────────────────────────────────────────
         var timer = setTimeout(function () {

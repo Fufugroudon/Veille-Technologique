@@ -23,7 +23,23 @@
         if (e.key === 'Escape') { closePicker(); }
     }
 
+    function clearPdfjsCache() {
+        try {
+            localStorage.removeItem('pdfjs.history');
+            var keys = [];
+            for (var i = 0; i < localStorage.length; i++) {
+                if (localStorage.key(i).indexOf('pdfjs') === 0) {
+                    keys.push(localStorage.key(i));
+                }
+            }
+            for (var j = 0; j < keys.length; j++) {
+                localStorage.removeItem(keys[j]);
+            }
+        } catch (e) {}
+    }
+
     function openViewer(fileUrl) {
+        clearPdfjsCache();
         var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
         var src = viewerBase + '?file=' + encodeURIComponent(fileUrl) + '&page=1';
         console.log('[viewer] opening PDF.js with file:', fileUrl);
