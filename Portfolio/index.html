@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="toast/toast.css">
   <link rel="stylesheet" href="viewer/viewer.css">
+  <link rel="stylesheet" href="itec/itec-block.css">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
@@ -65,7 +66,9 @@
           Leseigneur <span class="text-gradient">Léo</span>
         </h1>
         <p class="hero-subtitle hero-anim-3">Étudiant BTS SIO · Option SISR · Infrastructure &amp; Cybersécurité</p>
-        <p class="hero-subtitle hero-anim-3">Alternant BTS SIO SISR chez <a href="http://www.itec-engineering.com/" target="_blank" rel="noopener noreferrer">ITEC Engineering</a></p>
+        <p class="hero-subtitle hero-anim-3">Alternant BTS SIO SISR chez
+          <button class="itec-entry-trigger" type="button" id="itec-entry-trigger">ITEC Engineering <span aria-hidden="true">›</span></button>
+        </p>
         <p class="hero-description hero-anim-4">
           Passionné par l'infrastructure IT, les réseaux et la cybersécurité.
           En alternance et futur aspirant de l'Armée de l'air française.
@@ -675,11 +678,202 @@
     </div>
   </div>
 
+  <div class="itec-block-modal-overlay" id="itec-block-modal-overlay">
+    <div class="itec-block-modal" id="itec-block-modal" role="dialog" aria-modal="true" aria-label="ITEC Engineering">
+      <button class="itec-block-modal-close" id="itec-block-modal-close" type="button" aria-label="Fermer">✕</button>
+      <div class="itec-block-modal-body">
+        <div class="itec-wrap">
+          <div class="itec-content-grid">
+
+            <div class="itec-hero">
+              <img src="docs/images/Itec-enginneering-logo.png" alt="ITEC Engineering" class="itec-hero-logo">
+              <div class="itec-hero-text">
+                <h2>ITEC Engineering <button class="itec-drawer-btn" id="itec-modal-btn" type="button">→ En savoir plus</button></h2>
+                <p>Société française d'ingénierie industrielle spécialisée dans les solutions clé en main, de la conception jusqu'à la mise en service sur site, pour les secteurs pétroliers, énergétiques et les services aux collectivités.</p>
+                <div class="itec-tags">
+                  <span class="itec-tag itec-tag-green">Oil &amp; Gas</span>
+                  <span class="itec-tag itec-tag-blue">Énergie</span>
+                  <span class="itec-tag itec-tag-gray">Utilities</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="itec-row2-grid">
+              <div>
+                <p class="itec-section-title">Informations générales</p>
+                <div class="itec-info-card">
+                  <div class="itec-info-row">
+                    <span class="itec-info-key">Siège social</span>
+                    <span class="itec-info-val">8 Rue de Vignoru, 60110 Esches, France</span>
+                  </div>
+                  <div class="itec-info-row">
+                    <span class="itec-info-key">Secteurs</span>
+                    <span class="itec-info-val">Oil &amp; Gas · Énergie · Utilities</span>
+                  </div>
+                  <div class="itec-info-row">
+                    <span class="itec-info-key">Téléphone</span>
+                    <span class="itec-info-val">+33 (1) 30 28 81 90</span>
+                  </div>
+                  <div class="itec-info-row">
+                    <span class="itec-info-key">Site web</span>
+                    <span class="itec-info-val"><a href="http://www.itec-engineering.com" target="_blank">itec-engineering.com</a></span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p class="itec-section-title">Pôles d'activité</p>
+                <div class="itec-poles itec-poles--2col">
+                  <div class="itec-pole" data-tooltip="FEED, P&amp;ID, études de détail">
+                    <div class="itec-pole-icon itec-pole-icon--engineering">✏️</div>
+                    <h3>Engineering</h3>
+                    <p>Études process, électricité, instrumentation et automatisme. Du FEED jusqu'à l'exécution complète.</p>
+                  </div>
+                  <div class="itec-pole" data-tooltip="Conception 3D, livraison clé en main">
+                    <div class="itec-pole-icon itec-pole-icon--shelters">🏗️</div>
+                    <h3>Shelters</h3>
+                    <p>Fabrication de shelters techniques sur mesure et conteneurs modifiés pour sites industriels.</p>
+                  </div>
+                  <div class="itec-pole" data-tooltip="Siemens, Rockwell, Schneider">
+                    <div class="itec-pole-icon itec-pole-icon--automatisme">⚙️</div>
+                    <h3>Automatisme</h3>
+                    <p>Intégration PLC/DCS, SIS, F&amp;G, SCADA, réseaux industriels et transformation digitale IIoT.</p>
+                  </div>
+                  <div class="itec-pole" data-tooltip="Certification Ex — IEC 60079">
+                    <div class="itec-pole-icon itec-pole-icon--armoires">⚡</div>
+                    <h3>Armoires électriques</h3>
+                    <p>HTA/HTB/BT, tableaux MCC, armoires ATEX certifiées Ex d / Ex p / Ex e.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p class="itec-section-title">Couverture projet de A à Z</p>
+              <div class="itec-timeline">
+                <div class="itec-step" data-tooltip="Étude de faisabilité et définition du périmètre">
+                  <div class="itec-step-num">01</div>
+                  <span class="itec-step-label">FEED</span>
+                </div>
+                <div class="itec-step-arrow">›</div>
+                <div class="itec-step" data-tooltip="Plans détaillés, schémas et spécifications">
+                  <div class="itec-step-num">02</div>
+                  <span class="itec-step-label">Conception détaillée</span>
+                </div>
+                <div class="itec-step-arrow">›</div>
+                <div class="itec-step" data-tooltip="Assemblage en atelier sous contrôle qualité">
+                  <div class="itec-step-num">03</div>
+                  <span class="itec-step-label">Fabrication atelier</span>
+                </div>
+                <div class="itec-step-arrow">›</div>
+                <div class="itec-step" data-tooltip="Factory Acceptance Test — validation avant livraison">
+                  <div class="itec-step-num">04</div>
+                  <span class="itec-step-label">Tests FAT</span>
+                </div>
+                <div class="itec-step-arrow">›</div>
+                <div class="itec-step" data-tooltip="Installation et démarrage sur site client">
+                  <div class="itec-step-num last">05</div>
+                  <span class="itec-step-label">Mise en service</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p class="itec-section-title">Services proposés</p>
+              <div class="itec-pills">
+                <span class="itec-pill" data-tooltip="Pilotage planning, budget et équipes">Gestion de projet</span>
+                <span class="itec-pill" data-tooltip="Analyse de faisabilité en phase amont">Consulting FEED</span>
+                <span class="itec-pill" data-tooltip="Bilans de puissance, schémas unifilaires">Études électriques</span>
+                <span class="itec-pill" data-tooltip="Capteurs, vannes, boucles de régulation">Instrumentation</span>
+                <span class="itec-pill" data-tooltip="Habilitation zones explosibles IEC 60079">Personnel certifié ATEX</span>
+                <span class="itec-pill" data-tooltip="Sourcing, appels d'offres, contrôle qualité">Services achat</span>
+                <span class="itec-pill" data-tooltip="Supervision et dépannage à distance">Télémaintenance</span>
+                <span class="itec-pill" data-tooltip="VPN industriel, accès crypté aux équipements">Accès distant sécurisé</span>
+                <span class="itec-pill" data-tooltip="Archivage, monitoring et reporting en ligne">Support cloud</span>
+                <span class="itec-pill" data-tooltip="Formation des opérateurs sur le site client">Formation on-site</span>
+              </div>
+            </div>
+
+            <div class="itec-certif">
+              <div class="itec-certif-icon">✓</div>
+              <p><strong>Intégrateur certifié Rockwell Automation</strong><br>Certification internationale attestant du niveau d'expertise d'ITEC Engineering dans l'intégration de systèmes d'automatisme industriels.</p>
+            </div>
+
+            <div class="itec-partners-full">
+              <p class="itec-section-title">Partenaires &amp; Clients</p>
+              <div class="itec-partners">
+                <a href="https://www.perenco.com" target="_blank" rel="noopener" class="itec-partner-card">
+                  <div class="itec-partner-logo itec-partner-logo--perenco">
+                    <img src="docs/images/perenco-logo.png" alt="Perenco" class="itec-partner-logo-img" onerror="this.style.display='none'; this.parentElement.querySelector('.itec-partner-fallback').style.display='flex'">
+                    <span class="itec-partner-fallback">P</span>
+                  </div>
+                  <span class="itec-partner-name">Perenco</span>
+                  <span class="itec-partner-desc">Opérateur pétrolier international</span>
+                </a>
+                <a href="https://www.se.com" target="_blank" rel="noopener" class="itec-partner-card">
+                  <div class="itec-partner-logo itec-partner-logo--schneider">
+                    <img src="docs/images/logo-Schneider-Electric.webp" alt="Schneider Electric" class="itec-partner-logo-img" onerror="this.style.display='none'; this.parentElement.querySelector('.itec-partner-fallback').style.display='flex'">
+                    <span class="itec-partner-fallback">SE</span>
+                  </div>
+                  <span class="itec-partner-name">Schneider Electric</span>
+                  <span class="itec-partner-desc">Partenaire énergie &amp; automatisme</span>
+                </a>
+                <a href="https://www.rockwellautomation.com" target="_blank" rel="noopener" class="itec-partner-card">
+                  <div class="itec-partner-logo itec-partner-logo--rockwell">
+                    <img src="docs/images/rockwell-automation-logo.png" alt="Rockwell Automation" class="itec-partner-logo-img" onerror="this.style.display='none'; this.parentElement.querySelector('.itec-partner-fallback').style.display='flex'">
+                    <span class="itec-partner-fallback">RA</span>
+                  </div>
+                  <span class="itec-partner-name">Rockwell Automation</span>
+                  <span class="itec-partner-desc">Intégrateur certifié</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="itec-modal-overlay" id="itec-modal-overlay">
+    <div class="itec-modal" id="itec-modal" role="dialog" aria-modal="true" aria-label="En savoir plus — ITEC Engineering">
+      <button class="itec-modal-close" id="itec-modal-close" type="button" aria-label="Fermer">✕</button>
+      <h3 class="itec-modal-title">ITEC Engineering</h3>
+      <p class="itec-modal-desc">ITEC Engineering est une société française d'ingénierie industrielle fondée en 2005, spécialisée dans les projets clé en main pour les secteurs <a href="https://fr.wikipedia.org/wiki/Industrie_p%C3%A9troli%C3%A8re" target="_blank" rel="noopener" class="itec-modal-link"><span class="itec-highlight">Oil &amp; Gas</span></a>, Énergie et Utilities. Ses équipes interviennent de la phase <span class="itec-highlight">FEED</span> jusqu'à la mise en service, couvrant l'engineering procédé, électrique et instrumentation, la fabrication de shelters sur mesure, l'intégration de systèmes d'<span class="itec-highlight">automatisme</span> (<a href="https://fr.wikipedia.org/wiki/SCADA" target="_blank" rel="noopener" class="itec-modal-link">SCADA</a>, <a href="https://fr.wikipedia.org/wiki/Internet_des_objets" target="_blank" rel="noopener" class="itec-modal-link">IIoT</a>) ainsi que la conception d'armoires électriques <a href="https://fr.wikipedia.org/wiki/ATEX" target="_blank" rel="noopener" class="itec-modal-link"><span class="itec-highlight">ATEX</span></a> certifiées. Active en <a href="https://fr.wikipedia.org/wiki/Europe" target="_blank" rel="noopener" class="itec-modal-link"><span class="itec-highlight">Europe</span></a>, <a href="https://fr.wikipedia.org/wiki/Afrique" target="_blank" rel="noopener" class="itec-modal-link"><span class="itec-highlight">Afrique</span></a> et <a href="https://fr.wikipedia.org/wiki/Moyen-Orient" target="_blank" rel="noopener" class="itec-modal-link"><span class="itec-highlight">Moyen-Orient</span></a>, la société s'appuie sur des partenariats stratégiques avec Schneider Electric et <a href="https://www.rockwellautomation.com" target="_blank" rel="noopener" class="itec-modal-link">Rockwell Automation</a> pour accompagner des opérateurs de premier plan tels que <a href="https://www.perenco.com" target="_blank" rel="noopener" class="itec-modal-link">Perenco</a>.</p>
+      <ul class="itec-modal-list">
+        <li>
+          <span class="itec-modal-key">Présence internationale</span>
+          <span class="itec-modal-val">Projets actifs sur 4 continents</span>
+        </li>
+        <li>
+          <span class="itec-modal-key">Effectif</span>
+          <span class="itec-modal-val">~50 collaborateurs</span>
+        </li>
+        <li>
+          <span class="itec-modal-key">Zones d'intervention</span>
+          <span class="itec-modal-val">Europe, Afrique, Moyen-Orient</span>
+        </li>
+        <li>
+          <span class="itec-modal-key">Langues</span>
+          <span class="itec-modal-val">Français, Anglais</span>
+        </li>
+        <li>
+          <span class="itec-modal-key">Chiffre d'affaires estimé</span>
+          <span class="itec-modal-val">~10 M€</span>
+        </li>
+        <li>
+          <span class="itec-modal-key">Projets réalisés</span>
+          <span class="itec-modal-val">+200 installations dans 30 pays</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
   <script src="toast/toast.js" defer></script>
   <script src="nav.js" defer></script>
   <script src="script.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script src="viewer/viewer.js" defer></script>
+  <script src="itec/itec-block.js" defer></script>
 
 </body>
 </html>
