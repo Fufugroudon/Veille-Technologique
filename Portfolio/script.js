@@ -1572,11 +1572,52 @@ function initTerminal() {
     input.setAttribute('type', 'text');
     input.setAttribute('autocomplete', 'off');
     input.setAttribute('autocorrect', 'off');
-    input.setAttribute('autocapitalize', 'none');
+    input.setAttribute('autocapitalize', 'off');
     input.setAttribute('spellcheck', 'false');
     input.setAttribute('aria-label', 'Commande terminal');
     inputRow.appendChild(promptLabel);
     inputRow.appendChild(input);
+
+    // Mobile: history navigation buttons (▲▼) and send button
+    var histPrev = document.createElement('button');
+    histPrev.className = 'term-hist-btn';
+    histPrev.setAttribute('type', 'button');
+    histPrev.setAttribute('aria-label', 'Commande pr\u00e9c\u00e9dente');
+    histPrev.textContent = '\u25b2';
+    histPrev.addEventListener('click', function () {
+        if (histIdx < history.length - 1) { histIdx++; input.value = history[histIdx]; }
+        input.focus();
+    });
+
+    var histNext = document.createElement('button');
+    histNext.className = 'term-hist-btn';
+    histNext.setAttribute('type', 'button');
+    histNext.setAttribute('aria-label', 'Commande suivante');
+    histNext.textContent = '\u25bc';
+    histNext.addEventListener('click', function () {
+        if (histIdx > 0) { histIdx--; input.value = history[histIdx]; }
+        else { histIdx = -1; input.value = ''; }
+        input.focus();
+    });
+
+    var sendBtn = document.createElement('button');
+    sendBtn.className = 'term-send-btn';
+    sendBtn.setAttribute('type', 'button');
+    sendBtn.setAttribute('aria-label', 'Envoyer la commande');
+    sendBtn.textContent = 'Envoyer';
+    sendBtn.addEventListener('click', function () {
+        var val = input.value;
+        input.value = '';
+        histIdx = -1;
+        if (val.trim()) { history.unshift(val); }
+        dispatch(val);
+        input.focus();
+    });
+
+    inputRow.appendChild(histPrev);
+    inputRow.appendChild(histNext);
+    inputRow.appendChild(sendBtn);
+
     main.appendChild(inputRow);
 
     body.appendChild(main);
@@ -1711,20 +1752,21 @@ function initTerminal() {
     }
 
     function cmdSecret() {
-        print('  \uD83D\uDCBB Activation de la s\u00e9quence...');
-        // Trigger the Matrix egg if available
-        var ev = new KeyboardEvent('keydown', { keyCode: 65, bubbles: true });
-        var KONAMI_SEQ = [38,38,40,40,37,39,37,39,66,65];
-        var i = 0;
-        var t = setInterval(function () {
-            if (i >= KONAMI_SEQ.length) {
-                clearInterval(t);
-                print('  Raccourci\u00a0: \u2191\u2191\u2193\u2193\u2190\u2192\u2190\u2192BA (desktop) \u2014 Triple tap sur le logo (mobile)', 'term-line-hint');
-                return;
-            }
-            document.dispatchEvent(new KeyboardEvent('keydown', { keyCode: KONAMI_SEQ[i], bubbles: true }));
-            i++;
-        }, 30);
+        printBlank();
+        buildAsciiBox(['     S\u00c9QUENCE SECR\u00c8TE     ']).forEach(function (l) { print('  ' + l); });
+        printBlank();
+        printHTML('  <span style="color:#60a5fa">\u25ba \u00c9tape 1 \u2014 Konami Code (desktop)</span>');
+        print('    Appuyez sur\u00a0: \u2191 \u2191 \u2193 \u2193 \u2190 \u2192 \u2190 \u2192 B A');
+        printBlank();
+        printHTML('  <span style="color:#60a5fa">\u25ba \u00c9tape 2 \u2014 Triple Tap (mobile)</span>');
+        print('    Appuyez 3 fois sur le logo du site');
+        printBlank();
+        printHTML('  <span style="color:#60a5fa">\u25ba R\u00e9sultat</span>');
+        print('    La pluie Matrix envahit l\u2019\u00e9cran pendant 4 secondes.');
+        print('    Message\u00a0: \u201cACC\u00c8S AUTORIS\u00c9\u201d');
+        printBlank();
+        print('  [ Tapez "easteregg" pour plus de d\u00e9tails ]', 'term-line-muted');
+        printBlank();
     }
 
     function cmdHack() {
