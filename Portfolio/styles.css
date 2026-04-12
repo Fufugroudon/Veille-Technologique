@@ -1772,7 +1772,7 @@ body.light-mode .hero-grid {
   justify-content: center;
   padding: 1rem;
   overscroll-behavior: contain;
-  touch-action: pan-y;
+  touch-action: none;
 }
 
 #terminal-modal.term-open {
@@ -1791,6 +1791,7 @@ body.light-mode .hero-grid {
   height: min(560px, 90vh);
   overflow: hidden;
   position: relative;
+  touch-action: none;
 }
 
 /* Title bar */
