@@ -1578,28 +1578,7 @@ function initTerminal() {
     inputRow.appendChild(promptLabel);
     inputRow.appendChild(input);
 
-    // Mobile: history navigation buttons (▲▼) and send button
-    var histPrev = document.createElement('button');
-    histPrev.className = 'term-hist-btn';
-    histPrev.setAttribute('type', 'button');
-    histPrev.setAttribute('aria-label', 'Commande pr\u00e9c\u00e9dente');
-    histPrev.textContent = '\u25b2';
-    histPrev.addEventListener('click', function () {
-        if (histIdx < history.length - 1) { histIdx++; input.value = history[histIdx]; }
-        input.focus();
-    });
-
-    var histNext = document.createElement('button');
-    histNext.className = 'term-hist-btn';
-    histNext.setAttribute('type', 'button');
-    histNext.setAttribute('aria-label', 'Commande suivante');
-    histNext.textContent = '\u25bc';
-    histNext.addEventListener('click', function () {
-        if (histIdx > 0) { histIdx--; input.value = history[histIdx]; }
-        else { histIdx = -1; input.value = ''; }
-        input.focus();
-    });
-
+    // Mobile: send button
     var sendBtn = document.createElement('button');
     sendBtn.className = 'term-send-btn';
     sendBtn.setAttribute('type', 'button');
@@ -1614,8 +1593,6 @@ function initTerminal() {
         input.focus();
     });
 
-    inputRow.appendChild(histPrev);
-    inputRow.appendChild(histNext);
     inputRow.appendChild(sendBtn);
 
     main.appendChild(inputRow);
@@ -1669,7 +1646,7 @@ function initTerminal() {
     function openTerm() {
         modal.classList.add('term-open');
         document.body.style.overflow = 'hidden';
-        input.focus();
+        if (window.innerWidth > 768) { input.focus(); }
         if (output.childNodes.length === 0) { printWelcome(); }
     }
 
@@ -1687,6 +1664,7 @@ function initTerminal() {
         print('   |_|\\___|_|  |_| |_| |_|_|_| |_|\\__,_|_|', 'term-line-accent');
         printBlank();
         print('  Bienvenue ! Tapez "help" pour voir les commandes.', 'term-line-muted');
+        printBlank();
         printBlank();
     }
 

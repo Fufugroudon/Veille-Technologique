@@ -1856,7 +1856,13 @@ body.light-mode .hero-grid {
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.7rem;
   color: rgba(0,255,65,0.55);
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
 }
+.term-cheatsheet::-webkit-scrollbar { width: 6px; }
+.term-cheatsheet::-webkit-scrollbar-track { background: transparent; }
+.term-cheatsheet::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+.term-cheatsheet::-webkit-scrollbar-thumb:hover { opacity: 1; }
 
 .term-cheatsheet-title {
   font-size: 0.65rem;
@@ -1888,7 +1894,10 @@ body.light-mode .hero-grid {
 
 .term-output {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   padding: 0.75rem 1rem;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.82rem;
@@ -1974,21 +1983,7 @@ body.light-mode .hero-grid {
   caret-color: #00ff41;
 }
 
-/* Mobile history nav + send button */
-.term-hist-btn {
-  display: none;
-  background: none;
-  border: 1px solid rgba(0,255,65,0.25);
-  color: rgba(0,255,65,0.7);
-  border-radius: 4px;
-  padding: 0.2rem 0.45rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.term-hist-btn:active { background: rgba(0,255,65,0.12); }
-
+/* Mobile send button */
 .term-send-btn {
   display: none;
   background: #60a5fa;
@@ -2016,7 +2011,6 @@ body.light-mode .hero-grid {
     transform: translate(-50%, -50%);
   }
   .term-input { font-size: 16px; }
-  .term-hist-btn { display: inline-flex; align-items: center; justify-content: center; }
   .term-send-btn { display: inline-block; }
 }
 
