@@ -2037,10 +2037,6 @@ body.light-mode .hero-grid {
     width: 95vw;
     height: 85vh;
     border-radius: var(--radius);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
   .term-input { font-size: 16px; }
   .term-send-btn { display: flex; }
@@ -2056,11 +2052,12 @@ body.light-mode .hero-grid {
   background: #000;
   opacity: 0;
   transition: opacity 0.4s ease;
-  pointer-events: all;
+  pointer-events: none;
 }
 
 #matrix-overlay.matrix-visible {
   opacity: 1;
+  pointer-events: all;
 }
 
 #matrix-canvas {
