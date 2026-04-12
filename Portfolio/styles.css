@@ -1841,6 +1841,7 @@ body.light-mode .hero-grid {
 .term-body {
   display: flex;
   flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -1849,10 +1850,12 @@ body.light-mode .hero-grid {
   min-width: 280px;
   max-width: 320px;
   flex-shrink: 0;
+  min-height: 0;
   background: rgba(0,255,65,0.03);
   border-left: 1px solid rgba(0,255,65,0.1);
   padding: 0.75rem;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.7rem;
   color: rgba(0,255,65,0.55);
@@ -1906,11 +1909,11 @@ body.light-mode .hero-grid {
   scroll-behavior: smooth;
 }
 
-.term-output::-webkit-scrollbar          { width: 6px; height: 6px; }
-.term-output::-webkit-scrollbar-track   { background: #0f172a; border-radius: 4px; }
-.term-output::-webkit-scrollbar-thumb   { background: #3b82f6; border-radius: 4px; }
-.term-output::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
-.term-output { scrollbar-width: thin; scrollbar-color: #3b82f6 #0f172a; }
+.term-output::-webkit-scrollbar          { width: 6px; }
+.term-output::-webkit-scrollbar-track   { background: transparent; }
+.term-output::-webkit-scrollbar-thumb   { background: var(--accent); border-radius: 3px; }
+.term-output::-webkit-scrollbar-thumb:hover { opacity: 1; }
+.term-output { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
 
 .term-line         { margin-bottom: 0.1rem; white-space: pre-wrap; word-break: break-word; }
 .term-line.help-row { display: flex; gap: 0.5rem; white-space: normal; }
@@ -2019,6 +2022,14 @@ body.light-mode .hero-grid {
 .term-send-btn:active { opacity: 0.8; }
 
 /* Responsive */
+@media (max-width: 768px) {
+  .term-window {
+    height: 90vh;
+    max-height: 90vh;
+    width: 95vw;
+  }
+}
+
 @media (max-width: 640px) {
   .term-cheatsheet { display: none; }
   .term-pills { display: flex; }
