@@ -1662,7 +1662,9 @@ function initTerminal() {
         print('   | |/ _ \\ \'__| \'_ ` _ \\| | \'_ \\ / _` | |', 'term-line-accent');
         print('   | |  __/ |  | | | | | | | | | | (_| | |', 'term-line-accent');
         print('   |_|\\___|_|  |_| |_| |_|_|_| |_|\\__,_|_|', 'term-line-accent');
-        printBlank();
+        var spacer = document.createElement('div');
+        spacer.style.height = '0.75rem';
+        output.appendChild(spacer);
         print('  Bienvenue ! Tapez "help" pour voir les commandes.', 'term-line-muted');
         printBlank();
         printBlank();
