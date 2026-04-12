@@ -1925,14 +1925,18 @@ body.light-mode .hero-grid {
 /* Mobile pill row */
 .term-pills {
   display: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
   overflow-x: auto;
-  gap: 0.4rem;
-  padding: 0.4rem 0.75rem 4px;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
   border-top: 1px solid rgba(0,255,65,0.1);
   flex-shrink: 0;
   scrollbar-width: none;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
 }
 .term-pills::-webkit-scrollbar { display: none; }
 
