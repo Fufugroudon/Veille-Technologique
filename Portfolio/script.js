@@ -1648,14 +1648,23 @@ function initTerminal() {
 
     function openTerm() {
         modal.classList.add('term-open');
-        document.body.style.overflow = 'hidden';
+        var scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = '-' + scrollY + 'px';
+        document.body.style.width = '100%';
+        document.body.dataset.scrollY = scrollY;
         if (window.innerWidth > 768) { input.focus(); }
         if (output.childNodes.length === 0) { printWelcome(); }
     }
 
     function closeTerm() {
         modal.classList.remove('term-open');
-        document.body.style.overflow = '';
+        var savedScrollY = parseInt(document.body.dataset.scrollY || '0', 10);
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        delete document.body.dataset.scrollY;
+        window.scrollTo(0, savedScrollY);
         navBtn.focus();
     }
 
