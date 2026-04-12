@@ -1771,6 +1771,8 @@ body.light-mode .hero-grid {
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 #terminal-modal.term-open {
@@ -1856,6 +1858,8 @@ body.light-mode .hero-grid {
   padding: 0.75rem;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.7rem;
   color: rgba(0,255,65,0.55);
@@ -1897,10 +1901,13 @@ body.light-mode .hero-grid {
 
 .term-output {
   flex: 1;
+  height: 100%;
   min-height: 0;
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   padding: 0.75rem 1rem;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.82rem;
@@ -1930,10 +1937,12 @@ body.light-mode .hero-grid {
   display: none;
   flex-direction: row;
   flex-wrap: nowrap;
-  overflow-x: auto;
+  overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
   scroll-behavior: smooth;
   gap: 0.5rem;
   padding: 0.4rem 0.5rem;
