@@ -1276,7 +1276,7 @@ function initMatrixEasterEgg() {
 
     if (brand) {
         brand.addEventListener('touchstart', function (e) {
-            if (!document.body.dataset.scrollY) { e.preventDefault(); }
+            e.preventDefault();
             tapCount++;
             clearTimeout(tapTimer);
             tapTimer = setTimeout(function () { tapCount = 0; }, 1000);
