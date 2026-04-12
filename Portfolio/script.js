@@ -788,7 +788,7 @@ function initTagTooltips() {
 
         // Mobile: show on tap, auto-hide after 1.5 s
         tag.addEventListener('touchstart', function (e) {
-            e.preventDefault();
+            if (!e.target.closest('#terminal-modal')) { e.preventDefault(); }
             showTip(tag);
             clearTimeout(hideTimer);
             hideTimer = setTimeout(hideTip, 1500);
@@ -1276,7 +1276,7 @@ function initMatrixEasterEgg() {
 
     if (brand) {
         brand.addEventListener('touchstart', function (e) {
-            e.preventDefault();
+            if (!document.body.dataset.scrollY) { e.preventDefault(); }
             tapCount++;
             clearTimeout(tapTimer);
             tapTimer = setTimeout(function () { tapCount = 0; }, 1000);
@@ -1544,6 +1544,13 @@ function initTerminal() {
     output.className = 'term-output';
     output.setAttribute('aria-live', 'polite');
     main.appendChild(output);
+
+    // Touch passthrough: prevent parent handlers from swallowing scroll gestures inside the terminal
+    [output, cheat].forEach(function (el) {
+        if (!el) { return; }
+        el.addEventListener('touchstart', function (e) { e.stopPropagation(); }, { passive: true });
+        el.addEventListener('touchmove', function (e) { e.stopPropagation(); }, { passive: true });
+    });
 
     // Mobile pill row
     var pillRow = document.createElement('div');
