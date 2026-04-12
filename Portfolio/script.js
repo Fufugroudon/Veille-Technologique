@@ -1576,9 +1576,11 @@ function initTerminal() {
     input.setAttribute('spellcheck', 'false');
     input.setAttribute('aria-label', 'Commande terminal');
     inputRow.appendChild(promptLabel);
-    inputRow.appendChild(input);
+    var inputWrapper = document.createElement('div');
+    inputWrapper.className = 'term-input-wrapper';
+    inputWrapper.appendChild(input);
 
-    // Mobile: send button
+    // Mobile: send button (absolutely positioned inside inputWrapper)
     var sendBtn = document.createElement('button');
     sendBtn.className = 'term-send-btn';
     sendBtn.setAttribute('type', 'button');
@@ -1593,7 +1595,8 @@ function initTerminal() {
         input.focus();
     });
 
-    inputRow.appendChild(sendBtn);
+    inputWrapper.appendChild(sendBtn);
+    inputRow.appendChild(inputWrapper);
 
     main.appendChild(inputRow);
 
