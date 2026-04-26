@@ -1611,6 +1611,9 @@ function initTerminal() {
     body.appendChild(cheat);
     win.appendChild(body);
     modal.appendChild(win);
+    var termBackdrop = document.createElement('div');
+    termBackdrop.id = 'terminal-backdrop';
+    document.body.appendChild(termBackdrop);
     document.body.appendChild(modal);
 
     // ── History ──────────────────────────────────────────────────────────
@@ -1655,12 +1658,26 @@ function initTerminal() {
 
     function openTerm() {
         modal.classList.add('term-open');
+        termBackdrop.classList.add('term-open');
+
+        function preventScroll(e) {
+            if (!e.target.closest('.term-window')) { e.preventDefault(); }
+        }
+
+        document.body.addEventListener('touchmove', preventScroll, { passive: false });
+        modal._preventScroll = preventScroll;
+
         if (window.innerWidth > 768) { input.focus(); }
         if (output.childNodes.length === 0) { printWelcome(); }
     }
 
     function closeTerm() {
+        if (modal._preventScroll) {
+            document.body.removeEventListener('touchmove', modal._preventScroll);
+            delete modal._preventScroll;
+        }
         modal.classList.remove('term-open');
+        termBackdrop.classList.remove('term-open');
         navBtn.focus();
     }
 
@@ -2528,9 +2545,10 @@ document.addEventListener('DOMContentLoaded', function () {
         { id: 'accueil',     label: 'Accueil' },
         { id: 'profil',      label: 'Profil' },
         { id: 'parcours',    label: 'Parcours' },
-        { id: 'competences', label: 'Compétences' },
-        { id: 'projets',     label: 'Projets' },
-        { id: 'veille',      label: 'Veille' },
+        { id: 'competences',    label: 'Compétences' },
+        { id: 'certifications', label: 'Certifications' },
+        { id: 'projets',        label: 'Projets' },
+        { id: 'veille',         label: 'Veille' },
         { id: 'contact',     label: 'Contact' }
     ];
 
@@ -2753,4 +2771,32 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.addEventListener('DOMContentLoaded', initAvailabilityBadge);
+}());
+
+(function () {
+    'use strict';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var filterBtns = document.querySelectorAll('.cert-filter-btn');
+        var cards      = document.querySelectorAll('.cert-card');
+
+        if (!filterBtns.length || !cards.length) { return; }
+
+        filterBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var filter = btn.getAttribute('data-filter');
+
+                filterBtns.forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+
+                cards.forEach(function (card) {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    });
 }());
