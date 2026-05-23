@@ -1021,10 +1021,34 @@ nav.scrolled {
 
 .cert-card-footer {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
+}
+
+.cert-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.07);
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background var(--t), border-color var(--t), color var(--t);
+  white-space: nowrap;
+}
+
+.cert-view-btn:hover {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: var(--accent);
+  color: #fff;
 }
 
 .cert-level {
