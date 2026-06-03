@@ -2800,27 +2800,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 }());
-
-(function () {
-    'use strict';
-    document.addEventListener('DOMContentLoaded', function () {
-        var btn = document.getElementById('tableau-viewer-btn');
-        if (!btn) { return; }
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            try {
-                var keys = [];
-                for (var i = 0; i < localStorage.length; i++) {
-                    if (localStorage.key(i).indexOf('pdfjs') === 0) {
-                        keys.push(localStorage.key(i));
-                    }
-                }
-                for (var j = 0; j < keys.length; j++) {
-                    localStorage.removeItem(keys[j]);
-                }
-            } catch (ignore) {}
-            var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
-            window.location.href = viewerBase + '?file=' + encodeURIComponent('/CV/TABLEAU_DE_SYNTHESE.pdf') + '&page=1';
-        });
-    });
-}());
