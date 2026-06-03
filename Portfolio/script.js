@@ -2807,7 +2807,12 @@ document.addEventListener('DOMContentLoaded', function () {
         var btn = document.getElementById('cv-viewer-btn');
         if (!btn) { return; }
         btn.addEventListener('click', function () {
+            var overlay = document.getElementById('doc-viewer-overlay');
+            if (!overlay) { return; }
+            var frame = overlay.querySelector('.doc-viewer-frame');
+            if (!frame) { return; }
             try {
+                localStorage.removeItem('pdfjs.history');
                 var keys = [];
                 for (var i = 0; i < localStorage.length; i++) {
                     if (localStorage.key(i).indexOf('pdfjs') === 0) {
@@ -2819,7 +2824,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (ignore) {}
             var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
-            window.location.href = viewerBase + '?file=' + encodeURIComponent('/docs/CV/CV.pdf') + '&page=1';
+            frame.src = viewerBase + '?file=' + encodeURIComponent('/docs/CV/CV.pdf') + '&page=1';
+            if (!overlay.classList.contains('is-open')) {
+                overlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+                overlay.querySelector('.doc-viewer-close').focus();
+            }
         });
     });
 }());
@@ -2830,7 +2840,12 @@ document.addEventListener('DOMContentLoaded', function () {
         var btn = document.getElementById('tableau-viewer-btn');
         if (!btn) { return; }
         btn.addEventListener('click', function () {
+            var overlay = document.getElementById('doc-viewer-overlay');
+            if (!overlay) { return; }
+            var frame = overlay.querySelector('.doc-viewer-frame');
+            if (!frame) { return; }
             try {
+                localStorage.removeItem('pdfjs.history');
                 var keys = [];
                 for (var i = 0; i < localStorage.length; i++) {
                     if (localStorage.key(i).indexOf('pdfjs') === 0) {
@@ -2842,7 +2857,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (ignore) {}
             var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
-            window.location.href = viewerBase + '?file=' + encodeURIComponent('/CV/TABLEAU_DE_SYNTHESE.pdf') + '&page=1';
+            frame.src = viewerBase + '?file=' + encodeURIComponent('/CV/TABLEAU_DE_SYNTHESE.pdf') + '&page=1';
+            if (!overlay.classList.contains('is-open')) {
+                overlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+                overlay.querySelector('.doc-viewer-close').focus();
+            }
         });
     });
 }());
