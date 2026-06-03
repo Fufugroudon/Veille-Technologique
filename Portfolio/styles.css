@@ -1639,7 +1639,8 @@ footer {
 .veille-github {
   display: flex;
   justify-content: center;
-  margin-top: 0.75rem;
+  margin-top: 0.35rem;
+  margin-bottom: 1.5rem;
 }
 
 .veille-github-link {
