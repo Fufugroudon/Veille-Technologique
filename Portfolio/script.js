@@ -2857,7 +2857,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (ignore) {}
             var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
-            frame.src = viewerBase + '?file=' + encodeURIComponent('/CV/TABLEAU_DE_SYNTHESE.pdf') + '&page=1';
+            frame.src = viewerBase + '?file=' + encodeURIComponent('/docs/CV/TABLEAU_DE_SYNTHESE.pdf') + '&page=1';
             if (!overlay.classList.contains('is-open')) {
                 overlay.classList.add('is-open');
                 document.body.style.overflow = 'hidden';
