@@ -1615,6 +1615,51 @@ footer {
   opacity: 0.7;
 }
 
+.footer-github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: color var(--t), border-color var(--t), background var(--t), transform var(--t);
+  margin-top: 0.25rem;
+}
+
+.footer-github:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  transform: translateY(-2px);
+}
+
+.veille-github {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.veille-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.9rem;
+  transition: color var(--t), border-color var(--t), background var(--t);
+}
+
+.veille-github-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
 /* ═══════════════════════════════════════════════════════════════
    SCROLL TO TOP BUTTON
 ═══════════════════════════════════════════════════════════════ */
