@@ -2820,7 +2820,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (ignore) {}
             var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
-            window.open(viewerBase + '?file=' + encodeURIComponent('/CV/TABLEAU_DE_SYNTHESE.pdf') + '&page=1', '_blank');
+            window.location.href = viewerBase + '?file=' + encodeURIComponent('/CV/TABLEAU_DE_SYNTHESE.pdf') + '&page=1';
         });
     });
 }());
