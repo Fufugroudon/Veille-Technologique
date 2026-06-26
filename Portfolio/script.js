@@ -1391,7 +1391,7 @@ var i18n = {
     fr: {
         nav: ['Accueil', 'Profil', 'Parcours', 'Comp\u00e9tences', 'Certifications', 'Projets', 'Veille', 'Contact'],
         heroSubtitle: '\u00c9tudiant BTS SIO \u00b7 Option SISR \u00b7 Infrastructure & Cybers\u00e9curit\u00e9',
-        heroDesc:     'Passionn\u00e9 par l\u2019infrastructure IT, les r\u00e9seaux et la cybers\u00e9curit\u00e9.\n            En alternance et futur aspirant de l\u2019Arm\u00e9e de l\u2019air fran\u00e7aise.',
+        heroDesc:     'Passionn\u00e9 par l\u2019infrastructure IT, les r\u00e9seaux et la cybers\u00e9curit\u00e9.\n            En recherche d\u2019une alternance en BTS SIO SISR.',
         statLabels:   ['Projets r\u00e9alis\u00e9s', 'Technologies', 'Ans d\u2019\u00e9tudes', 'Motivation'],
         footerCopy:   '\u00a9 2025\u20132026 Leseigneur L\u00e9o \u2014 Tous droits r\u00e9serv\u00e9s',
         backToTop:    'Retour en haut de page'
@@ -1399,7 +1399,7 @@ var i18n = {
     en: {
         nav: ['Home', 'Profile', 'Background', 'Skills', 'Certifications', 'Projects', 'Research', 'Contact'],
         heroSubtitle: 'BTS SIO Student \u00b7 SISR Track \u00b7 Infrastructure & Cybersecurity',
-        heroDesc:     'Passionate about IT infrastructure, networking and cybersecurity.\n            Work-study student and aspiring French Air Force officer.',
+        heroDesc:     'Passionate about IT infrastructure, networking and cybersecurity.\n            Seeking a work-study position in BTS SIO SISR.',
         statLabels:   ['Projects completed', 'Technologies', 'Years of study', 'Motivation'],
         footerCopy:   '\u00a9 2025\u20132026 Leseigneur L\u00e9o \u2014 All rights reserved',
         backToTop:    'Back to top'
