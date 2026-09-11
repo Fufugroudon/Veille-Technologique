@@ -12,4 +12,15 @@ export default defineConfig({
     assetsDir: 'assets',
     sourcemap: false,
   },
+  server: {
+    // No PHP backend exists in this repo — the contact form builds a
+    // mailto: link client-side (see src/components/contact/ContactForm.tsx).
+    // If a real PHP endpoint is added later, point requests to it here, e.g.:
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:8000',
+    //     changeOrigin: true,
+    //   },
+    // },
+  },
 })

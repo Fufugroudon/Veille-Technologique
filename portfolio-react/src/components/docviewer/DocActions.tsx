@@ -6,8 +6,8 @@ interface Props {
 }
 
 // o2switch requires .htaccess MIME type declarations for the PDF.js
-// viewer's .js/.wasm assets — the vendored public/viewer/pdfjs/.htaccess
-// already ships these; Phase 7 adds the site-root .htaccess.
+// viewer's .js/.wasm assets — both public/viewer/pdfjs/.htaccess and
+// public/.htaccess (site root) carry these.
 export function DocActions({ base }: Props) {
   const { openEye, openDownload } = useDocViewer()
 
