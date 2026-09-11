@@ -5,10 +5,11 @@ import { ScrollToTopButton } from './components/layout/ScrollToTopButton'
 import { SectionDots } from './components/layout/SectionDots'
 import { Hero } from './components/hero/Hero'
 import { Profil } from './components/sections/Profil'
+import { Parcours } from './components/sections/Parcours'
 import { SECTIONS } from './constants/sections'
 import { useHashNav } from './hooks/useHashNav'
 
-const PLACEHOLDER_IDS = new Set(['accueil', 'profil'])
+const PLACEHOLDER_IDS = new Set(['accueil', 'profil', 'parcours'])
 const PLACEHOLDER_SECTIONS = SECTIONS.filter((s) => !PLACEHOLDER_IDS.has(s.id))
 
 // Placeholder content until later Phase 3 commits migrate each section's real markup.
@@ -34,6 +35,7 @@ function App() {
       <main>
         <Hero />
         <Profil />
+        <Parcours />
         {PLACEHOLDER_SECTIONS.map((section) => (
           <SectionPlaceholder key={section.id} id={section.id} label={section.labelFr} />
         ))}
