@@ -12,6 +12,7 @@ import './styles/hero.css'
 import './styles/itec.css'
 import './styles/profil.css'
 import './styles/parcours.css'
+import './styles/competences.css'
 
 // Applied before the first render to avoid a dark→light flash for users
 // who previously chose the light theme.
