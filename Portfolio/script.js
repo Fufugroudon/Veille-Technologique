@@ -1276,7 +1276,7 @@ function initMatrixEasterEgg() {
 
     if (brand) {
         brand.addEventListener('touchstart', function (e) {
-            if (!document.body.dataset.scrollY) { e.preventDefault(); }
+            e.preventDefault();
             tapCount++;
             clearTimeout(tapTimer);
             tapTimer = setTimeout(function () { tapCount = 0; }, 1000);
@@ -1389,17 +1389,17 @@ document.addEventListener('DOMContentLoaded', initMatrixEasterEgg);
 
 var i18n = {
     fr: {
-        nav: ['Accueil', 'Profil', 'Parcours', 'Comp\u00e9tences', 'Projets', 'Veille', 'Contact'],
+        nav: ['Accueil', 'Profil', 'Parcours', 'Comp\u00e9tences', 'Certifications', 'Projets', 'Veille', 'Contact'],
         heroSubtitle: '\u00c9tudiant BTS SIO \u00b7 Option SISR \u00b7 Infrastructure & Cybers\u00e9curit\u00e9',
-        heroDesc:     'Passionn\u00e9 par l\u2019infrastructure IT, les r\u00e9seaux et la cybers\u00e9curit\u00e9.\n            En alternance et futur aspirant de l\u2019Arm\u00e9e de l\u2019air fran\u00e7aise.',
+        heroDesc:     'Passionn\u00e9 par l\u2019infrastructure IT, les r\u00e9seaux et la cybers\u00e9curit\u00e9.\n            En recherche d\u2019une alternance en BTS SIO SISR.',
         statLabels:   ['Projets r\u00e9alis\u00e9s', 'Technologies', 'Ans d\u2019\u00e9tudes', 'Motivation'],
         footerCopy:   '\u00a9 2025\u20132026 Leseigneur L\u00e9o \u2014 Tous droits r\u00e9serv\u00e9s',
         backToTop:    'Retour en haut de page'
     },
     en: {
-        nav: ['Home', 'Profile', 'Background', 'Skills', 'Projects', 'Research', 'Contact'],
+        nav: ['Home', 'Profile', 'Background', 'Skills', 'Certifications', 'Projects', 'Research', 'Contact'],
         heroSubtitle: 'BTS SIO Student \u00b7 SISR Track \u00b7 Infrastructure & Cybersecurity',
-        heroDesc:     'Passionate about IT infrastructure, networking and cybersecurity.\n            Work-study student and aspiring French Air Force officer.',
+        heroDesc:     'Passionate about IT infrastructure, networking and cybersecurity.\n            Seeking a work-study position in BTS SIO SISR.',
         statLabels:   ['Projects completed', 'Technologies', 'Years of study', 'Motivation'],
         footerCopy:   '\u00a9 2025\u20132026 Leseigneur L\u00e9o \u2014 All rights reserved',
         backToTop:    'Back to top'
@@ -1611,6 +1611,9 @@ function initTerminal() {
     body.appendChild(cheat);
     win.appendChild(body);
     modal.appendChild(win);
+    var termBackdrop = document.createElement('div');
+    termBackdrop.id = 'terminal-backdrop';
+    document.body.appendChild(termBackdrop);
     document.body.appendChild(modal);
 
     // ── History ──────────────────────────────────────────────────────────
@@ -1655,12 +1658,26 @@ function initTerminal() {
 
     function openTerm() {
         modal.classList.add('term-open');
+        termBackdrop.classList.add('term-open');
+
+        function preventScroll(e) {
+            if (!e.target.closest('.term-window')) { e.preventDefault(); }
+        }
+
+        document.body.addEventListener('touchmove', preventScroll, { passive: false });
+        modal._preventScroll = preventScroll;
+
         if (window.innerWidth > 768) { input.focus(); }
         if (output.childNodes.length === 0) { printWelcome(); }
     }
 
     function closeTerm() {
+        if (modal._preventScroll) {
+            document.body.removeEventListener('touchmove', modal._preventScroll);
+            delete modal._preventScroll;
+        }
         modal.classList.remove('term-open');
+        termBackdrop.classList.remove('term-open');
         navBtn.focus();
     }
 
@@ -2055,8 +2072,8 @@ function initTerminal() {
     function cmdCv() {
         print('  \uD83D\uDCC4 T\u00e9l\u00e9chargement du CV en cours\u2026', 'term-line-accent');
         var a = document.createElement('a');
-        a.href = '/docs/L\u00e9o_CV.pdf';
-        a.download = 'L\u00e9o_CV.pdf';
+        a.href = '/docs/CV.pdf';
+        a.download = 'CV.pdf';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -2528,9 +2545,10 @@ document.addEventListener('DOMContentLoaded', function () {
         { id: 'accueil',     label: 'Accueil' },
         { id: 'profil',      label: 'Profil' },
         { id: 'parcours',    label: 'Parcours' },
-        { id: 'competences', label: 'Compétences' },
-        { id: 'projets',     label: 'Projets' },
-        { id: 'veille',      label: 'Veille' },
+        { id: 'competences',    label: 'Compétences' },
+        { id: 'certifications', label: 'Certifications' },
+        { id: 'projets',        label: 'Projets' },
+        { id: 'veille',         label: 'Veille' },
         { id: 'contact',     label: 'Contact' }
     ];
 
@@ -2753,4 +2771,98 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.addEventListener('DOMContentLoaded', initAvailabilityBadge);
+}());
+
+(function () {
+    'use strict';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var filterBtns = document.querySelectorAll('.cert-filter-btn');
+        var cards      = document.querySelectorAll('.cert-card');
+
+        if (!filterBtns.length || !cards.length) { return; }
+
+        filterBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var filter = btn.getAttribute('data-filter');
+
+                filterBtns.forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+
+                cards.forEach(function (card) {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    });
+}());
+
+(function () {
+    'use strict';
+    document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('cv-viewer-btn');
+        if (!btn) { return; }
+        btn.addEventListener('click', function () {
+            var overlay = document.getElementById('doc-viewer-overlay');
+            if (!overlay) { return; }
+            var frame = overlay.querySelector('.doc-viewer-frame');
+            if (!frame) { return; }
+            try {
+                localStorage.removeItem('pdfjs.history');
+                var keys = [];
+                for (var i = 0; i < localStorage.length; i++) {
+                    if (localStorage.key(i).indexOf('pdfjs') === 0) {
+                        keys.push(localStorage.key(i));
+                    }
+                }
+                for (var j = 0; j < keys.length; j++) {
+                    localStorage.removeItem(keys[j]);
+                }
+            } catch (ignore) {}
+            var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
+            frame.src = viewerBase + '?file=' + encodeURIComponent('/docs/CV/CV.pdf') + '&page=1';
+            if (!overlay.classList.contains('is-open')) {
+                overlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+                overlay.querySelector('.doc-viewer-close').focus();
+            }
+        });
+    });
+}());
+
+(function () {
+    'use strict';
+    document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('tableau-viewer-btn');
+        if (!btn) { return; }
+        btn.addEventListener('click', function () {
+            var overlay = document.getElementById('doc-viewer-overlay');
+            if (!overlay) { return; }
+            var frame = overlay.querySelector('.doc-viewer-frame');
+            if (!frame) { return; }
+            try {
+                localStorage.removeItem('pdfjs.history');
+                var keys = [];
+                for (var i = 0; i < localStorage.length; i++) {
+                    if (localStorage.key(i).indexOf('pdfjs') === 0) {
+                        keys.push(localStorage.key(i));
+                    }
+                }
+                for (var j = 0; j < keys.length; j++) {
+                    localStorage.removeItem(keys[j]);
+                }
+            } catch (ignore) {}
+            var viewerBase = new URL('viewer/pdfjs/web/viewer.html', window.location.href).href;
+            frame.src = viewerBase + '?file=' + encodeURIComponent('/docs/CV/TABLEAU_DE_SYNTHESE.pdf') + '&page=1';
+            if (!overlay.classList.contains('is-open')) {
+                overlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+                overlay.querySelector('.doc-viewer-close').focus();
+            }
+        });
+    });
 }());
