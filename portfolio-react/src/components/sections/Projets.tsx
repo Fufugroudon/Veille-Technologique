@@ -2,13 +2,14 @@ import { useReveal } from '../../hooks/useReveal'
 import { useCardTilt } from '../projects/useCardTilt'
 import { Tag } from '../projects/Tag'
 import { TagTooltipProvider } from '../../context/TagTooltipContext'
+import { DocActions } from '../docviewer/DocActions'
 
 interface ProjectDef {
   emoji: string
   title: string
   description: string
   tags: string[]
-  download?: { href: string; dataDoc: string; label: string }
+  docBase?: string
 }
 
 const PROJECTS: ProjectDef[] = [
@@ -55,11 +56,7 @@ const PROJECTS: ProjectDef[] = [
     description:
       "Documentation technique E6 : configuration d'un annuaire Active Directory et de stratégies de groupes sur Windows Server 2025.",
     tags: ['Active Directory', 'Windows Server', 'GPO', 'DNS'],
-    download: {
-      href: 'docs/Docu_AD/AD_Documentation_Leo.pdf',
-      dataDoc: 'docs/Docu_AD/AD_Documentation_Leo',
-      label: 'Télécharger la documentation',
-    },
+    docBase: 'docs/AD-Documentation-Leo',
   },
 ]
 
@@ -86,30 +83,10 @@ function ProjectCard({ project }: { project: ProjectDef }) {
             <Tag key={tag} name={tag} />
           ))}
         </div>
-        {project.download && (
-          <a
-            href={project.download.href}
-            download
-            data-doc={project.download.dataDoc}
-            className="btn btn-outline project-download-btn"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            {project.download.label}
-          </a>
+        {project.docBase && (
+          <div className="project-download-btn">
+            <DocActions base={project.docBase} />
+          </div>
         )}
       </div>
       <div className="card-shine" ref={shineRef} />

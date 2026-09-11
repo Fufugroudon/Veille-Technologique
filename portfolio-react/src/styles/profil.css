@@ -99,10 +99,6 @@
   flex-shrink: 0;
 }
 
-.cv-btn {
-  font-size: 0.9rem;
-}
-
 @media (max-width: 768px) {
   .profile-content {
     grid-template-columns: 1fr;
