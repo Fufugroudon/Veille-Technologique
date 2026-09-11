@@ -8,10 +8,11 @@ import { Profil } from './components/sections/Profil'
 import { Parcours } from './components/sections/Parcours'
 import { Competences } from './components/sections/Competences'
 import { Certifications } from './components/sections/Certifications'
+import { Projets } from './components/sections/Projets'
 import { SECTIONS } from './constants/sections'
 import { useHashNav } from './hooks/useHashNav'
 
-const PLACEHOLDER_IDS = new Set(['accueil', 'profil', 'parcours', 'competences'])
+const PLACEHOLDER_IDS = new Set(['accueil', 'profil', 'parcours', 'competences', 'projets'])
 const PLACEHOLDER_SECTIONS = SECTIONS.filter((s) => !PLACEHOLDER_IDS.has(s.id))
 
 // Placeholder content until later Phase 3 commits migrate each section's real markup.
@@ -40,6 +41,7 @@ function App() {
         <Parcours />
         <Competences />
         <Certifications />
+        <Projets />
         {PLACEHOLDER_SECTIONS.map((section) => (
           <SectionPlaceholder key={section.id} id={section.id} label={section.labelFr} />
         ))}
