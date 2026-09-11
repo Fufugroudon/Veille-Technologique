@@ -8,6 +8,8 @@ import './styles/variables.css'
 import './styles/base.css'
 import './styles/layout.css'
 import './styles/toast.css'
+import './styles/hero.css'
+import './styles/itec.css'
 
 // Applied before the first render to avoid a dark→light flash for users
 // who previously chose the light theme.

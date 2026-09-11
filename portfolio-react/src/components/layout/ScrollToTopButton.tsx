@@ -34,7 +34,7 @@ export function ScrollToTopButton() {
       id="back-to-top"
       type="button"
       aria-label={t.backToTop}
-      style={{ opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none' }}
+      className={visible ? 'visible' : ''}
       onClick={(e) => {
         e.preventDefault()
         e.stopPropagation()
