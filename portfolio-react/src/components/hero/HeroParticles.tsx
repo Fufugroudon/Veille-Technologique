@@ -38,7 +38,7 @@ export function HeroParticles() {
     if (!ctx) return
 
     let pts: Point[] = []
-    let bursts: Burst[] = []
+    const bursts: Burst[] = []
     let raf = 0
     let mouseX = -9999
     let mouseY = -9999
