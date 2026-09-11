@@ -7,6 +7,7 @@ import { Hero } from './components/hero/Hero'
 import { Profil } from './components/sections/Profil'
 import { Parcours } from './components/sections/Parcours'
 import { Competences } from './components/sections/Competences'
+import { Certifications } from './components/sections/Certifications'
 import { SECTIONS } from './constants/sections'
 import { useHashNav } from './hooks/useHashNav'
 
@@ -38,6 +39,7 @@ function App() {
         <Profil />
         <Parcours />
         <Competences />
+        <Certifications />
         {PLACEHOLDER_SECTIONS.map((section) => (
           <SectionPlaceholder key={section.id} id={section.id} label={section.labelFr} />
         ))}

@@ -1,0 +1,46 @@
+#certifications {
+  background: var(--dark);
+}
+
+.certifications-intro {
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.certifications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 1.25rem;
+}
+
+.certification-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  transition: border-color var(--t), box-shadow var(--t), transform var(--t), background var(--t);
+}
+
+.certification-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--glow-sm);
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
+}
+
+.certification-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.certification-status {
+  font-size: 0.8rem;
+  color: var(--text-faint);
+}
