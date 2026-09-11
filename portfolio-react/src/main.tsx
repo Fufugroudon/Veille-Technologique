@@ -10,6 +10,7 @@ import './styles/layout.css'
 import './styles/toast.css'
 import './styles/hero.css'
 import './styles/itec.css'
+import './styles/profil.css'
 
 // Applied before the first render to avoid a dark→light flash for users
 // who previously chose the light theme.

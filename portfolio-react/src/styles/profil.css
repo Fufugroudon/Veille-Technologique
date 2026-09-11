@@ -1,0 +1,133 @@
+#profil {
+  background: var(--dark-secondary);
+}
+
+.profile-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.profile-text h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.3px;
+}
+
+.profile-text p {
+  color: var(--text-muted);
+  line-height: 1.85;
+  margin-bottom: 1rem;
+  font-size: 0.97rem;
+}
+
+.profile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.75rem;
+}
+
+.profile-tag {
+  padding: 0.35rem 0.85rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  letter-spacing: 0.2px;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.profile-tag:hover {
+  background: rgba(59, 130, 246, 0.18);
+  border-color: var(--accent);
+}
+
+.profile-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-ring {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--dark-secondary), var(--dark-secondary)) padding-box,
+    linear-gradient(135deg, var(--accent), var(--accent-purple), var(--accent)) border-box;
+  animation: shimmer-ring 6s linear infinite;
+}
+
+@keyframes shimmer-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.avatar-large {
+  position: relative;
+  z-index: 1;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -2px;
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.35), 0 0 0 8px rgba(59, 130, 246, 0.08);
+  flex-shrink: 0;
+}
+
+.cv-btn {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .profile-image {
+    order: -1;
+  }
+
+  .avatar-large {
+    width: min(200px, 55vw);
+    height: min(200px, 55vw);
+    font-size: clamp(3.5rem, 12vw, 5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-large {
+    width: min(170px, 55vw);
+    height: min(170px, 55vw);
+    font-size: clamp(3rem, 11vw, 4.5rem);
+  }
+
+  .profile-tags {
+    gap: 0.4rem;
+  }
+}
