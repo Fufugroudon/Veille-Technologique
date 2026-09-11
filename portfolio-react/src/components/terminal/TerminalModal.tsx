@@ -427,7 +427,7 @@ export function TerminalModal({ open, onClose }: Props) {
 
   function cmdCv() {
     printLine('  📄 Téléchargement du CV en cours…', 'term-line-accent')
-    downloadFile('docs/Léo_CV.pdf')
+    downloadFile('docs/CV/CV.pdf')
   }
 
   function clearOutput() {

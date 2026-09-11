@@ -56,7 +56,7 @@ const PROJECTS: ProjectDef[] = [
     description:
       "Documentation technique E6 : configuration d'un annuaire Active Directory et de stratégies de groupes sur Windows Server 2025.",
     tags: ['Active Directory', 'Windows Server', 'GPO', 'DNS'],
-    docBase: 'docs/AD-Documentation-Leo',
+    docBase: 'docs/Docu_AD/AD_Documentation_Leo',
   },
 ]
 

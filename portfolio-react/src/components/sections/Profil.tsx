@@ -46,7 +46,7 @@ export function Profil() {
               <div className="avatar-ring" aria-hidden="true" />
               <div className="avatar-large">LL</div>
             </div>
-            <DocActions base="docs/Léo_CV" />
+            <DocActions base="docs/CV/CV" />
           </div>
         </div>
       </div>
