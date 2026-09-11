@@ -5,6 +5,7 @@ import { I18nProvider } from './i18n/I18nContext'
 import { ToastProvider } from './context/ToastContext'
 import { DocViewerProvider } from './components/docviewer/DocViewerProvider'
 import { TermsModalProvider } from './context/TermsModalContext'
+import { ThemeProvider } from './context/ThemeContext'
 import { applyStoredTheme } from './utils/theme'
 import './styles/variables.css'
 import './styles/base.css'
@@ -20,6 +21,9 @@ import './styles/projets.css'
 import './styles/veille.css'
 import './styles/docviewer.css'
 import './styles/contact.css'
+import './styles/terminal.css'
+import './styles/matrix.css'
+import './styles/creature.css'
 
 // Applied before the first render to avoid a dark→light flash for users
 // who previously chose the light theme.
@@ -27,14 +31,16 @@ applyStoredTheme()
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
-    <I18nProvider>
-      <ToastProvider>
-        <DocViewerProvider>
-          <TermsModalProvider>
-            <App />
-          </TermsModalProvider>
-        </DocViewerProvider>
-      </ToastProvider>
-    </I18nProvider>
+    <ThemeProvider>
+      <I18nProvider>
+        <ToastProvider>
+          <DocViewerProvider>
+            <TermsModalProvider>
+              <App />
+            </TermsModalProvider>
+          </DocViewerProvider>
+        </ToastProvider>
+      </I18nProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

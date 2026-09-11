@@ -11,6 +11,9 @@ import { Certifications } from './components/sections/Certifications'
 import { Projets } from './components/sections/Projets'
 import { Veille } from './components/sections/Veille'
 import { Contact } from './components/sections/Contact'
+import { MatrixRain } from './components/easter-eggs/MatrixRain'
+import { CreatureEasterEgg } from './components/easter-eggs/CreatureEasterEgg'
+import { CreatureLegend } from './components/easter-eggs/CreatureLegend'
 import { useHashNav } from './hooks/useHashNav'
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
       <Footer />
       <SectionDots />
       <ScrollToTopButton />
+      <MatrixRain />
+      <CreatureEasterEgg />
+      <CreatureLegend />
     </>
   )
 }

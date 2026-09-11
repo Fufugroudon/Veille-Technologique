@@ -1,14 +1,7 @@
-import { useState } from 'react'
-import { isLightMode, setLightMode } from '../../utils/theme'
+import { useTheme } from '../../context/ThemeContext'
 
 export function ThemeToggle() {
-  const [light, setLight] = useState(isLightMode)
-
-  function handleClick() {
-    const next = !light
-    setLightMode(next)
-    setLight(next)
-  }
+  const { light, toggle } = useTheme()
 
   return (
     <button
@@ -16,7 +9,7 @@ export function ThemeToggle() {
       className="theme-toggle"
       aria-pressed={light}
       aria-label={light ? 'Activer le mode nuit' : 'Activer le mode jour'}
-      onClick={handleClick}
+      onClick={toggle}
     >
       {light ? '🌙' : '☀️'}
     </button>

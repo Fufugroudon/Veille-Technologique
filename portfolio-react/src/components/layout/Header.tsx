@@ -4,6 +4,7 @@ import { useNavbarScrolled } from '../../hooks/useNavbarScrolled'
 import { useActiveSection } from '../../hooks/useActiveSection'
 import { SECTIONS } from '../../constants/sections'
 import { ThemeToggle } from './ThemeToggle'
+import { TerminalModal } from '../terminal/TerminalModal'
 
 const SECTION_IDS = SECTIONS.map((s) => s.id)
 
@@ -12,8 +13,10 @@ export function Header() {
   const scrolled = useNavbarScrolled()
   const activeId = useActiveSection(SECTION_IDS)
   const [isOpen, setIsOpen] = useState(false)
+  const [terminalOpen, setTerminalOpen] = useState(false)
   const navRef = useRef<HTMLUListElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
+  const terminalBtnRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     function handleOutsideClick(e: MouseEvent) {
@@ -79,8 +82,26 @@ export function Header() {
           <span className="hamburger-bar" />
         </button>
 
+        <button
+          type="button"
+          className="terminal-nav-btn"
+          aria-label="Ouvrir le terminal interactif"
+          ref={terminalBtnRef}
+          onClick={() => setTerminalOpen(true)}
+        >
+          {'>_'}
+        </button>
+
         <ThemeToggle />
       </div>
+
+      <TerminalModal
+        open={terminalOpen}
+        onClose={() => {
+          setTerminalOpen(false)
+          terminalBtnRef.current?.focus()
+        }}
+      />
     </nav>
   )
 }
