@@ -1,8 +1,10 @@
 import { useI18n } from '../../i18n/I18nContext'
+import { useTermsModal } from '../../context/TermsModalContext'
 import { LiveClock } from './LiveClock'
 
 export function Footer() {
   const { t } = useI18n()
+  const { showInfo } = useTermsModal()
 
   return (
     <footer>
@@ -15,6 +17,11 @@ export function Footer() {
         </div>
         <p className="footer-copy">{t.footerCopy}</p>
         <p className="footer-sub">Étudiant BTS SIO SISR</p>
+        <p className="footer-sub">
+          <button type="button" className="footer-terms-link" onClick={showInfo}>
+            Conditions d'utilisation
+          </button>
+        </p>
         <a
           href="https://github.com/Fufugroudon"
           target="_blank"

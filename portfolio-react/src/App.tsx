@@ -10,24 +10,8 @@ import { Competences } from './components/sections/Competences'
 import { Certifications } from './components/sections/Certifications'
 import { Projets } from './components/sections/Projets'
 import { Veille } from './components/sections/Veille'
-import { SECTIONS } from './constants/sections'
+import { Contact } from './components/sections/Contact'
 import { useHashNav } from './hooks/useHashNav'
-
-const PLACEHOLDER_IDS = new Set(['accueil', 'profil', 'parcours', 'competences', 'projets', 'veille'])
-const PLACEHOLDER_SECTIONS = SECTIONS.filter((s) => !PLACEHOLDER_IDS.has(s.id))
-
-// Placeholder content until later Phase 3 commits migrate each section's real markup.
-function SectionPlaceholder({ id, label }: { id: string; label: string }) {
-  return (
-    <section id={id}>
-      <div className="container">
-        <div className="section-header">
-          <h2>{label}</h2>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 function App() {
   useHashNav()
@@ -44,9 +28,7 @@ function App() {
         <Certifications />
         <Projets />
         <Veille />
-        {PLACEHOLDER_SECTIONS.map((section) => (
-          <SectionPlaceholder key={section.id} id={section.id} label={section.labelFr} />
-        ))}
+        <Contact />
       </main>
       <Footer />
       <SectionDots />
