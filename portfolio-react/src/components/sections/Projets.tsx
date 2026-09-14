@@ -102,7 +102,7 @@ export function Projets() {
       <section id="projets">
         <div className="container">
           <div className={header.className} ref={header.ref}>
-            <span className="section-number">04</span>
+            <span className="section-number">05</span>
             <h2>Projets</h2>
             <p className="section-subtitle">Mes réalisations techniques</p>
           </div>

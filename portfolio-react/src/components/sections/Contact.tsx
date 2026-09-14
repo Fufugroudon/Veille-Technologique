@@ -12,7 +12,7 @@ export function Contact() {
     <section id="contact">
       <div className="container">
         <div className={header.className} ref={header.ref}>
-          <span className="section-number">06</span>
+          <span className="section-number">07</span>
           <h2>Contact</h2>
           <p className="section-subtitle">Restons en contact</p>
         </div>

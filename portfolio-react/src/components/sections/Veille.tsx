@@ -80,7 +80,7 @@ export function Veille() {
     <section id="veille">
       <div className="container">
         <div className={header.className} ref={header.ref}>
-          <span className="section-number">05</span>
+          <span className="section-number">06</span>
           <h2>Veille Technologique</h2>
           <p className="section-subtitle">Ordinateurs Quantiques vs Ordinateurs Classiques</p>
         </div>

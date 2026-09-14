@@ -9,6 +9,7 @@ export const SECTIONS: SectionDef[] = [
   { id: 'profil', labelFr: 'Profil' },
   { id: 'parcours', labelFr: 'Parcours' },
   { id: 'competences', labelFr: 'Compétences' },
+  { id: 'certifications', labelFr: 'Certifications' },
   { id: 'projets', labelFr: 'Projets' },
   { id: 'veille', labelFr: 'Veille' },
   { id: 'contact', labelFr: 'Contact' },

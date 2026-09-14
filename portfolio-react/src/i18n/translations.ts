@@ -12,7 +12,7 @@ export interface Translation {
 
 export const translations: Record<Lang, Translation> = {
   fr: {
-    nav: ['Accueil', 'Profil', 'Parcours', 'Compétences', 'Projets', 'Veille', 'Contact'],
+    nav: ['Accueil', 'Profil', 'Parcours', 'Compétences', 'Certifications', 'Projets', 'Veille', 'Contact'],
     heroSubtitle: 'Étudiant BTS SIO · Option SISR · Infrastructure & Cybersécurité',
     heroDesc:
       "Passionné par l'infrastructure IT, les réseaux et la cybersécurité.\nEn alternance et futur aspirant de l'Armée de l'air française.",
@@ -21,7 +21,7 @@ export const translations: Record<Lang, Translation> = {
     backToTop: 'Retour en haut de page',
   },
   en: {
-    nav: ['Home', 'Profile', 'Background', 'Skills', 'Projects', 'Research', 'Contact'],
+    nav: ['Home', 'Profile', 'Background', 'Skills', 'Certifications', 'Projects', 'Research', 'Contact'],
     heroSubtitle: 'BTS SIO Student · SISR Track · Infrastructure & Cybersecurity',
     heroDesc:
       'Passionate about IT infrastructure, networking and cybersecurity.\nWork-study student and aspiring French Air Force officer.',
