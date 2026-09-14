@@ -1,8 +1,10 @@
 import { useReveal } from '../../hooks/useReveal'
+import { useScrambleText } from '../../hooks/useScrambleText'
 import { DocActions } from '../docviewer/DocActions'
 
 export function Profil() {
   const header = useReveal<HTMLDivElement>()
+  const titleRef = useScrambleText<HTMLHeadingElement>()
   const text = useReveal<HTMLDivElement>()
   const image = useReveal<HTMLDivElement>()
 
@@ -11,7 +13,7 @@ export function Profil() {
       <div className="container">
         <div className={header.className} ref={header.ref}>
           <span className="section-number">01</span>
-          <h2>Profil</h2>
+          <h2 ref={titleRef}>Profil</h2>
           <p className="section-subtitle">Qui suis-je ?</p>
         </div>
 

@@ -1,4 +1,5 @@
 import { useReveal } from '../../hooks/useReveal'
+import { useScrambleText } from '../../hooks/useScrambleText'
 
 interface TimelineEntry {
   date: string
@@ -64,13 +65,14 @@ function TimelineItem({ entry }: { entry: TimelineEntry }) {
 
 export function Parcours() {
   const header = useReveal<HTMLDivElement>()
+  const titleRef = useScrambleText<HTMLHeadingElement>()
 
   return (
     <section id="parcours">
       <div className="container">
         <div className={header.className} ref={header.ref}>
           <span className="section-number">02</span>
-          <h2>Parcours</h2>
+          <h2 ref={titleRef}>Parcours</h2>
           <p className="section-subtitle">Mon chemin académique</p>
         </div>
 

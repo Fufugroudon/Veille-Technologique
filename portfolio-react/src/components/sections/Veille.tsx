@@ -1,4 +1,5 @@
 import { useReveal } from '../../hooks/useReveal'
+import { useScrambleText } from '../../hooks/useScrambleText'
 
 interface FeatureRow {
   label: string
@@ -69,6 +70,7 @@ function FeatureBoxes({ features }: { features: FeatureRow[] }) {
 
 export function Veille() {
   const header = useReveal<HTMLDivElement>()
+  const titleRef = useScrambleText<HTMLHeadingElement>()
   const intro = useReveal<HTMLDivElement>()
   const comparison = useReveal<HTMLDivElement>()
   const domaines = useReveal<HTMLDivElement>()
@@ -81,7 +83,7 @@ export function Veille() {
       <div className="container">
         <div className={header.className} ref={header.ref}>
           <span className="section-number">06</span>
-          <h2>Veille Technologique</h2>
+          <h2 ref={titleRef}>Veille Technologique</h2>
           <p className="section-subtitle">Ordinateurs Quantiques vs Ordinateurs Classiques</p>
         </div>
 

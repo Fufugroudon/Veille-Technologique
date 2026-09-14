@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useReveal } from '../../hooks/useReveal'
+import { useScrambleText } from '../../hooks/useScrambleText'
 import { DocActions } from '../docviewer/DocActions'
 
 type Category = 'langue' | 'reseau' | 'cloud' | 'securite' | 'methode' | 'mooc'
@@ -44,6 +45,7 @@ export function Certifications() {
   const header = useReveal<HTMLDivElement>()
   const filters = useReveal<HTMLDivElement>()
   const grid = useReveal<HTMLDivElement>()
+  const titleRef = useScrambleText<HTMLHeadingElement>()
   const [activeFilter, setActiveFilter] = useState<'all' | Category>('all')
 
   return (
@@ -51,7 +53,7 @@ export function Certifications() {
       <div className="container">
         <div className={header.className} ref={header.ref}>
           <span className="section-number">04</span>
-          <h2>Certifications</h2>
+          <h2 ref={titleRef}>Certifications</h2>
           <p className="section-subtitle">Mes accréditations et attestations</p>
         </div>
 

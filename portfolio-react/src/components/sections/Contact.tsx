@@ -1,4 +1,5 @@
 import { useReveal } from '../../hooks/useReveal'
+import { useScrambleText } from '../../hooks/useScrambleText'
 import { ContactForm } from '../contact/ContactForm'
 import { CopyEmailButton } from '../contact/CopyEmailButton'
 
@@ -7,13 +8,14 @@ const CONTACT_EMAIL = 'leo.leseigneur@orange.fr'
 export function Contact() {
   const header = useReveal<HTMLDivElement>()
   const info = useReveal<HTMLDivElement>()
+  const titleRef = useScrambleText<HTMLHeadingElement>()
 
   return (
     <section id="contact">
       <div className="container">
         <div className={header.className} ref={header.ref}>
           <span className="section-number">07</span>
-          <h2>Contact</h2>
+          <h2 ref={titleRef}>Contact</h2>
           <p className="section-subtitle">Restons en contact</p>
         </div>
 

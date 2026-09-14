@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useReveal } from '../../hooks/useReveal'
+import { useScrambleText } from '../../hooks/useScrambleText'
 import { SkillsGridCanvas } from './SkillsGridCanvas'
 
 interface Skill {
@@ -99,6 +100,7 @@ function SkillCategoryCard({ category }: { category: SkillCategoryDef }) {
 
 export function Competences() {
   const header = useReveal<HTMLDivElement>()
+  const titleRef = useScrambleText<HTMLHeadingElement>()
 
   return (
     <section id="competences">
@@ -106,7 +108,7 @@ export function Competences() {
       <div className="container">
         <div className={header.className} ref={header.ref}>
           <span className="section-number">03</span>
-          <h2>Compétences</h2>
+          <h2 ref={titleRef}>Compétences</h2>
           <p className="section-subtitle">Mes expertises techniques</p>
         </div>
 

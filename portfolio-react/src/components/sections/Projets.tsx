@@ -1,4 +1,5 @@
 import { useReveal } from '../../hooks/useReveal'
+import { useScrambleText } from '../../hooks/useScrambleText'
 import { useCardTilt } from '../projects/useCardTilt'
 import { Tag } from '../projects/Tag'
 import { TagTooltipProvider } from '../../context/TagTooltipContext'
@@ -96,6 +97,7 @@ function ProjectCard({ project }: { project: ProjectDef }) {
 
 export function Projets() {
   const header = useReveal<HTMLDivElement>()
+  const titleRef = useScrambleText<HTMLHeadingElement>()
 
   return (
     <TagTooltipProvider>
@@ -103,7 +105,7 @@ export function Projets() {
         <div className="container">
           <div className={header.className} ref={header.ref}>
             <span className="section-number">05</span>
-            <h2>Projets</h2>
+            <h2 ref={titleRef}>Projets</h2>
             <p className="section-subtitle">Mes réalisations techniques</p>
           </div>
 
