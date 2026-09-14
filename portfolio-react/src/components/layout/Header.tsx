@@ -71,7 +71,7 @@ export function Header() {
           type="button"
           className="nav-toggle"
           id="nav-toggle"
-          aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-label={isOpen ? t.navCloseMenu : t.navOpenMenu}
           aria-expanded={isOpen}
           aria-controls="nav-menu"
           ref={toggleRef}
@@ -85,7 +85,7 @@ export function Header() {
         <button
           type="button"
           className="terminal-nav-btn"
-          aria-label="Ouvrir le terminal interactif"
+          aria-label={t.navOpenTerminal}
           ref={terminalBtnRef}
           onClick={() => setTerminalOpen(true)}
         >

@@ -1,4 +1,5 @@
 import { useDocViewer } from './DocViewerProvider'
+import { useI18n } from '../../i18n/I18nContext'
 
 interface Props {
   /** Path without extension — probed as `${base}.pdf` and `${base}.docx`. */
@@ -10,13 +11,14 @@ interface Props {
 // public/.htaccess (site root) carry these.
 export function DocActions({ base }: Props) {
   const { openEye, openDownload } = useDocViewer()
+  const { t } = useI18n()
 
   return (
     <div className="doc-btn-group">
       <button
         type="button"
         className="btn btn-outline doc-download-btn"
-        aria-label="Télécharger le document"
+        aria-label={t.docActions.downloadAria}
         onClick={() => openDownload(base)}
       >
         <svg
@@ -34,12 +36,12 @@ export function DocActions({ base }: Props) {
           <polyline points="7 10 12 15 17 10" />
           <line x1="12" y1="15" x2="12" y2="3" />
         </svg>
-        <span>Télécharger</span>
+        <span>{t.docActions.download}</span>
       </button>
       <button
         type="button"
         className="btn btn-outline doc-eye-btn"
-        aria-label="Visualiser le document"
+        aria-label={t.docActions.viewAria}
         onClick={() => openEye(base)}
       >
         <svg
@@ -56,7 +58,7 @@ export function DocActions({ base }: Props) {
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
           <circle cx="12" cy="12" r="3" />
         </svg>
-        <span>Visualiser</span>
+        <span>{t.docActions.view}</span>
       </button>
     </div>
   )

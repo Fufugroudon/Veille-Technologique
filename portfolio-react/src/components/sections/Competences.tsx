@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useReveal } from '../../hooks/useReveal'
 import { useScrambleText } from '../../hooks/useScrambleText'
+import { useI18n } from '../../i18n/I18nContext'
 import { SkillsGridCanvas } from './SkillsGridCanvas'
 
 interface Skill {
@@ -14,43 +15,13 @@ interface SkillCategoryDef {
   skills: Skill[]
 }
 
-const CATEGORIES: SkillCategoryDef[] = [
-  {
-    icon: '⚙️',
-    title: 'Administration Système',
-    skills: [
-      { name: 'Linux (Debian, Ubuntu, Kali)', pct: 90 },
-      { name: 'Windows Server', pct: 80 },
-      { name: 'Virtualisation (VMware, Proxmox)', pct: 85 },
-    ],
-  },
-  {
-    icon: '🌐',
-    title: 'Réseaux',
-    skills: [
-      { name: 'Configuration réseau (VLAN, routing)', pct: 88 },
-      { name: 'Firewall (pfSense, iptables)', pct: 75 },
-      { name: 'Services réseau (DNS, DHCP, VPN)', pct: 82 },
-    ],
-  },
-  {
-    icon: '🔒',
-    title: 'Cybersécurité',
-    skills: [
-      { name: 'Audit de sécurité', pct: 70 },
-      { name: 'Pentest (Kali, Nmap, Burp Suite)', pct: 65 },
-      { name: 'SSL/TLS, certificats', pct: 78 },
-    ],
-  },
-  {
-    icon: '💻',
-    title: 'Développement & Scripts',
-    skills: [
-      { name: 'Bash / Shell scripting', pct: 85 },
-      { name: 'Python', pct: 80 },
-      { name: 'C#', pct: 75 },
-    ],
-  },
+// Percentages and icons are decorative/numeric — not translated, only labels are.
+const ICONS = ['⚙️', '🌐', '🔒', '💻']
+const PCTS = [
+  [90, 80, 85],
+  [88, 75, 82],
+  [70, 65, 78],
+  [85, 80, 75],
 ]
 
 function SkillCategoryCard({ category }: { category: SkillCategoryDef }) {
@@ -99,8 +70,15 @@ function SkillCategoryCard({ category }: { category: SkillCategoryDef }) {
 }
 
 export function Competences() {
+  const { t } = useI18n()
   const header = useReveal<HTMLDivElement>()
   const titleRef = useScrambleText<HTMLHeadingElement>()
+
+  const categories: SkillCategoryDef[] = t.competences.categories.map((cat, i) => ({
+    icon: ICONS[i],
+    title: cat.title,
+    skills: cat.skills.map((name, j) => ({ name, pct: PCTS[i][j] })),
+  }))
 
   return (
     <section id="competences">
@@ -108,12 +86,12 @@ export function Competences() {
       <div className="container">
         <div className={header.className} ref={header.ref}>
           <span className="section-number">03</span>
-          <h2 ref={titleRef}>Compétences</h2>
-          <p className="section-subtitle">Mes expertises techniques</p>
+          <h2 ref={titleRef}>{t.nav[3]}</h2>
+          <p className="section-subtitle">{t.competences.sectionSubtitle}</p>
         </div>
 
         <div className="skills-grid">
-          {CATEGORIES.map((category) => (
+          {categories.map((category) => (
             <SkillCategoryCard key={category.title} category={category} />
           ))}
         </div>

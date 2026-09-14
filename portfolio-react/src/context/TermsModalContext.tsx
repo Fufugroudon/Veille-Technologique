@@ -1,4 +1,5 @@
 import { createContext, useContext, useRef, useState, type ReactNode } from 'react'
+import { useI18n } from '../i18n/I18nContext'
 
 type Source = 'form' | 'footer' | null
 
@@ -9,9 +10,39 @@ interface TermsModalContextValue {
 
 const TermsModalContext = createContext<TermsModalContextValue | null>(null)
 
-const TERMS_TITLE = "Conditions d'utilisation"
+const BODY_TEXT = {
+  fr: [
+    <>
+      Les informations transmises via ce formulaire sont utilisées <strong>uniquement</strong> pour vous
+      répondre. Elles ne sont ni partagées, ni vendues à des tiers.
+    </>,
+    <>
+      Vos données sont conservées au maximum <strong>1 an</strong>, puis supprimées. Vous pouvez demander
+      leur suppression à tout moment en me contactant directement.
+    </>,
+    <>
+      Conformément au <abbr title="Règlement Général sur la Protection des Données">RGPD</abbr>, vous
+      disposez d'un droit d'accès, de rectification et d'effacement de vos données personnelles.
+    </>,
+  ],
+  en: [
+    <>
+      Information submitted through this form is used <strong>solely</strong> to reply to you. It is never
+      shared or sold to third parties.
+    </>,
+    <>
+      Your data is kept for a maximum of <strong>1 year</strong>, then deleted. You may request its
+      deletion at any time by contacting me directly.
+    </>,
+    <>
+      Under the <abbr title="General Data Protection Regulation">GDPR</abbr>, you have the right to access,
+      rectify and erase your personal data.
+    </>,
+  ],
+}
 
 export function TermsModalProvider({ children }: { children: ReactNode }) {
+  const { t, lang } = useI18n()
   const [source, setSource] = useState<Source>(null)
   const onAcceptRef = useRef<(() => void) | null>(null)
 
@@ -53,36 +84,26 @@ export function TermsModalProvider({ children }: { children: ReactNode }) {
       >
         <div className="terms-card">
           <h2 id="terms-title" className="terms-title">
-            {TERMS_TITLE}
+            {t.terms.title}
           </h2>
           <div className="terms-body">
-            <p>
-              Les informations transmises via ce formulaire sont utilisées <strong>uniquement</strong> pour
-              vous répondre. Elles ne sont ni partagées, ni vendues à des tiers.
-            </p>
-            <p>
-              Vos données sont conservées au maximum <strong>1 an</strong>, puis supprimées. Vous pouvez
-              demander leur suppression à tout moment en me contactant directement.
-            </p>
-            <p>
-              Conformément au <abbr title="Règlement Général sur la Protection des Données">RGPD</abbr>,
-              vous disposez d'un droit d'accès, de rectification et d'effacement de vos données
-              personnelles.
-            </p>
+            {BODY_TEXT[lang].map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))}
           </div>
           <div className="terms-actions">
             {source === 'footer' && (
               <button type="button" className="btn btn-primary" onClick={close}>
-                Fermer
+                {t.terms.close}
               </button>
             )}
             {source === 'form' && (
               <>
                 <button type="button" className="btn btn-primary" onClick={accept}>
-                  J'accepte
+                  {t.terms.accept}
                 </button>
                 <button type="button" className="btn btn-outline" onClick={close}>
-                  Refuser
+                  {t.terms.refuse}
                 </button>
               </>
             )}

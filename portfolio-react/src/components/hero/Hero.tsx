@@ -30,7 +30,7 @@ export function Hero() {
         <div className="hero-content">
           <div className="hero-badge hero-anim-1">
             <span className="badge-pulse" />
-            Disponible — Alternance BTS SIO SISR
+            {t.heroBadge}
           </div>
 
           <HeroTitle />
@@ -39,11 +39,11 @@ export function Hero() {
 
           <div id="availability-badge">
             <span className="pulse-dot" />
-            Disponible en alternance
+            {t.availabilityBadge}
           </div>
 
           <p className="hero-subtitle hero-anim-3">
-            Alternant BTS SIO SISR chez{' '}
+            {t.itecPrefix}{' '}
             <button
               className="itec-entry-trigger"
               type="button"
@@ -58,10 +58,10 @@ export function Hero() {
 
           <div className="hero-cta hero-anim-5">
             <a href="#projets" className="btn btn-primary">
-              Voir mes projets
+              {t.heroCtaProjects}
             </a>
             <a href="#contact" className="btn btn-outline">
-              Me contacter
+              {t.heroCtaContact}
             </a>
           </div>
 

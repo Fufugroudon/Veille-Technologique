@@ -16,10 +16,10 @@ export function Footer() {
           <span>Leseigneur Léo</span>
         </div>
         <p className="footer-copy">{t.footerCopy}</p>
-        <p className="footer-sub">Étudiant BTS SIO SISR</p>
+        <p className="footer-sub">{t.footerRole}</p>
         <p className="footer-sub">
           <button type="button" className="footer-terms-link" onClick={showInfo}>
-            Conditions d'utilisation
+            {t.termsLink}
           </button>
         </p>
         <a

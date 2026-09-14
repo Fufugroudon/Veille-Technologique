@@ -1,5 +1,6 @@
 import { useReveal } from '../../hooks/useReveal'
 import { useScrambleText } from '../../hooks/useScrambleText'
+import { useI18n } from '../../i18n/I18nContext'
 
 interface TimelineEntry {
   date: string
@@ -9,38 +10,6 @@ interface TimelineEntry {
   subtitle: string
   paragraphs: string[]
 }
-
-const ENTRIES: TimelineEntry[] = [
-  {
-    date: "Sept 2025 — Aujourd'hui",
-    badge: 'En cours',
-    badgeActive: true,
-    title: 'BTS SIO — Option SISR',
-    subtitle: 'BTS Services Informatiques aux Organisations',
-    paragraphs: [
-      'Ensitech, Cergy',
-      "Option Solutions d'Infrastructure, Systèmes et Réseaux",
-      "Formation en alternance axée sur l'administration système, la gestion réseau et la cybersécurité.",
-    ],
-  },
-  {
-    date: 'Sept 2022 — Juin 2025',
-    badge: 'Obtenu avec mention',
-    title: 'Baccalauréat Général',
-    subtitle: 'Spécialités Scientifiques',
-    paragraphs: [
-      'Spécialités AMC (Anglais Monde Contemporain) et NSI (Numérique et Sciences Informatiques)',
-      "Formation aux bases de l'informatique et de la programmation.",
-    ],
-  },
-  {
-    date: '2018 — 2022',
-    badge: 'Obtenu avec mention',
-    title: 'Collège',
-    subtitle: 'Brevet des collèges',
-    paragraphs: ['Obtention du diplôme national du brevet avec mention.'],
-  },
-]
 
 function TimelineItem({ entry }: { entry: TimelineEntry }) {
   const { ref, className } = useReveal<HTMLDivElement>()
@@ -64,20 +33,27 @@ function TimelineItem({ entry }: { entry: TimelineEntry }) {
 }
 
 export function Parcours() {
+  const { t } = useI18n()
   const header = useReveal<HTMLDivElement>()
   const titleRef = useScrambleText<HTMLHeadingElement>()
+
+  // Only the first (current) entry is still in progress — matches vanilla.
+  const entries: TimelineEntry[] = t.parcours.entries.map((entry, i) => ({
+    ...entry,
+    badgeActive: i === 0,
+  }))
 
   return (
     <section id="parcours">
       <div className="container">
         <div className={header.className} ref={header.ref}>
           <span className="section-number">02</span>
-          <h2 ref={titleRef}>Parcours</h2>
-          <p className="section-subtitle">Mon chemin académique</p>
+          <h2 ref={titleRef}>{t.nav[2]}</h2>
+          <p className="section-subtitle">{t.parcours.sectionSubtitle}</p>
         </div>
 
         <div className="timeline">
-          {ENTRIES.map((entry) => (
+          {entries.map((entry) => (
             <TimelineItem key={entry.title} entry={entry} />
           ))}
         </div>

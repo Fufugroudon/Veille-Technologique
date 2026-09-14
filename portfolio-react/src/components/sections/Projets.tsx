@@ -1,5 +1,6 @@
 import { useReveal } from '../../hooks/useReveal'
 import { useScrambleText } from '../../hooks/useScrambleText'
+import { useI18n } from '../../i18n/I18nContext'
 import { useCardTilt } from '../projects/useCardTilt'
 import { Tag } from '../projects/Tag'
 import { TagTooltipProvider } from '../../context/TagTooltipContext'
@@ -13,53 +14,19 @@ interface ProjectDef {
   docBase?: string
 }
 
-const PROJECTS: ProjectDef[] = [
-  {
-    emoji: '🖥️',
-    title: 'Serveur Web LAMP',
-    description: "Déploiement d'un serveur Linux Apache MariaDB PHP avec backup automatisé et monitoring.",
-    tags: ['Linux', 'Apache', 'Bash', 'SSL'],
-  },
-  {
-    emoji: '🌐',
-    title: 'Infrastructure réseau VM',
-    description: 'Configuration VMware complète avec routage VLAN, firewall pfSense et segmentation réseau.',
-    tags: ['VMware', 'Réseau', 'pfSense', 'VLAN'],
-  },
-  {
-    emoji: '🐍',
-    title: 'Application Python',
-    description:
-      'Développement d\'un outil Python pour différentes tâches. Tel que créer des comptes Admin Local, etc...',
-    tags: ['Python', 'TI-Python', 'JSON'],
-  },
-  {
-    emoji: '💻',
-    title: 'Maintenance code C#',
-    description: "Correction de bugs et ajout de fonctionnalités sur une application de gestion.",
-    tags: ['C#', '.NET', 'Debugging'],
-  },
-  {
-    emoji: '🔒',
-    title: 'Audit de sécurité',
-    description: "Scan de vulnérabilités et tests d'intrusion sur infrastructure test avec Kali Linux.",
-    tags: ['Kali Linux', 'Nmap', 'Pentesting'],
-  },
-  {
-    emoji: '🌍',
-    title: 'Portfolio Web',
-    description: 'Création de ce portfolio hébergé sur o2switch avec configuration Apache et SSL.',
-    tags: ['HTML/CSS', 'Apache', 'o2switch'],
-  },
-  {
-    emoji: '🗂️',
-    title: 'Active Directory & GPO',
-    description:
-      "Documentation technique E6 : configuration d'un annuaire Active Directory et de stratégies de groupes sur Windows Server 2025.",
-    tags: ['Active Directory', 'Windows Server', 'GPO', 'DNS'],
-    docBase: 'docs/Docu_AD/AD_Documentation_Leo',
-  },
+// Emoji/tags are language-independent (tags are technical terms, kept as-is
+// like vanilla); title/description come from i18n.
+const EMOJIS = ['🖥️', '🌐', '🐍', '💻', '🔒', '🌍', '🗂️']
+const TAGS = [
+  ['Linux', 'Apache', 'Bash', 'SSL'],
+  ['VMware', 'Réseau', 'pfSense', 'VLAN'],
+  ['Python', 'TI-Python', 'JSON'],
+  ['C#', '.NET', 'Debugging'],
+  ['Kali Linux', 'Nmap', 'Pentesting'],
+  ['HTML/CSS', 'Apache', 'o2switch'],
+  ['Active Directory', 'Windows Server', 'GPO', 'DNS'],
 ]
+const DOC_BASE = 'docs/Docu_AD/AD_Documentation_Leo'
 
 function ProjectCard({ project }: { project: ProjectDef }) {
   const { ref: revealRef, className } = useReveal<HTMLDivElement>()
@@ -96,8 +63,17 @@ function ProjectCard({ project }: { project: ProjectDef }) {
 }
 
 export function Projets() {
+  const { t } = useI18n()
   const header = useReveal<HTMLDivElement>()
   const titleRef = useScrambleText<HTMLHeadingElement>()
+
+  const projects: ProjectDef[] = t.projets.items.map((item, i) => ({
+    emoji: EMOJIS[i],
+    title: item.title,
+    description: item.description,
+    tags: TAGS[i],
+    docBase: i === TAGS.length - 1 ? DOC_BASE : undefined,
+  }))
 
   return (
     <TagTooltipProvider>
@@ -105,12 +81,12 @@ export function Projets() {
         <div className="container">
           <div className={header.className} ref={header.ref}>
             <span className="section-number">05</span>
-            <h2 ref={titleRef}>Projets</h2>
-            <p className="section-subtitle">Mes réalisations techniques</p>
+            <h2 ref={titleRef}>{t.nav[5]}</h2>
+            <p className="section-subtitle">{t.projets.sectionSubtitle}</p>
           </div>
 
           <div className="projects-grid">
-            {PROJECTS.map((project) => (
+            {projects.map((project) => (
               <ProjectCard key={project.title} project={project} />
             ))}
           </div>
