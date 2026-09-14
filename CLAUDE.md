@@ -11,7 +11,7 @@ Personal academic project by **Leseigneur Léo** for **BTS SIO SISR** at **Ensit
 
 Two purposes:
 1. **Veille Technologique**: Structured research on quantum computers vs. classical computers, focusing on cybersecurity.
-2. **Portfolio Web**: Personal portfolio on `lesnorrys.com`, evolving from static to full-stack.
+2. **Portfolio Web**: Personal portfolio on `lesnorrys.fr`, evolving from static to full-stack.
 
 **Hosting**: o2switch (shared hosting, Apache, cPanel) — no root access, no Docker, no Node.js server-side runtime, no containerized runtimes. PHP 8.x via cPanel, URL rewriting via `.htaccess`, cron jobs via cPanel, MySQL/MariaDB only.
 
@@ -62,5 +62,5 @@ Two purposes:
 - All work is carried out via prompts given to Claude Code.
 - Code comments and technical documentation in **English**. UI content in **French**.
 - Always work on and push to `claude-workflow` unless instructed otherwise.
-- Production domain: `lesnorrys.com`, hosted on o2switch.
+- Production domain: `lesnorrys.fr`, hosted on o2switch.
 - Do not refactor the overall architecture, switch any part of the tech stack, or delete files without explicit instruction. Suggestions are welcome, but no structural change should be applied autonomously.
