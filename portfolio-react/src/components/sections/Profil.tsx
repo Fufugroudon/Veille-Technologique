@@ -46,7 +46,17 @@ export function Profil() {
               <div className="avatar-ring" aria-hidden="true" />
               <div className="avatar-large">LL</div>
             </div>
-            <DocActions base="docs/CV/CV" />
+
+            <div className="profile-docs">
+              <div className="profile-doc-group">
+                <span className="profile-doc-label">Curriculum Vitae</span>
+                <DocActions base="docs/CV/CV" />
+              </div>
+              <div className="profile-doc-group">
+                <span className="profile-doc-label">Tableau de Synthèse</span>
+                <DocActions base="docs/CV/TABLEAU_DE_SYNTHESE" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
