@@ -27,11 +27,11 @@
 }
 
 .toast-error {
-  border-left-color: #ef4444;
+  border-left-color: var(--error);
 }
 
 .toast-warning {
-  border-left-color: #f59e0b;
+  border-left-color: var(--warning);
 }
 
 .toast-success {
@@ -98,11 +98,11 @@
 }
 
 .toast-error .toast-progress {
-  background: #ef4444;
+  background: var(--error);
 }
 
 .toast-warning .toast-progress {
-  background: #f59e0b;
+  background: var(--warning);
 }
 
 .toast-success .toast-progress {

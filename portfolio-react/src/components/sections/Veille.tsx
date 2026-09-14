@@ -21,6 +21,25 @@ function FeatureBoxes({ features }: { features: FeatureRow[] }) {
   )
 }
 
+// Icons are language-independent, so they're kept separate from the
+// translated labels and matched up here by index (vanilla's fixed order).
+const DOMAINES_ICONS = ['🔐', '🧬', '🤖', '📊']
+const SOURCES_ICONS = ['🔬', '🏢', '🎓', '📰']
+const METHODES_ICONS = ['📰', '🔔', '💬', '📱']
+
+function IconGrid({ items, icons }: { items: { label: string }[]; icons: string[] }) {
+  return (
+    <div className="veille-icon-grid">
+      {items.map((item, i) => (
+        <div className="veille-icon-card" key={item.label}>
+          <span aria-hidden="true">{icons[i]}</span>
+          <h4>{item.label}</h4>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function Veille() {
   const { t } = useI18n()
   const header = useReveal<HTMLDivElement>()
@@ -90,38 +109,17 @@ export function Veille() {
 
         <div className={`veille-grid-section ${domaines.className}`} ref={domaines.ref}>
           <h3 className="veille-section-title">{t.veille.domainesTitle}</h3>
-          <div className="veille-icon-grid">
-            {t.veille.domaines.map((item, i) => (
-              <div className="veille-icon-card" key={item.label}>
-                <span aria-hidden="true">{['🔐', '🧬', '🤖', '📊'][i]}</span>
-                <h4>{item.label}</h4>
-              </div>
-            ))}
-          </div>
+          <IconGrid items={t.veille.domaines} icons={DOMAINES_ICONS} />
         </div>
 
         <div className={`veille-grid-section ${sources.className}`} ref={sources.ref}>
           <h3 className="veille-section-title">{t.veille.sourcesTitle}</h3>
-          <div className="veille-icon-grid">
-            {t.veille.sources.map((item, i) => (
-              <div className="veille-icon-card" key={item.label}>
-                <span aria-hidden="true">{['🔬', '🏢', '🎓', '📰'][i]}</span>
-                <h4>{item.label}</h4>
-              </div>
-            ))}
-          </div>
+          <IconGrid items={t.veille.sources} icons={SOURCES_ICONS} />
         </div>
 
         <div className={`veille-grid-section ${methodes.className}`} ref={methodes.ref}>
           <h3 className="veille-section-title">{t.veille.methodesTitle}</h3>
-          <div className="veille-icon-grid">
-            {t.veille.methodes.map((item, i) => (
-              <div className="veille-icon-card" key={item.label}>
-                <span aria-hidden="true">{['📰', '🔔', '💬', '📱'][i]}</span>
-                <h4>{item.label}</h4>
-              </div>
-            ))}
-          </div>
+          <IconGrid items={t.veille.methodes} icons={METHODES_ICONS} />
         </div>
 
         <div className={`veille-conclusion ${conclusion.className}`} ref={conclusion.ref}>

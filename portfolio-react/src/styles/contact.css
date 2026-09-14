@@ -153,12 +153,12 @@ textarea {
 
 input.field-invalid,
 textarea.field-invalid {
-  border-color: #ef4444;
+  border-color: var(--error);
 }
 
 .field-error {
   font-size: 0.78rem;
-  color: #ef4444;
+  color: var(--error);
   margin-top: 0.2rem;
 }
 
@@ -170,7 +170,7 @@ textarea.field-invalid {
 }
 
 .char-counter-danger {
-  color: #ef4444;
+  color: var(--error);
 }
 
 @keyframes field-shake {
