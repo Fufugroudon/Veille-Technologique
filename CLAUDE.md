@@ -3,7 +3,7 @@
 This file provides guidance for AI assistants working in this repository.
 
 ## Skills
-Additional context and conventions are available in `.claude/skills/veille-techno-web.md`. Read it when working on the portfolio, articles, or any web-related task.
+Additional context and conventions are available in `.claude/skills/veille-techno-web/SKILL.md`. Read it when working on the portfolio, articles, or any web-related task.
 
 ## Project Overview
 
@@ -14,20 +14,6 @@ Two purposes:
 2. **Portfolio Web**: Personal portfolio on `lesnorrys.com`, evolving from static to full-stack.
 
 **Hosting**: o2switch (shared hosting, Apache, cPanel) — no root access, no Docker, no Node.js server-side runtime, no containerized runtimes. PHP 8.x via cPanel, URL rewriting via `.htaccess`, cron jobs via cPanel, MySQL/MariaDB only.
-
-## Repository Structure
-
-```
-/
-├── CLAUDE.md
-├── README.md
-├── Articles/
-│   ├── 1&2.md
-│   └── 3&4.md
-└── Portfolio/
-    ├── index.html
-    └── styles.css
-```
 
 ## Technology Stack
 
@@ -56,37 +42,6 @@ Two purposes:
 - All user inputs must be validated server-side.
 - Credentials and API keys must never be hardcoded — use `.env` excluded via `.gitignore`.
 - A `.env.example` with placeholder values must be kept versioned.
-
-## Veille Technologique — Article Conventions
-
-**Subject**: Differences between quantum and classical computers, with a focus on cybersecurity.
-
-Each `.md` file in `Articles/` contains:
-1. A heading stating the research objective
-2. A Markdown table evaluating sources across 7 criteria (scored 1–4)
-3. `## Analyse comparative` — bullet-point summaries per article
-4. `## Synthèse` — synthesis of both articles
-
-**Evaluation table columns:**
-| Column | Meaning |
-|---|---|
-| Sources d'information | Source URL and author |
-| Crédibilité de l'auteur | Author credibility (1–4) |
-| Fiabilité de la source | Source reliability (1–4) |
-| Objectivité de l'information | Objectivity (1–4) |
-| Exactitude de l'information | Accuracy (1–4) |
-| Actualité de l'information | Currency/recency (1–4) |
-| Pertinence de l'information | Relevance (1–4) |
-
-Article files follow the `N&M.md` naming convention (e.g. `5&6.md` for the next pair).
-
-## Portfolio Conventions
-
-- Single-page, anchor-based navigation. All content in **French**.
-- Dark navy/blue color scheme — keep consistent with existing CSS variables.
-- Responsive: must work on all device types (PC, smartphone, tablet).
-- **Current static version**: do not introduce npm, bundlers, frameworks, or build tooling.
-- **Future full-stack**: PHP + MySQL + vanilla JS/TS target stack.
 
 ## Git & Workflow
 
