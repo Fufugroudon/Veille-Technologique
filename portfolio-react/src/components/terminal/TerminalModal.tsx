@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode, type KeyboardEvent } from 'react'
+import { createPortal } from 'react-dom'
 import { useTheme } from '../../context/ThemeContext'
 import { useI18n } from '../../i18n/I18nContext'
 import { downloadFile } from '../docviewer/docUtils'
@@ -545,7 +546,11 @@ export function TerminalModal({ open, onClose }: Props) {
 
   if (!open) return null
 
-  return (
+  // Portal to <body>: matches vanilla's body.appendChild(modal). Rendering
+  // this inline inside <nav> would resolve `position: fixed` against navbar's
+  // own box (backdrop-filter creates a new containing block) instead of the
+  // viewport, squashing the modal and clipping its close button.
+  return createPortal(
     <div id="terminal-modal" className="term-open" role="dialog" aria-modal="true" aria-label="Terminal interactif">
       <div className="term-window">
         <div className="term-titlebar">
@@ -627,6 +632,7 @@ export function TerminalModal({ open, onClose }: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
