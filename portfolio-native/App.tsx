@@ -1,20 +1,88 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SECTIONS } from './constants/sections';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { ScrollProvider, useScrollContext } from './context/ScrollContext';
+import { I18nProvider, useI18n } from './i18n/I18nContext';
+import { useRegisterSection } from './hooks/useRegisterSection';
+import { Header } from './components/layout/Header';
+import { ReadingProgressBar } from './components/layout/ReadingProgressBar';
+import { ScrollToTopButton } from './components/layout/ScrollToTopButton';
+import { SectionDots } from './components/layout/SectionDots';
 
-export default function App() {
+// Placeholder — each section below is replaced with its real port in a
+// later Phase 2 checkpoint. Kept here only so the App shell (nav, theme,
+// i18n, scroll-spy) has real content to scroll and verify against.
+function SectionStub({ id, index }: { id: string; index: number }) {
+  const { colors } = useTheme();
+  const { t } = useI18n();
+  const onLayout = useRegisterSection(id);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View
+      nativeID={id}
+      onLayout={onLayout}
+      style={[styles.stub, { backgroundColor: index % 2 === 0 ? colors.dark : colors.darkSecondary }]}
+    >
+      <Text style={[styles.stubText, { color: colors.text }]}>{t.nav[index]}</Text>
     </View>
   );
 }
 
+function AppContent() {
+  const { colors } = useTheme();
+  const { scrollViewRef, onScroll, onScrollViewLayout, onContentSizeChange } = useScrollContext();
+
+  return (
+    <View style={[styles.root, { backgroundColor: colors.dark }]}>
+      <ScrollView
+        ref={scrollViewRef}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        onLayout={(e) => onScrollViewLayout(e.nativeEvent.layout.height)}
+        onContentSizeChange={(_, height) => onContentSizeChange(height)}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {SECTIONS.map((section, i) => (
+          <SectionStub key={section.id} id={section.id} index={i} />
+        ))}
+      </ScrollView>
+
+      <ReadingProgressBar />
+      <Header />
+      <ScrollToTopButton />
+      <SectionDots />
+      <StatusBar style="light" />
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <I18nProvider>
+        <ScrollProvider>
+          <AppContent />
+        </ScrollProvider>
+      </I18nProvider>
+    </ThemeProvider>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: '#fff',
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  stub: {
+    minHeight: 500,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  stubText: {
+    fontSize: 28,
+    fontWeight: '700',
   },
 });
