@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SECTIONS } from './constants/sections';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { ScrollProvider, useScrollContext } from './context/ScrollContext';
+import { ToastProvider } from './context/ToastContext';
 import { I18nProvider, useI18n } from './i18n/I18nContext';
 import { useRegisterSection } from './hooks/useRegisterSection';
 import { Header } from './components/layout/Header';
@@ -10,6 +11,8 @@ import { ReadingProgressBar } from './components/layout/ReadingProgressBar';
 import { ScrollToTopButton } from './components/layout/ScrollToTopButton';
 import { SectionDots } from './components/layout/SectionDots';
 import { Hero } from './components/hero/Hero';
+import { Profil } from './components/sections/Profil';
+import { DocViewerProvider } from './components/docviewer/DocViewerProvider';
 
 // Placeholder — each section below is replaced with its real port in a
 // later Phase 2 checkpoint. Kept here only so the App shell (nav, theme,
@@ -36,27 +39,29 @@ function AppContent() {
 
   return (
     <View style={[styles.root, { backgroundColor: colors.dark }]}>
-      <ScrollView
-        ref={scrollViewRef}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        onLayout={(e) => onScrollViewLayout(e.nativeEvent.layout.height)}
-        onContentSizeChange={(_, height) => onContentSizeChange(height)}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {SECTIONS.map((section, i) =>
-          section.id === 'accueil' ? (
-            <Hero key={section.id} />
-          ) : (
-            <SectionStub key={section.id} id={section.id} index={i} />
-          ),
-        )}
-      </ScrollView>
+      <ToastProvider>
+        <DocViewerProvider>
+          <ScrollView
+            ref={scrollViewRef}
+            onScroll={onScroll}
+            scrollEventThrottle={16}
+            onLayout={(e) => onScrollViewLayout(e.nativeEvent.layout.height)}
+            onContentSizeChange={(_, height) => onContentSizeChange(height)}
+            contentContainerStyle={styles.scrollContent}
+          >
+            {SECTIONS.map((section, i) => {
+              if (section.id === 'accueil') return <Hero key={section.id} />;
+              if (section.id === 'profil') return <Profil key={section.id} />;
+              return <SectionStub key={section.id} id={section.id} index={i} />;
+            })}
+          </ScrollView>
 
-      <ReadingProgressBar />
-      <Header />
-      <ScrollToTopButton />
-      <SectionDots />
+          <ReadingProgressBar />
+          <Header />
+          <ScrollToTopButton />
+          <SectionDots />
+        </DocViewerProvider>
+      </ToastProvider>
       <StatusBar style="light" />
     </View>
   );
