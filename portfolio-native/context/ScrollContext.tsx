@@ -40,6 +40,8 @@ interface ScrollContextValue {
   progressPercent: number;
   showBackToTop: boolean;
   activeSectionId: string | null;
+  scrollY: number;
+  viewportHeight: number;
 }
 
 const ScrollContext = createContext<ScrollContextValue | null>(null);
@@ -54,6 +56,8 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
   const [progressPercent, setProgressPercent] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
+  const [scrollY, setScrollY] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
 
   const registerSection = useCallback((id: string, y: number) => {
     sectionYRef.current.set(id, y);
@@ -71,6 +75,7 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
 
   const onScrollViewLayout = useCallback((height: number) => {
     viewportHeightRef.current = height;
+    setViewportHeight(height);
   }, []);
 
   const onContentSizeChange = useCallback((height: number) => {
@@ -78,17 +83,18 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const scrollY = e.nativeEvent.contentOffset.y;
+    const nextScrollY = e.nativeEvent.contentOffset.y;
     const viewportHeight = viewportHeightRef.current;
     const contentHeight = contentHeightRef.current;
 
-    setScrolled(scrollY > NAVBAR_SCROLLED_THRESHOLD);
-    setShowBackToTop(scrollY > BACK_TO_TOP_THRESHOLD);
+    setScrollY(nextScrollY);
+    setScrolled(nextScrollY > NAVBAR_SCROLLED_THRESHOLD);
+    setShowBackToTop(nextScrollY > BACK_TO_TOP_THRESHOLD);
 
     const maxScroll = contentHeight - viewportHeight;
-    setProgressPercent(maxScroll > 0 ? Math.min(100, (scrollY / maxScroll) * 100) : 0);
+    setProgressPercent(maxScroll > 0 ? Math.min(100, (nextScrollY / maxScroll) * 100) : 0);
 
-    const threshold = scrollY + viewportHeight * ACTIVE_SECTION_BAND;
+    const threshold = nextScrollY + viewportHeight * ACTIVE_SECTION_BAND;
     let candidate: string | null = null;
     let candidateY = -Infinity;
     sectionYRef.current.forEach((y, id) => {
@@ -113,8 +119,23 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
       progressPercent,
       showBackToTop,
       activeSectionId,
+      scrollY,
+      viewportHeight,
     }),
-    [registerSection, scrollToSection, scrollToTop, onScroll, onScrollViewLayout, onContentSizeChange, scrolled, progressPercent, showBackToTop, activeSectionId],
+    [
+      registerSection,
+      scrollToSection,
+      scrollToTop,
+      onScroll,
+      onScrollViewLayout,
+      onContentSizeChange,
+      scrolled,
+      progressPercent,
+      showBackToTop,
+      activeSectionId,
+      scrollY,
+      viewportHeight,
+    ],
   );
 
   return <ScrollContext.Provider value={value}>{children}</ScrollContext.Provider>;

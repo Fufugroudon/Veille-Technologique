@@ -9,6 +9,7 @@ import { Header } from './components/layout/Header';
 import { ReadingProgressBar } from './components/layout/ReadingProgressBar';
 import { ScrollToTopButton } from './components/layout/ScrollToTopButton';
 import { SectionDots } from './components/layout/SectionDots';
+import { Hero } from './components/hero/Hero';
 
 // Placeholder — each section below is replaced with its real port in a
 // later Phase 2 checkpoint. Kept here only so the App shell (nav, theme,
@@ -43,9 +44,13 @@ function AppContent() {
         onContentSizeChange={(_, height) => onContentSizeChange(height)}
         contentContainerStyle={styles.scrollContent}
       >
-        {SECTIONS.map((section, i) => (
-          <SectionStub key={section.id} id={section.id} index={i} />
-        ))}
+        {SECTIONS.map((section, i) =>
+          section.id === 'accueil' ? (
+            <Hero key={section.id} />
+          ) : (
+            <SectionStub key={section.id} id={section.id} index={i} />
+          ),
+        )}
       </ScrollView>
 
       <ReadingProgressBar />
