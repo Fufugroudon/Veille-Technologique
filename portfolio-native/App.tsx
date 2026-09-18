@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SECTIONS } from './constants/sections';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { ScrollProvider, useScrollContext } from './context/ScrollContext';
 import { ToastProvider } from './context/ToastContext';
 import { TermsModalProvider } from './context/TermsModalContext';
-import { I18nProvider, useI18n } from './i18n/I18nContext';
-import { useRegisterSection } from './hooks/useRegisterSection';
+import { TimezoneProvider } from './context/TimezoneContext';
+import { MatrixRainProvider } from './context/MatrixRainContext';
+import { I18nProvider } from './i18n/I18nContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { ReadingProgressBar } from './components/layout/ReadingProgressBar';
@@ -21,25 +21,8 @@ import { Projets } from './components/sections/Projets';
 import { Veille } from './components/sections/Veille';
 import { Contact } from './components/sections/Contact';
 import { DocViewerProvider } from './components/docviewer/DocViewerProvider';
-
-// Placeholder — each section below is replaced with its real port in a
-// later Phase 2 checkpoint. Kept here only so the App shell (nav, theme,
-// i18n, scroll-spy) has real content to scroll and verify against.
-function SectionStub({ id, index }: { id: string; index: number }) {
-  const { colors } = useTheme();
-  const { t } = useI18n();
-  const onLayout = useRegisterSection(id);
-
-  return (
-    <View
-      nativeID={id}
-      onLayout={onLayout}
-      style={[styles.stub, { backgroundColor: index % 2 === 0 ? colors.dark : colors.darkSecondary }]}
-    >
-      <Text style={[styles.stubText, { color: colors.text }]}>{t.nav[index]}</Text>
-    </View>
-  );
-}
+import { MatrixRain } from './components/easter-eggs/MatrixRain';
+import { CreatureLegend } from './components/easter-eggs/CreatureLegend';
 
 function AppContent() {
   const { colors } = useTheme();
@@ -58,17 +41,14 @@ function AppContent() {
               onContentSizeChange={(_, height) => onContentSizeChange(height)}
               contentContainerStyle={styles.scrollContent}
             >
-              {SECTIONS.map((section, i) => {
-                if (section.id === 'accueil') return <Hero key={section.id} />;
-                if (section.id === 'profil') return <Profil key={section.id} />;
-                if (section.id === 'parcours') return <Parcours key={section.id} />;
-                if (section.id === 'competences') return <Competences key={section.id} />;
-                if (section.id === 'certifications') return <Certifications key={section.id} />;
-                if (section.id === 'projets') return <Projets key={section.id} />;
-                if (section.id === 'veille') return <Veille key={section.id} />;
-                if (section.id === 'contact') return <Contact key={section.id} />;
-                return <SectionStub key={section.id} id={section.id} index={i} />;
-              })}
+              <Hero />
+              <Profil />
+              <Parcours />
+              <Competences />
+              <Certifications />
+              <Projets />
+              <Veille />
+              <Contact />
               <Footer />
             </ScrollView>
 
@@ -76,6 +56,8 @@ function AppContent() {
             <Header />
             <ScrollToTopButton />
             <SectionDots />
+            <CreatureLegend />
+            <MatrixRain />
           </TermsModalProvider>
         </DocViewerProvider>
       </ToastProvider>
@@ -88,9 +70,13 @@ export default function App() {
   return (
     <ThemeProvider>
       <I18nProvider>
-        <ScrollProvider>
-          <AppContent />
-        </ScrollProvider>
+        <TimezoneProvider>
+          <ScrollProvider>
+            <MatrixRainProvider>
+              <AppContent />
+            </MatrixRainProvider>
+          </ScrollProvider>
+        </TimezoneProvider>
       </I18nProvider>
     </ThemeProvider>
   );
@@ -102,14 +88,5 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-  },
-  stub: {
-    minHeight: 500,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  stubText: {
-    fontSize: 28,
-    fontWeight: '700',
   },
 });

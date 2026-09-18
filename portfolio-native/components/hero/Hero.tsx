@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Pressable, StyleSheet, Text, View, type GestureResponderEvent } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../i18n/I18nContext';
 import { useScrollContext } from '../../context/ScrollContext';
@@ -9,6 +9,7 @@ import { HeroTitle } from './HeroTitle';
 import { HeroStats } from './HeroStats';
 import { HeroScrollIndicator } from './HeroScrollIndicator';
 import { ItecBlockModal } from '../itec/ItecBlockModal';
+import { CreatureEasterEgg, type CreatureEasterEggHandle } from '../easter-eggs/CreatureEasterEgg';
 
 // NOTE: vanilla's decorative background (radial-gradient "orbs" + a faint
 // grid pattern behind the hero) is omitted here — RN has no radial-gradient
@@ -20,10 +21,22 @@ export function Hero() {
   const { scrollToSection } = useScrollContext();
   const onLayout = useRegisterSection('accueil');
   const [itecOpen, setItecOpen] = useState(false);
+  const creatureEggRef = useRef<CreatureEasterEggHandle>(null);
+
+  function handleHeroTouchEnd(e: GestureResponderEvent) {
+    const { locationX, locationY } = e.nativeEvent;
+    creatureEggRef.current?.registerTap(locationX, locationY);
+  }
 
   return (
-    <View nativeID="accueil" onLayout={onLayout} style={[styles.section, { backgroundColor: colors.dark }]}>
+    <View
+      nativeID="accueil"
+      onLayout={onLayout}
+      onTouchEnd={handleHeroTouchEnd}
+      style={[styles.section, { backgroundColor: colors.dark }]}
+    >
       <HeroParticles />
+      <CreatureEasterEgg ref={creatureEggRef} />
 
       <View style={styles.content}>
         <View style={[styles.badge, { borderColor: colors.border, backgroundColor: colors.bgCard }]}>

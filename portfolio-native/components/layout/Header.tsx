@@ -1,25 +1,44 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SECTIONS } from '../../constants/sections';
 import { useTheme } from '../../context/ThemeContext';
 import { useScrollContext } from '../../context/ScrollContext';
 import { useI18n } from '../../i18n/I18nContext';
+import { useMatrixRain } from '../../context/MatrixRainContext';
 import { ThemeToggle } from './ThemeToggle';
+import { TerminalModal } from '../terminal/TerminalModal';
 
 const NAV_HEIGHT = 72;
 const MOBILE_BREAKPOINT = 768;
+const TRIPLE_TAP_WINDOW_MS = 1000;
 
 export function Header() {
   const { colors, light } = useTheme();
   const { scrolled, activeSectionId, scrollToSection } = useScrollContext();
   const { t } = useI18n();
   const { width } = useWindowDimensions();
+  const { launch: launchMatrixRain } = useMatrixRain();
   const [isOpen, setIsOpen] = useState(false);
+  const [terminalOpen, setTerminalOpen] = useState(false);
   const isMobile = width < MOBILE_BREAKPOINT;
+  const tapCount = useRef(0);
+  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function handleLinkPress(id: string) {
     scrollToSection(id);
     setIsOpen(false);
+  }
+
+  function handleBrandTripleTap() {
+    tapCount.current++;
+    if (tapTimer.current) clearTimeout(tapTimer.current);
+    tapTimer.current = setTimeout(() => {
+      tapCount.current = 0;
+    }, TRIPLE_TAP_WINDOW_MS);
+    if (tapCount.current >= 3) {
+      tapCount.current = 0;
+      launchMatrixRain();
+    }
   }
 
   return (
@@ -33,7 +52,13 @@ export function Header() {
       ]}
     >
       <View style={styles.container}>
-        <Pressable onPress={() => handleLinkPress('accueil')} style={styles.brand}>
+        <Pressable
+          onPress={() => {
+            handleLinkPress('accueil');
+            handleBrandTripleTap();
+          }}
+          style={styles.brand}
+        >
           <View style={[styles.brandBadge, { backgroundColor: colors.accent }]}>
             <Text style={styles.brandBadgeText}>LL</Text>
           </View>
@@ -65,6 +90,14 @@ export function Header() {
         )}
 
         <View style={styles.right}>
+          <Pressable
+            onPress={() => setTerminalOpen(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t.navOpenTerminal}
+            style={[styles.terminalBtn, { borderColor: colors.border }]}
+          >
+            <Text style={[styles.terminalBtnText, { color: colors.textMuted }]}>{'>_'}</Text>
+          </Pressable>
           <ThemeToggle />
           {isMobile && (
             <Pressable
@@ -95,6 +128,8 @@ export function Header() {
           })}
         </View>
       )}
+
+      <TerminalModal visible={terminalOpen} onClose={() => setTerminalOpen(false)} />
     </View>
   );
 }
@@ -155,6 +190,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  terminalBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  terminalBtnText: {
+    fontFamily: 'monospace',
+    fontSize: 13,
+    fontWeight: '700',
   },
   hamburger: {
     width: 36,

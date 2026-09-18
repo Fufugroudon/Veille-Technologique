@@ -1,16 +1,29 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
+import { useTimezone } from '../../context/TimezoneContext';
 
 function capitalize(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-function formatNow(): { time: string; date: string } {
+function formatNow(tz: string | null): { time: string; date: string } {
   const now = new Date();
 
-  const timeOpts: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-  const dateOpts: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  const timeOpts: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    ...(tz ? { timeZone: tz } : {}),
+  };
+  const dateOpts: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    ...(tz ? { timeZone: tz } : {}),
+  };
 
   const tp = new Intl.DateTimeFormat('fr-FR', timeOpts).formatToParts(now);
   const h = tp.find((p) => p.type === 'hour')?.value ?? '';
@@ -26,17 +39,19 @@ function formatNow(): { time: string; date: string } {
   return { time: `${h}:${m}:${s}`, date: `${day} ${dateNum} ${month} ${year}` };
 }
 
-// NOTE: vanilla/portfolio-react let a `preferred_timezone` terminal command
-// override the clock's timezone. Ported when the terminal checkpoint adds
-// that command — this clock uses the device's local timezone until then.
 export function LiveClock() {
   const { colors } = useTheme();
-  const [now, setNow] = useState(formatNow);
+  const { timezone } = useTimezone();
+  const [now, setNow] = useState(() => formatNow(timezone))
 
+  // No synchronous setState-in-effect (eslint's react-hooks rules forbid
+  // both that and ref reads/writes during render): switching timezone via
+  // the terminal's `timezone` command is reflected on the next tick, up to
+  // 1s later, rather than instantly. A minor, acceptable tradeoff.
   useEffect(() => {
-    const interval = setInterval(() => setNow(formatNow()), 1000);
+    const interval = setInterval(() => setNow(formatNow(timezone)), 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [timezone]);
 
   return (
     <View style={styles.wrap}>
