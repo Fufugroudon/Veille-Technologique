@@ -12,6 +12,7 @@ import { ScrollToTopButton } from './components/layout/ScrollToTopButton';
 import { SectionDots } from './components/layout/SectionDots';
 import { Hero } from './components/hero/Hero';
 import { Profil } from './components/sections/Profil';
+import { Parcours } from './components/sections/Parcours';
 import { DocViewerProvider } from './components/docviewer/DocViewerProvider';
 
 // Placeholder — each section below is replaced with its real port in a
@@ -52,6 +53,7 @@ function AppContent() {
             {SECTIONS.map((section, i) => {
               if (section.id === 'accueil') return <Hero key={section.id} />;
               if (section.id === 'profil') return <Profil key={section.id} />;
+              if (section.id === 'parcours') return <Parcours key={section.id} />;
               return <SectionStub key={section.id} id={section.id} index={i} />;
             })}
           </ScrollView>
