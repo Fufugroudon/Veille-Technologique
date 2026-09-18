@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../i18n/I18nContext';
@@ -7,6 +8,7 @@ import { HeroParticles } from './HeroParticles';
 import { HeroTitle } from './HeroTitle';
 import { HeroStats } from './HeroStats';
 import { HeroScrollIndicator } from './HeroScrollIndicator';
+import { ItecBlockModal } from '../itec/ItecBlockModal';
 
 // NOTE: vanilla's decorative background (radial-gradient "orbs" + a faint
 // grid pattern behind the hero) is omitted here — RN has no radial-gradient
@@ -17,6 +19,7 @@ export function Hero() {
   const { t } = useI18n();
   const { scrollToSection } = useScrollContext();
   const onLayout = useRegisterSection('accueil');
+  const [itecOpen, setItecOpen] = useState(false);
 
   return (
     <View nativeID="accueil" onLayout={onLayout} style={[styles.section, { backgroundColor: colors.dark }]}>
@@ -31,6 +34,13 @@ export function Hero() {
         <HeroTitle />
 
         <Text style={[styles.subtitle, { color: colors.textMuted }]}>{t.heroSubtitle}</Text>
+
+        <Pressable onPress={() => setItecOpen(true)} style={styles.itecTrigger}>
+          <Text style={[styles.subtitle, { color: colors.textMuted }]}>
+            {t.itecPrefix}{' '}
+            <Text style={{ color: colors.accentLight, fontWeight: '700' }}>ITEC Engineering ›</Text>
+          </Text>
+        </Pressable>
 
         <View style={styles.availabilityBadge}>
           <View style={[styles.pulseDot, { backgroundColor: colors.success }]} />
@@ -58,6 +68,7 @@ export function Hero() {
       </View>
 
       <HeroScrollIndicator />
+      <ItecBlockModal visible={itecOpen} onClose={() => setItecOpen(false)} />
     </View>
   );
 }
@@ -95,6 +106,9 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     fontWeight: '500',
+  },
+  itecTrigger: {
+    alignSelf: 'flex-start',
   },
   availabilityBadge: {
     flexDirection: 'row',
