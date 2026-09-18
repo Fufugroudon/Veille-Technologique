@@ -4,9 +4,11 @@ import { SECTIONS } from './constants/sections';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { ScrollProvider, useScrollContext } from './context/ScrollContext';
 import { ToastProvider } from './context/ToastContext';
+import { TermsModalProvider } from './context/TermsModalContext';
 import { I18nProvider, useI18n } from './i18n/I18nContext';
 import { useRegisterSection } from './hooks/useRegisterSection';
 import { Header } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
 import { ReadingProgressBar } from './components/layout/ReadingProgressBar';
 import { ScrollToTopButton } from './components/layout/ScrollToTopButton';
 import { SectionDots } from './components/layout/SectionDots';
@@ -17,6 +19,7 @@ import { Competences } from './components/sections/Competences';
 import { Certifications } from './components/sections/Certifications';
 import { Projets } from './components/sections/Projets';
 import { Veille } from './components/sections/Veille';
+import { Contact } from './components/sections/Contact';
 import { DocViewerProvider } from './components/docviewer/DocViewerProvider';
 
 // Placeholder — each section below is replaced with its real port in a
@@ -46,30 +49,34 @@ function AppContent() {
     <View style={[styles.root, { backgroundColor: colors.dark }]}>
       <ToastProvider>
         <DocViewerProvider>
-          <ScrollView
-            ref={scrollViewRef}
-            onScroll={onScroll}
-            scrollEventThrottle={16}
-            onLayout={(e) => onScrollViewLayout(e.nativeEvent.layout.height)}
-            onContentSizeChange={(_, height) => onContentSizeChange(height)}
-            contentContainerStyle={styles.scrollContent}
-          >
-            {SECTIONS.map((section, i) => {
-              if (section.id === 'accueil') return <Hero key={section.id} />;
-              if (section.id === 'profil') return <Profil key={section.id} />;
-              if (section.id === 'parcours') return <Parcours key={section.id} />;
-              if (section.id === 'competences') return <Competences key={section.id} />;
-              if (section.id === 'certifications') return <Certifications key={section.id} />;
-              if (section.id === 'projets') return <Projets key={section.id} />;
-              if (section.id === 'veille') return <Veille key={section.id} />;
-              return <SectionStub key={section.id} id={section.id} index={i} />;
-            })}
-          </ScrollView>
+          <TermsModalProvider>
+            <ScrollView
+              ref={scrollViewRef}
+              onScroll={onScroll}
+              scrollEventThrottle={16}
+              onLayout={(e) => onScrollViewLayout(e.nativeEvent.layout.height)}
+              onContentSizeChange={(_, height) => onContentSizeChange(height)}
+              contentContainerStyle={styles.scrollContent}
+            >
+              {SECTIONS.map((section, i) => {
+                if (section.id === 'accueil') return <Hero key={section.id} />;
+                if (section.id === 'profil') return <Profil key={section.id} />;
+                if (section.id === 'parcours') return <Parcours key={section.id} />;
+                if (section.id === 'competences') return <Competences key={section.id} />;
+                if (section.id === 'certifications') return <Certifications key={section.id} />;
+                if (section.id === 'projets') return <Projets key={section.id} />;
+                if (section.id === 'veille') return <Veille key={section.id} />;
+                if (section.id === 'contact') return <Contact key={section.id} />;
+                return <SectionStub key={section.id} id={section.id} index={i} />;
+              })}
+              <Footer />
+            </ScrollView>
 
-          <ReadingProgressBar />
-          <Header />
-          <ScrollToTopButton />
-          <SectionDots />
+            <ReadingProgressBar />
+            <Header />
+            <ScrollToTopButton />
+            <SectionDots />
+          </TermsModalProvider>
         </DocViewerProvider>
       </ToastProvider>
       <StatusBar style="light" />
