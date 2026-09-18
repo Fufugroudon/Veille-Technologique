@@ -1,0 +1,207 @@
+.creature-particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9997;
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.creature-particle--burst {
+  transform: translate(0, 0) scale(0);
+  opacity: 0;
+}
+
+.creature-wrap {
+  position: fixed;
+  transform: translate(-50%, -50%) translateY(0) scale(0.5);
+  font-size: 3rem;
+  line-height: 1;
+  text-align: center;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 1;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease;
+}
+
+.creature-wrap--rising {
+  transform: translate(-50%, -50%) translateY(-150px) scale(1.5);
+  opacity: 0;
+}
+
+.creature-label {
+  font-size: 0.75rem;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  margin-top: 0.25rem;
+  white-space: nowrap;
+}
+
+#creature-legend-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  width: 46px;
+  height: 46px;
+  background: var(--dark-secondary);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 900;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#creature-legend-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.25);
+}
+
+.creature-legend-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}
+
+#creature-legend-panel {
+  position: fixed;
+  bottom: 5rem;
+  left: 1.5rem;
+  max-width: 320px;
+  width: min(320px, calc(100vw - 3rem));
+  background: var(--dark-secondary);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  max-height: 60vh;
+  overflow-y: auto;
+  z-index: 9990;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 #0f172a;
+}
+
+#creature-legend-panel::-webkit-scrollbar {
+  width: 4px;
+}
+#creature-legend-panel::-webkit-scrollbar-track {
+  background: #0f172a;
+  border-radius: 4px;
+}
+#creature-legend-panel::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 4px;
+}
+
+#creature-legend-panel.creature-legend-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.creature-legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.creature-legend-title {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.creature-legend-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.15s;
+  margin: -0.5rem -0.5rem -0.5rem 0;
+}
+
+.creature-legend-close:hover {
+  color: var(--text);
+}
+
+.creature-legend-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.creature-legend-row.last {
+  border-bottom: none;
+}
+
+.creature-legend-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+
+.creature-legend-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.creature-legend-name {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.creature-legend-desc {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  display: block;
+}
+
+.creature-legend-hint {
+  background: rgba(59, 130, 246, 0.08);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  #creature-legend-btn {
+    min-width: 48px;
+    min-height: 48px;
+  }
+}

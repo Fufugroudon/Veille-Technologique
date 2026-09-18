@@ -1,0 +1,130 @@
+#parcours {
+  background: var(--dark);
+}
+
+.timeline {
+  position: relative;
+  padding-left: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), rgba(59, 130, 246, 0.15));
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 3.5rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -1.5rem;
+  top: 0.4rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--dark);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18), var(--glow-sm);
+  margin-left: -1px;
+  transition: box-shadow var(--t);
+}
+
+.timeline-item:hover .timeline-dot {
+  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.2), var(--glow-md);
+}
+
+.timeline-date {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.timeline-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem;
+  transition: border-color var(--t), box-shadow var(--t), background var(--t);
+}
+
+.timeline-item:hover .timeline-content {
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: var(--glow-sm);
+  background: var(--bg-card-hover);
+}
+
+.timeline-badge {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--accent-light);
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-bottom: 0.85rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.badge-active {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.timeline-content h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.2px;
+}
+
+.timeline-content h4 {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 0.85rem;
+}
+
+.timeline-content p {
+  font-size: 0.9rem;
+  color: var(--text-faint);
+  line-height: 1.75;
+  margin-bottom: 0.3rem;
+}
+
+.timeline-content p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .timeline {
+    padding-left: 1.25rem;
+  }
+
+  .timeline-dot {
+    left: -1.1rem;
+    top: 0.35rem;
+    width: 8px;
+    height: 8px;
+  }
+}

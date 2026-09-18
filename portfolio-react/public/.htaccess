@@ -1,0 +1,4 @@
+Options -Indexes
+
+AddType application/javascript .js .mjs
+AddType application/wasm .wasm

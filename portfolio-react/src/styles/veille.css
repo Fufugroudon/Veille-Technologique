@@ -1,0 +1,224 @@
+#veille {
+  background: var(--dark-secondary);
+}
+
+.veille-github {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.35rem;
+  margin-bottom: 1.5rem;
+}
+
+.veille-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.9rem;
+  transition: color var(--t), border-color var(--t), background var(--t);
+}
+
+.veille-github-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.veille-intro {
+  max-width: 800px;
+  margin: 0 auto 3.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  padding: 1.75rem 2rem;
+  background: rgba(59, 130, 246, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.veille-intro strong {
+  color: var(--accent-light);
+  font-weight: 600;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.comparison-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: opacity var(--t-slow), transform var(--t), box-shadow var(--t), border-color var(--t);
+}
+
+.comparison-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--glow-md);
+  border-color: var(--border-hover);
+}
+
+.comparison-card.classic .card-header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  padding: 1.75rem;
+  text-align: center;
+}
+
+.comparison-card.quantum .card-header {
+  background: linear-gradient(135deg, #5b21b6, #8b5cf6);
+  padding: 1.75rem;
+  text-align: center;
+}
+
+.card-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.card-header h4 {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.feature-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: rgba(59, 130, 246, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: background var(--t-fast), transform var(--t-fast);
+}
+
+.feature-box:hover {
+  background: rgba(59, 130, 246, 0.09);
+  transform: translateX(4px);
+}
+
+.feature-box.highlight {
+  background: rgba(16, 185, 129, 0.07);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.feature-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.feature-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+}
+
+.veille-grid-section {
+  margin-bottom: 3rem;
+}
+
+.veille-section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.2px;
+}
+
+.veille-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.veille-icon-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: border-color var(--t), box-shadow var(--t), transform var(--t), background var(--t);
+}
+
+.veille-icon-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--glow-sm);
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
+}
+
+.veille-icon-card span {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.veille-icon-card h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.veille-conclusion {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(139, 92, 246, 0.06));
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.veille-conclusion h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.2px;
+}
+
+.veille-conclusion p {
+  color: var(--text-muted);
+  font-size: 0.97rem;
+  line-height: 1.85;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .comparison-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .veille-icon-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .veille-icon-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
