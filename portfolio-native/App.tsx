@@ -16,6 +16,7 @@ import { Parcours } from './components/sections/Parcours';
 import { Competences } from './components/sections/Competences';
 import { Certifications } from './components/sections/Certifications';
 import { Projets } from './components/sections/Projets';
+import { Veille } from './components/sections/Veille';
 import { DocViewerProvider } from './components/docviewer/DocViewerProvider';
 
 // Placeholder — each section below is replaced with its real port in a
@@ -60,6 +61,7 @@ function AppContent() {
               if (section.id === 'competences') return <Competences key={section.id} />;
               if (section.id === 'certifications') return <Certifications key={section.id} />;
               if (section.id === 'projets') return <Projets key={section.id} />;
+              if (section.id === 'veille') return <Veille key={section.id} />;
               return <SectionStub key={section.id} id={section.id} index={i} />;
             })}
           </ScrollView>
